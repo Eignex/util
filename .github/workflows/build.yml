@@ -1,0 +1,123 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      fullTargets:
+        description: Validate all targets on Linux, macOS and Windows
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        default: ''
+      ciVersion:
+        type: string
+        default: '0.0.0-ci'
+      fullTargets:
+        type: boolean
+        default: false
+    secrets:
+      GRADLE_ENCRYPTION_KEY:
+        required: false
+      CODECOV_TOKEN:
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: ${{ matrix.os == 'ubuntu-latest' && 'Run tests and collect coverage' || format('Native tests ({0})', matrix.os) }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.fullTargets && '["ubuntu-latest","macos-15","windows-latest"]' || '["ubuntu-latest"]') }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      HAS_CONFIGURATION_CACHE: ${{ secrets.GRADLE_ENCRYPTION_KEY != '' }}
+      FULL_TARGETS: ${{ inputs.fullTargets || false }}
+      CI_VERSION: ${{ inputs.ciVersion || '0.0.0-ci' }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          # kbuild 1.3.6 requires Java 21; library compilation and tests use 17.
+          java-version: |
+            17
+            21
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+      - name: Cache Kotlin Native
+        uses: actions/cache@v6
+        with:
+          path: ~/.konan
+          key: ${{ runner.os }}-${{ runner.arch }}-konan-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('*.gradle.kts', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-konan-
+      - name: Cache encrypted configuration state
+        if: env.HAS_CONFIGURATION_CACHE == 'true'
+        uses: actions/cache@v6
+        with:
+          path: .gradle/configuration-cache
+          key: ${{ runner.os }}-${{ runner.arch }}-configuration-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('*.gradle.kts', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-configuration-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('*.gradle.kts', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-
+      - name: Build and test
+        run: |
+          case "$RUNNER_OS" in
+            Linux) tasks=(check lintDocs koverXmlReport) ;;
+            macOS) tasks=(macosArm64Test) ;;
+            Windows) tasks=(mingwX64Test) ;;
+          esac
+          args=(-PciVersion="$CI_VERSION")
+          if [[ "$FULL_TARGETS" == true ]]; then args+=(-Ptargets.full); fi
+          if [[ "$RUNNER_OS" != Linux ]]; then
+            args+=(--max-workers=2 -Pkotlin.native.parallelThreads=2)
+          fi
+          ./gradlew "${tasks[@]}" "${args[@]}"
+      - name: Test iOS simulator
+        if: runner.os == 'macOS'
+        run: |
+          device=$(xcrun simctl list devices available --json | jq -er '
+            [.devices | to_entries[] | select(.key | contains(".iOS-")) | .value[] |
+             select(.name | startswith("iPhone")) | .udid][0] // error("No iPhone simulator available")')
+          ./gradlew iosSimulatorArm64Test -Ptargets.full -PciVersion="$CI_VERSION" \
+            --max-workers=2 -Pkotlin.native.parallelThreads=2 -PiosSimulatorDevice="$device"
+      - name: Require committed JavaScript and Wasm lockfiles
+        if: runner.os == 'Linux' && inputs.fullTargets
+        run: |
+          git diff --exit-code -- kotlin-js-store
+          test -z "$(git ls-files --others --exclude-standard -- kotlin-js-store)"
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-reports-${{ runner.os }}
+          path: |
+            build/reports/tests/
+            build/test-results/
+          if-no-files-found: ignore
+      - name: Upload coverage
+        if: runner.os == 'Linux' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: codecov/codecov-action@v7
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build/reports/kover/report.xml
+          fail_ci_if_error: false
