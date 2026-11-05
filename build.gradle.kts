@@ -32,6 +32,7 @@ eignexBuild {
 
 @OptIn(ExperimentalWasmDsl::class)
 kotlin {
+    compilerOptions.freeCompilerArgs.add("-Xexpect-actual-classes")
     jvm()
     linuxX64()
     if (fullTargets) {
@@ -41,6 +42,26 @@ kotlin {
         linuxArm64()
         macosArm64(); mingwX64()
         iosX64(); iosArm64(); iosSimulatorArm64()
+    }
+
+    applyDefaultHierarchyTemplate()
+    sourceSets {
+        val hostMain = create("hostMain") { dependsOn(commonMain.get()) }
+        jvmMain.get().dependsOn(hostMain)
+        nativeMain.get().dependsOn(hostMain)
+        val hostTest = create("hostTest") { dependsOn(commonTest.get()) }
+        jvmTest.get().dependsOn(hostTest)
+        nativeTest.get().dependsOn(hostTest)
+
+        val posixMain = create("posixMain") { dependsOn(nativeMain.get()) }
+        linuxMain.get().dependsOn(posixMain)
+        if (fullTargets) {
+            appleMain.get().dependsOn(posixMain)
+            val singleThreadMain = create("singleThreadMain") { dependsOn(commonMain.get()) }
+            jsMain.get().dependsOn(singleThreadMain)
+            wasmJsMain.get().dependsOn(singleThreadMain)
+            wasmWasiMain.get().dependsOn(singleThreadMain)
+        }
     }
 }
 

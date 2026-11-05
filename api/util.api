@@ -1,0 +1,514 @@
+public final class com/eignex/util/arrays/ArgSortKt {
+	public static final fun argsortBy (ILkotlin/jvm/functions/Function2;)[I
+	public static final fun argsortBy (I[I[ILkotlin/jvm/functions/Function2;)[I
+	public static final fun argsortByIntKey (ILkotlin/jvm/functions/Function1;)[I
+}
+
+public final class com/eignex/util/arrays/BinarySearchKt {
+	public static final fun binarySearchInt ([IIII)I
+	public static synthetic fun binarySearchInt$default ([IIIIILjava/lang/Object;)I
+	public static final fun binarySearchLong ([JJII)I
+	public static synthetic fun binarySearchLong$default ([JJIIILjava/lang/Object;)I
+}
+
+public final class com/eignex/util/collections/Bits {
+	public static final field Companion Lcom/eignex/util/collections/Bits$Companion;
+	public fun <init> (I)V
+	public final fun andInPlace (Lcom/eignex/util/collections/Bits;)V
+	public final fun andNotInPlace (Lcom/eignex/util/collections/Bits;)V
+	public final fun cardinality ()I
+	public final fun clear (I)V
+	public final fun containsAll (Lcom/eignex/util/collections/Bits;)Z
+	public final fun copy ()Lcom/eignex/util/collections/Bits;
+	public final fun copyFrom (Lcom/eignex/util/collections/Bits;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun forEachSet (Lkotlin/jvm/functions/Function1;)V
+	public final fun get (I)Z
+	public final fun getSize ()I
+	public final fun getWords ()[J
+	public fun hashCode ()I
+	public final fun orInPlace (Lcom/eignex/util/collections/Bits;)V
+	public final fun set (I)V
+	public final fun toIntArray ()[I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/eignex/util/collections/Bits$Companion {
+	public final fun clear ([JI)V
+	public final fun clearAbove ([JI)V
+	public final fun clearBelow ([JI)V
+	public final fun empty (I)Lcom/eignex/util/collections/Bits;
+	public final fun fillRange ([JII)V
+	public final fun firstSet ([J)I
+	public final fun full (I)Lcom/eignex/util/collections/Bits;
+	public final fun has ([JI)Z
+	public final fun lastSet ([J)I
+	public final fun of (I[I)Lcom/eignex/util/collections/Bits;
+	public final fun popcount ([J)I
+	public final fun set ([JI)V
+	public final fun xorInto ([J[J)V
+}
+
+public final class com/eignex/util/collections/CollectionExtrasKt {
+	public static final fun sortedKeys (Lcom/eignex/util/collections/MutableIntDoubleMap;)[I
+	public static final fun sortedKeys (Lcom/eignex/util/collections/MutableIntIntMap;)[I
+	public static final fun sortedKeys (Lcom/eignex/util/collections/MutableIntLongMap;)[I
+	public static final fun sortedKeys (Lcom/eignex/util/collections/MutableIntObjectMap;)[I
+	public static final fun toSortedIntArray (Lcom/eignex/util/collections/IntArrayList;)[I
+	public static final fun toSortedIntArray (Lcom/eignex/util/collections/IntHashSet;)[I
+	public static final fun toSortedLongArray (Lcom/eignex/util/collections/LongArrayList;)[J
+	public static final fun toSortedLongArray (Lcom/eignex/util/collections/LongHashSet;)[J
+}
+
+public final class com/eignex/util/collections/IndexedMaxHeap {
+	public fun <init> (I)V
+	public final fun contains (I)Z
+	public final fun extractMax ()I
+	public final fun getCapacity ()I
+	public final fun getSize ()I
+	public final fun insert (ID)V
+	public final fun keyOf (I)D
+	public final fun peekMax ()I
+	public final fun remove (I)V
+	public final fun resetAllKeysInIdOrder (D)V
+	public final fun restore (I)V
+	public final fun scaleKeys (D)V
+	public final fun updateKey (ID)V
+}
+
+public final class com/eignex/util/collections/IntArrayDeque {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun addFirst (I)V
+	public final fun addLast (I)V
+	public final fun clear ()V
+	public final fun get (I)I
+	public final fun getSize ()I
+	public final fun isEmpty ()Z
+	public final fun isNotEmpty ()Z
+	public final fun removeAt (I)I
+	public final fun removeFirst ()I
+	public final fun removeFirstOr (I)I
+	public final fun removeLast ()I
+}
+
+public final class com/eignex/util/collections/IntArrayList {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun add (I)V
+	public final fun addAll ([I)V
+	public final fun clear ()V
+	public final fun contains (I)Z
+	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
+	public final fun get (I)I
+	public final fun getBackingData ()[I
+	public final fun getSize ()I
+	public final fun indexOf (I)I
+	public final fun insertAt (II)V
+	public final fun isEmpty ()Z
+	public final fun last ()I
+	public final fun lowerBound (I)I
+	public final fun lowerBoundDescending (I)I
+	public final fun removeAt (I)V
+	public final fun removeValue (I)Z
+	public final fun set (II)V
+	public final fun sortByIntKey (ZLkotlin/jvm/functions/Function1;)V
+	public static synthetic fun sortByIntKey$default (Lcom/eignex/util/collections/IntArrayList;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public final fun toIntArray ()[I
+	public final fun toSet ()Ljava/util/Set;
+	public final fun truncateTo (I)V
+}
+
+public final class com/eignex/util/collections/IntDisjointSet {
+	public fun <init> (I)V
+	public final fun connected (II)Z
+	public final fun find (I)I
+	public final fun groups ()Ljava/util/List;
+	public final fun union (II)V
+}
+
+public final class com/eignex/util/collections/IntHashSet {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun add (I)Z
+	public final fun clear ()V
+	public final fun contains (I)Z
+	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
+	public final fun getKeysInternal ()[I
+	public final fun getSize ()I
+	public final fun getUsedInternal ()[Z
+	public final fun isEmpty ()Z
+	public final fun remove (I)Z
+	public final fun toIntArray ()[I
+}
+
+public final class com/eignex/util/collections/IntIntMap {
+	public static final field Companion Lcom/eignex/util/collections/IntIntMap$Companion;
+	public final fun contains (I)Z
+	public final fun get (I)I
+}
+
+public final class com/eignex/util/collections/IntIntMap$Companion {
+	public final fun build ([I[III)Lcom/eignex/util/collections/IntIntMap;
+	public static synthetic fun build$default (Lcom/eignex/util/collections/IntIntMap$Companion;[I[IIIILjava/lang/Object;)Lcom/eignex/util/collections/IntIntMap;
+}
+
+public final class com/eignex/util/collections/IntLongMap {
+	public static final field Companion Lcom/eignex/util/collections/IntLongMap$Companion;
+	public final fun contains (I)Z
+	public final fun get (I)J
+}
+
+public final class com/eignex/util/collections/IntLongMap$Companion {
+	public final fun build ([I[JJI)Lcom/eignex/util/collections/IntLongMap;
+	public static synthetic fun build$default (Lcom/eignex/util/collections/IntLongMap$Companion;[I[JJIILjava/lang/Object;)Lcom/eignex/util/collections/IntLongMap;
+}
+
+public final class com/eignex/util/collections/IntSwapSet {
+	public fun <init> (I)V
+	public final fun add (I)Z
+	public final fun clear ()V
+	public final fun contains (I)Z
+	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
+	public final fun get (I)I
+	public final fun getSize ()I
+	public final fun isEmpty ()Z
+	public final fun random (Lkotlin/random/Random;)I
+	public final fun remove (I)Z
+	public final fun toIntArray ()[I
+}
+
+public final class com/eignex/util/collections/LongArrayList {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun add (J)V
+	public final fun clear ()V
+	public final fun contains (J)Z
+	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
+	public final fun get (I)J
+	public final fun getSize ()I
+	public final fun indexOf (J)I
+	public final fun insertAt (IJ)V
+	public final fun isEmpty ()Z
+	public final fun last ()J
+	public final fun lowerBound (J)I
+	public final fun removeAt (I)V
+	public final fun removeValue (J)Z
+	public final fun set (IJ)V
+	public final fun sort (Z)V
+	public static synthetic fun sort$default (Lcom/eignex/util/collections/LongArrayList;ZILjava/lang/Object;)V
+	public final fun toLongArray ()[J
+	public final fun toSet ()Ljava/util/Set;
+	public final fun trim ()V
+	public final fun truncateTo (I)V
+}
+
+public final class com/eignex/util/collections/LongHashSet {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun add (J)Z
+	public final fun clear ()V
+	public final fun contains (J)Z
+	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
+	public final fun getKeysInternal ()[J
+	public final fun getSize ()I
+	public final fun getUsedInternal ()[Z
+	public final fun isEmpty ()Z
+	public final fun remove (J)Z
+	public final fun toLongArray ()[J
+}
+
+public final class com/eignex/util/collections/MutableIntDoubleMap {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun addTo (ID)D
+	public final fun clear ()V
+	public final fun containsKey (I)Z
+	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public final fun getKeysInternal ()[I
+	public final fun getOrDefault (ID)D
+	public final fun getSize ()I
+	public final fun getUsedInternal ()[Z
+	public final fun getValuesInternal ()[D
+	public final fun isEmpty ()Z
+	public final fun put (ID)V
+	public final fun remove (I)Z
+}
+
+public final class com/eignex/util/collections/MutableIntIntMap {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun addTo (II)I
+	public final fun clear ()V
+	public final fun containsKey (I)Z
+	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public final fun getKeysInternal ()[I
+	public final fun getOrDefault (II)I
+	public final fun getSize ()I
+	public final fun getUsedInternal ()[Z
+	public final fun getValuesInternal ()[I
+	public final fun isEmpty ()Z
+	public final fun put (II)V
+	public final fun remove (I)Z
+}
+
+public final class com/eignex/util/collections/MutableIntLongMap {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun addTo (IJ)J
+	public final fun clear ()V
+	public final fun containsKey (I)Z
+	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public final fun getKeysInternal ()[I
+	public final fun getOrDefault (IJ)J
+	public final fun getSize ()I
+	public final fun getUsedInternal ()[Z
+	public final fun getValuesInternal ()[J
+	public final fun isEmpty ()Z
+	public final fun put (IJ)V
+	public final fun remove (I)Z
+}
+
+public final class com/eignex/util/collections/MutableIntObjectMap {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun clear ()V
+	public final fun containsKey (I)Z
+	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public final fun get (I)Ljava/lang/Object;
+	public final fun getKeysInternal ()[I
+	public final fun getOrPut (ILkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public final fun getSize ()I
+	public final fun getUsedInternal ()[Z
+	public final fun getValue (I)Ljava/lang/Object;
+	public final fun getValuesInternal ()[Ljava/lang/Object;
+	public final fun isEmpty ()Z
+	public final fun put (ILjava/lang/Object;)V
+	public final fun remove (I)Z
+	public final fun removeKeysAbove (I)V
+	public final fun valueAtMaxKey ()Ljava/lang/Object;
+}
+
+public final class com/eignex/util/collections/MutableLongIntMap {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun addTo (JI)I
+	public final fun clear ()V
+	public final fun containsKey (J)Z
+	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public final fun getKeysInternal ()[J
+	public final fun getOrDefault (JI)I
+	public final fun getSize ()I
+	public final fun getUsedInternal ()[Z
+	public final fun getValuesInternal ()[I
+	public final fun isEmpty ()Z
+	public final fun put (JI)V
+	public final fun remove (J)Z
+	public final fun removeAndGet (JI)I
+}
+
+public final class com/eignex/util/collections/MutableLongObjectMap {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun clear ()V
+	public final fun containsKey (J)Z
+	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public final fun get (J)Ljava/lang/Object;
+	public final fun getKeysInternal ()[J
+	public final fun getOrPut (JLkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public final fun getSize ()I
+	public final fun getUsedInternal ()[Z
+	public final fun getValue (J)Ljava/lang/Object;
+	public final fun getValuesInternal ()[Ljava/lang/Object;
+	public final fun isEmpty ()Z
+	public final fun put (JLjava/lang/Object;)V
+	public final fun remove (J)Z
+}
+
+public final class com/eignex/util/concurrent/AdderCountersKt {
+	public static final fun getAdderCounters ()Lcom/eignex/util/concurrent/CounterMode;
+}
+
+public final class com/eignex/util/concurrent/AtomicCells : com/eignex/util/concurrent/CellMode {
+	public static final field INSTANCE Lcom/eignex/util/concurrent/AtomicCells;
+	public fun newDouble (D)Lcom/eignex/util/concurrent/DoubleCell;
+	public synthetic fun newDouble (D)Lcom/eignex/util/concurrent/DoubleCounter;
+	public fun newDoubleArray (ILkotlin/jvm/functions/Function1;)Lcom/eignex/util/concurrent/DoubleCellArray;
+	public fun newLong (J)Lcom/eignex/util/concurrent/LongCell;
+	public synthetic fun newLong (J)Lcom/eignex/util/concurrent/LongCounter;
+	public fun newLongArray (ILkotlin/jvm/functions/Function1;)Lcom/eignex/util/concurrent/LongCellArray;
+	public fun newReference (Ljava/lang/Object;)Lcom/eignex/util/concurrent/ReferenceCell;
+}
+
+public final class com/eignex/util/concurrent/AtomicUpdatesKt {
+	public static final fun casMax (Lcom/eignex/util/concurrent/DoubleCell;D)V
+	public static final fun casMax (Lcom/eignex/util/concurrent/LongCell;J)V
+	public static final fun casMax (Lcom/eignex/util/concurrent/LongCellArray;IJ)V
+	public static final fun casMin (Lcom/eignex/util/concurrent/DoubleCell;D)V
+	public static final fun casMin (Lcom/eignex/util/concurrent/LongCell;J)V
+	public static final fun casMin (Lcom/eignex/util/concurrent/LongCellArray;IJ)V
+	public static final fun casOr (Lcom/eignex/util/concurrent/LongCell;J)V
+	public static final fun casOr (Lcom/eignex/util/concurrent/LongCellArray;IJ)V
+}
+
+public abstract interface class com/eignex/util/concurrent/CellMode : com/eignex/util/concurrent/CounterMode {
+	public abstract fun newDouble (D)Lcom/eignex/util/concurrent/DoubleCell;
+	public synthetic fun newDouble (D)Lcom/eignex/util/concurrent/DoubleCounter;
+	public abstract fun newDoubleArray (ILkotlin/jvm/functions/Function1;)Lcom/eignex/util/concurrent/DoubleCellArray;
+	public static synthetic fun newDoubleArray$default (Lcom/eignex/util/concurrent/CellMode;ILkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/eignex/util/concurrent/DoubleCellArray;
+	public abstract fun newLong (J)Lcom/eignex/util/concurrent/LongCell;
+	public synthetic fun newLong (J)Lcom/eignex/util/concurrent/LongCounter;
+	public abstract fun newLongArray (ILkotlin/jvm/functions/Function1;)Lcom/eignex/util/concurrent/LongCellArray;
+	public static synthetic fun newLongArray$default (Lcom/eignex/util/concurrent/CellMode;ILkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/eignex/util/concurrent/LongCellArray;
+	public abstract fun newReference (Ljava/lang/Object;)Lcom/eignex/util/concurrent/ReferenceCell;
+}
+
+public final class com/eignex/util/concurrent/CellMode$DefaultImpls {
+	public static synthetic fun newDoubleArray$default (Lcom/eignex/util/concurrent/CellMode;ILkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/eignex/util/concurrent/DoubleCellArray;
+	public static synthetic fun newLongArray$default (Lcom/eignex/util/concurrent/CellMode;ILkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/eignex/util/concurrent/LongCellArray;
+}
+
+public final class com/eignex/util/concurrent/CellModeKt {
+	public static final fun getValue (Lcom/eignex/util/concurrent/DoubleCounter;Ljava/lang/Object;Lkotlin/reflect/KProperty;)D
+	public static final fun getValue (Lcom/eignex/util/concurrent/LongCounter;Ljava/lang/Object;Lkotlin/reflect/KProperty;)J
+}
+
+public abstract interface class com/eignex/util/concurrent/CounterMode {
+	public abstract fun newDouble (D)Lcom/eignex/util/concurrent/DoubleCounter;
+	public static synthetic fun newDouble$default (Lcom/eignex/util/concurrent/CounterMode;DILjava/lang/Object;)Lcom/eignex/util/concurrent/DoubleCounter;
+	public abstract fun newLong (J)Lcom/eignex/util/concurrent/LongCounter;
+	public static synthetic fun newLong$default (Lcom/eignex/util/concurrent/CounterMode;JILjava/lang/Object;)Lcom/eignex/util/concurrent/LongCounter;
+}
+
+public final class com/eignex/util/concurrent/CounterMode$DefaultImpls {
+	public static synthetic fun newDouble$default (Lcom/eignex/util/concurrent/CounterMode;DILjava/lang/Object;)Lcom/eignex/util/concurrent/DoubleCounter;
+	public static synthetic fun newLong$default (Lcom/eignex/util/concurrent/CounterMode;JILjava/lang/Object;)Lcom/eignex/util/concurrent/LongCounter;
+}
+
+public abstract interface class com/eignex/util/concurrent/DoubleCell : com/eignex/util/concurrent/DoubleCounter {
+	public abstract fun compareAndSet (DD)Z
+}
+
+public abstract interface class com/eignex/util/concurrent/DoubleCellArray {
+	public abstract fun add (ID)V
+	public abstract fun compareAndSet (IDD)Z
+	public abstract fun getSize ()I
+	public abstract fun load (I)D
+	public abstract fun store (ID)V
+}
+
+public abstract interface class com/eignex/util/concurrent/DoubleCounter {
+	public abstract fun add (D)V
+	public abstract fun addAndGet (D)D
+	public abstract fun load ()D
+	public abstract fun store (D)V
+}
+
+public abstract interface class com/eignex/util/concurrent/LongCell : com/eignex/util/concurrent/LongCounter {
+	public abstract fun compareAndSet (JJ)Z
+}
+
+public abstract interface class com/eignex/util/concurrent/LongCellArray {
+	public abstract fun add (IJ)V
+	public abstract fun addAndGet (IJ)J
+	public abstract fun compareAndSet (IJJ)Z
+	public abstract fun getSize ()I
+	public abstract fun load (I)J
+	public abstract fun store (IJ)V
+}
+
+public abstract interface class com/eignex/util/concurrent/LongCounter {
+	public abstract fun add (J)V
+	public abstract fun addAndGet (J)J
+	public abstract fun load ()J
+	public abstract fun store (J)V
+}
+
+public abstract interface class com/eignex/util/concurrent/Mutex {
+	public abstract fun enter ()V
+	public abstract fun exit ()V
+	public abstract fun withLock (Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+}
+
+public final class com/eignex/util/concurrent/MutexKt {
+	public static final fun Mutex (Z)Lcom/eignex/util/concurrent/Mutex;
+	public static synthetic fun Mutex$default (ZILjava/lang/Object;)Lcom/eignex/util/concurrent/Mutex;
+	public static final fun guarded (Lcom/eignex/util/concurrent/Mutex;Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+}
+
+public final class com/eignex/util/concurrent/NoopMutex : com/eignex/util/concurrent/Mutex {
+	public static final field INSTANCE Lcom/eignex/util/concurrent/NoopMutex;
+	public fun enter ()V
+	public fun exit ()V
+	public fun withLock (Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+}
+
+public abstract interface class com/eignex/util/concurrent/ReferenceCell {
+	public abstract fun compareAndExchange (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public abstract fun compareAndSet (Ljava/lang/Object;Ljava/lang/Object;)Z
+	public abstract fun load ()Ljava/lang/Object;
+	public abstract fun store (Ljava/lang/Object;)V
+}
+
+public final class com/eignex/util/concurrent/SerialCells : com/eignex/util/concurrent/CellMode {
+	public static final field INSTANCE Lcom/eignex/util/concurrent/SerialCells;
+	public fun newDouble (D)Lcom/eignex/util/concurrent/DoubleCell;
+	public synthetic fun newDouble (D)Lcom/eignex/util/concurrent/DoubleCounter;
+	public fun newDoubleArray (ILkotlin/jvm/functions/Function1;)Lcom/eignex/util/concurrent/DoubleCellArray;
+	public fun newLong (J)Lcom/eignex/util/concurrent/LongCell;
+	public synthetic fun newLong (J)Lcom/eignex/util/concurrent/LongCounter;
+	public fun newLongArray (ILkotlin/jvm/functions/Function1;)Lcom/eignex/util/concurrent/LongCellArray;
+	public fun newReference (Ljava/lang/Object;)Lcom/eignex/util/concurrent/ReferenceCell;
+}
+
+public final class com/eignex/util/hash/HashesKt {
+	public static final fun hash64 (Ljava/lang/String;)J
+	public static final fun hash64 ([B)J
+	public static final fun splitmix64 (J)J
+}
+
+public final class com/eignex/util/numbers/CheckedLongOverflowException : java/lang/ArithmeticException {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class com/eignex/util/numbers/CheckedLongOverflowExceptionKt {
+	public static final fun addExact (JJ)J
+	public static final fun mulExact (JJ)J
+	public static final fun subExact (JJ)J
+}
+
+public final class com/eignex/util/numbers/Int128 {
+	public fun <init> ()V
+	public final fun add (Lcom/eignex/util/numbers/Int128;)V
+	public final fun addLong (J)V
+	public final fun addProduct (JJ)V
+	public final fun ceilDivPow2 (I)Ljava/lang/Long;
+	public final fun clear ()V
+	public final fun copy ()Lcom/eignex/util/numbers/Int128;
+	public final fun divExactByLong (J)Ljava/lang/Long;
+	public final fun fitsLong ()Z
+	public final fun floorDivPositive (J)Ljava/lang/Long;
+	public final fun getHi ()J
+	public final fun getLo ()J
+	public final fun getOverflow ()Z
+	public final fun isNonNegative ()Z
+	public final fun shiftLeft (I)V
+	public final fun subtract (Lcom/eignex/util/numbers/Int128;)V
+	public final fun toLong ()J
+}
+
+public final class com/eignex/util/platform/IdentityHash_jvmKt {
+	public static final fun identityHash (Ljava/lang/Object;)I
+}
+

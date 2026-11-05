@@ -14,18 +14,51 @@
 
 Shared Kotlin Multiplatform primitives for Eignex libraries and applications.
 
-The repository contains the build scaffold and a `com.eignex.util` package stub.
-Public utilities have not been extracted yet.
+Primitive collections, array algorithms and concurrency storage without a dependency
+on a solver, statistics library or BLAS engine. The API is under development.
 
-## Intended scope
+## Utilities
 
 - Primitive collections: lists, deques, sets, maps and packed bitsets.
-- Array algorithms: sorting, searching and reusable temporary buffers.
-- Concurrency primitives: locks, atomic cells and additive counters.
-- Platform support: host identity, CPU information and native library loading.
-- Numeric primitives: checked arithmetic and wider integer helpers.
+- Array algorithms: stable argsort and primitive binary search.
+- Concurrency primitives: synchronous locks, atomic cells and additive counters.
+- Numeric primitives: checked Long arithmetic and a signed 128-bit accumulator.
+- Hashing: deterministic SplitMix64 mixing and 64-bit byte/string hashes.
+- Platform support: reference identity hashing on JVM and Native.
 
-Initial candidates come from [Klause](https://github.com/Eignex/klause),
-[Koblas](https://github.com/Eignex/koblas) and
-[Kumulant](https://github.com/Eignex/kumulant). Solver policies, BLAS engine
-selection and statistical concurrency guarantees belong in their consuming libraries.
+## Usage
+
+Accumulate values with primitive keys:
+
+```kotlin
+import com.eignex.util.collections.MutableIntDoubleMap
+
+val totals = MutableIntDoubleMap()
+totals.addTo(42, 1.5)
+totals.addTo(42, 2.0)
+check(totals.getOrDefault(42, 0.0) == 3.5)
+```
+
+Create an atomic counter or protect coupled state:
+
+```kotlin
+import com.eignex.util.concurrent.AtomicCells
+import com.eignex.util.concurrent.Mutex
+import com.eignex.util.concurrent.guarded
+
+val count = AtomicCells.newLong()
+count.add(1L)
+
+val lock = Mutex()
+val values = mutableListOf<Int>()
+lock.guarded { values.add(42) }
+```
+
+`SerialCells` requires single-threaded ownership or external synchronization.
+`AtomicCells` supports compare-and-set and per-cell atomic updates. `AdderCounters`
+uses striped JVM adders with best-effort totals and atomic cells on other targets.
+JS and Wasm operations run within a single execution agent; these primitives do
+not synchronize separate workers. Mutexes are synchronous and do not support re-entry.
+
+Collections are mutable and require external synchronization when shared. List
+removal uses swap removal, which does not preserve element order.
