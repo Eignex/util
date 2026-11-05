@@ -1,5 +1,8 @@
 package com.eignex.util.hash
 
+import com.eignex.util.collections.internals.mixIntKey
+import com.eignex.util.collections.internals.mixLongKey
+
 /**
  * SplitMix64 - a fast, high-quality 64-bit mixer suitable for spreading sequential
  * or low-entropy keys into a uniform 64-bit hash before feeding them to cardinality
@@ -52,3 +55,9 @@ fun hash64(bytes: ByteArray): Long {
 
 /** UTF-8 byte hash convenience over [hash64]. */
 fun hash64(value: String): Long = hash64(value.encodeToByteArray())
+
+/** Fibonacci multiplicative mixing of an Int key for power-of-two hash tables. */
+fun fibonacciHash(value: Int): Int = mixIntKey(value)
+
+/** Folded Fibonacci multiplicative mixing of a Long key into a 32-bit table hash. */
+fun fibonacciHash(value: Long): Int = mixLongKey(value)

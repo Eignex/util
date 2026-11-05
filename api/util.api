@@ -108,6 +108,7 @@ public final class com/eignex/util/collections/Bits$Companion {
 }
 
 public final class com/eignex/util/collections/CollectionExtrasKt {
+	public static final fun hashTableCapacity (I)I
 	public static final fun sortedKeys (Lcom/eignex/util/collections/IntKeyed;)[I
 	public static final fun sortedKeys (Lcom/eignex/util/collections/LongKeyed;)[J
 	public static final fun toSortedIntArray (Lcom/eignex/util/collections/IntCollection;)[I
@@ -752,6 +753,8 @@ public final class com/eignex/util/concurrent/SerialCells : com/eignex/util/conc
 }
 
 public final class com/eignex/util/hash/HashesKt {
+	public static final fun fibonacciHash (I)I
+	public static final fun fibonacciHash (J)I
 	public static final fun hash64 (Ljava/lang/String;)J
 	public static final fun hash64 ([B)J
 	public static final fun splitmix64 (J)J
