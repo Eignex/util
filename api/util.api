@@ -454,6 +454,10 @@ public final class com/eignex/util/concurrent/NoopMutex : com/eignex/util/concur
 	public fun withLock (Lkotlin/jvm/functions/Function0;)Ljava/lang/Object;
 }
 
+public final class com/eignex/util/concurrent/ParallelRun_jvmKt {
+	public static final fun parallelRun (Ljava/util/List;)Ljava/util/List;
+}
+
 public abstract interface class com/eignex/util/concurrent/ReferenceCell {
 	public abstract fun compareAndExchange (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 	public abstract fun compareAndSet (Ljava/lang/Object;Ljava/lang/Object;)Z
@@ -476,6 +480,74 @@ public final class com/eignex/util/hash/HashesKt {
 	public static final fun hash64 (Ljava/lang/String;)J
 	public static final fun hash64 ([B)J
 	public static final fun splitmix64 (J)J
+}
+
+public final class com/eignex/util/io/CharReader {
+	public fun <init> (Lcom/eignex/util/io/CharSource;)V
+	public final fun advance ()V
+	public final fun eof ()Z
+	public final fun peek (I)I
+	public static synthetic fun peek$default (Lcom/eignex/util/io/CharReader;IILjava/lang/Object;)I
+}
+
+public abstract interface class com/eignex/util/io/CharSource {
+	public abstract fun next ()Ljava/lang/String;
+}
+
+public final class com/eignex/util/io/CharSourceKt {
+	public static final fun lineSequence (Lcom/eignex/util/io/CharSource;)Lkotlin/sequences/Sequence;
+	public static final fun readText (Lcom/eignex/util/io/CharSource;)Ljava/lang/String;
+	public static final fun useSource (Lcom/eignex/util/io/CharSource;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public final class com/eignex/util/io/StringCharSource : com/eignex/util/io/CharSource {
+	public fun <init> (Ljava/lang/String;)V
+	public fun next ()Ljava/lang/String;
+}
+
+public final class com/eignex/util/io/TextFilesKt {
+	public static final fun readTextFile (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class com/eignex/util/io/TextFiles_jvmKt {
+	public static final fun openTextFile (Ljava/lang/String;)Lcom/eignex/util/io/CharSource;
+}
+
+public final class com/eignex/util/numbers/BigIntKt {
+	public static final fun maxOf (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
+	public static final fun minOf (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
+	public static final fun remainderOf (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
+}
+
+public final class com/eignex/util/numbers/BigInt_jvmKt {
+	public static final fun abs (Ljava/math/BigInteger;)Ljava/math/BigInteger;
+	public static final fun bigIntOf (I)Ljava/math/BigInteger;
+	public static final fun bigIntOf (J)Ljava/math/BigInteger;
+	public static final fun bigIntOf-VKZWuLQ (J)Ljava/math/BigInteger;
+	public static final fun compareTo (Ljava/math/BigInteger;Ljava/math/BigInteger;)I
+	public static final fun div (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
+	public static final fun fitsLong (Ljava/math/BigInteger;)Z
+	public static final fun floorBigInt (D)Ljava/math/BigInteger;
+	public static final fun gcd (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
+	public static final fun getBIG_ONE ()Ljava/math/BigInteger;
+	public static final fun getBIG_TEN ()Ljava/math/BigInteger;
+	public static final fun getBIG_TWO ()Ljava/math/BigInteger;
+	public static final fun getBIG_ZERO ()Ljava/math/BigInteger;
+	public static final fun isZero (Ljava/math/BigInteger;)Z
+	public static final fun magnitudeBitLength (Ljava/math/BigInteger;)I
+	public static final fun minus (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
+	public static final fun negate (Ljava/math/BigInteger;)Ljava/math/BigInteger;
+	public static final fun parseBigInt (Ljava/lang/String;)Ljava/math/BigInteger;
+	public static final fun plus (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
+	public static final fun rem (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
+	public static final fun shl (Ljava/math/BigInteger;I)Ljava/math/BigInteger;
+	public static final fun shr (Ljava/math/BigInteger;I)Ljava/math/BigInteger;
+	public static final fun signum (Ljava/math/BigInteger;)I
+	public static final fun times (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
+	public static final fun toDouble (Ljava/math/BigInteger;)D
+	public static final fun toLong (Ljava/math/BigInteger;)J
+	public static final fun toLongExact (Ljava/math/BigInteger;)J
+	public static final fun unaryMinus (Ljava/math/BigInteger;)Ljava/math/BigInteger;
 }
 
 public final class com/eignex/util/numbers/CheckedLongOverflowException : java/lang/ArithmeticException {
@@ -508,7 +580,27 @@ public final class com/eignex/util/numbers/Int128 {
 	public final fun toLong ()J
 }
 
+public final class com/eignex/util/platform/HeapSample {
+	public fun <init> (JJLjava/lang/Long;)V
+	public final fun getCommittedBytes ()J
+	public final fun getPeakBytes ()Ljava/lang/Long;
+	public final fun getRetainedBytes ()J
+}
+
 public final class com/eignex/util/platform/IdentityHash_jvmKt {
 	public static final fun identityHash (Ljava/lang/Object;)I
+}
+
+public final class com/eignex/util/platform/RuntimeDiagnostics_jvmKt {
+	public static final fun compilationTimeMillis ()Ljava/lang/Long;
+	public static final fun sampleHeap ()Lcom/eignex/util/platform/HeapSample;
+	public static final fun startHeapPeakSampler ()V
+}
+
+public final class com/eignex/util/process/Process_jvmKt {
+	public static final fun exitProcess (I)Ljava/lang/Void;
+	public static final fun flushStandardOutput ()V
+	public static final fun printErrorLine (Ljava/lang/String;)V
+	public static final fun processProperty (Ljava/lang/String;)Ljava/lang/String;
 }
 

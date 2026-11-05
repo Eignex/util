@@ -1,6 +1,8 @@
 // Klib ABI Dump
 // Targets: [iosArm64, iosSimulatorArm64, iosX64, js, linuxArm64, linuxX64, macosArm64, mingwX64, wasmJs, wasmWasi]
 // Alias: native => [iosArm64, iosSimulatorArm64, iosX64, linuxArm64, linuxX64, macosArm64, mingwX64]
+// Alias: apple => [iosArm64, iosSimulatorArm64, iosX64, macosArm64]
+// Alias: linux => [linuxArm64, linuxX64]
 // Rendering settings:
 // - Signature version: 2
 // - Show manifest properties: true
@@ -74,6 +76,10 @@ abstract interface com.eignex.util.concurrent/Mutex { // com.eignex.util.concurr
     abstract fun <#A1: kotlin/Any?> withLock(kotlin/Function0<#A1>): #A1 // com.eignex.util.concurrent/Mutex.withLock|withLock(kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
     abstract fun enter() // com.eignex.util.concurrent/Mutex.enter|enter(){}[0]
     abstract fun exit() // com.eignex.util.concurrent/Mutex.exit|exit(){}[0]
+}
+
+abstract interface com.eignex.util.io/CharSource { // com.eignex.util.io/CharSource|null[0]
+    abstract fun next(): kotlin/String? // com.eignex.util.io/CharSource.next|next(){}[0]
 }
 
 final class <#A: kotlin/Any?> com.eignex.util.collections/MutableIntObjectMap { // com.eignex.util.collections/MutableIntObjectMap|null[0]
@@ -439,6 +445,20 @@ final class com.eignex.util.collections/MutableLongIntMap { // com.eignex.util.c
     final inline fun forEach(kotlin/Function2<kotlin/Long, kotlin/Int, kotlin/Unit>) // com.eignex.util.collections/MutableLongIntMap.forEach|forEach(kotlin.Function2<kotlin.Long,kotlin.Int,kotlin.Unit>){}[0]
 }
 
+final class com.eignex.util.io/CharReader { // com.eignex.util.io/CharReader|null[0]
+    constructor <init>(com.eignex.util.io/CharSource) // com.eignex.util.io/CharReader.<init>|<init>(com.eignex.util.io.CharSource){}[0]
+
+    final fun advance() // com.eignex.util.io/CharReader.advance|advance(){}[0]
+    final fun eof(): kotlin/Boolean // com.eignex.util.io/CharReader.eof|eof(){}[0]
+    final fun peek(kotlin/Int = ...): kotlin/Int // com.eignex.util.io/CharReader.peek|peek(kotlin.Int){}[0]
+}
+
+final class com.eignex.util.io/StringCharSource : com.eignex.util.io/CharSource { // com.eignex.util.io/StringCharSource|null[0]
+    constructor <init>(kotlin/String) // com.eignex.util.io/StringCharSource.<init>|<init>(kotlin.String){}[0]
+
+    final fun next(): kotlin/String? // com.eignex.util.io/StringCharSource.next|next(){}[0]
+}
+
 final class com.eignex.util.numbers/CheckedLongOverflowException : kotlin/ArithmeticException { // com.eignex.util.numbers/CheckedLongOverflowException|null[0]
     constructor <init>(kotlin/String) // com.eignex.util.numbers/CheckedLongOverflowException.<init>|<init>(kotlin.String){}[0]
 }
@@ -502,6 +522,8 @@ final fun (com.eignex.util.collections/MutableIntIntMap).com.eignex.util.collect
 final fun (com.eignex.util.collections/MutableIntLongMap).com.eignex.util.collections/sortedKeys(): kotlin/IntArray // com.eignex.util.collections/sortedKeys|sortedKeys@com.eignex.util.collections.MutableIntLongMap(){}[0]
 final fun (com.eignex.util.concurrent/DoubleCounter).com.eignex.util.concurrent/getValue(kotlin/Any?, kotlin.reflect/KProperty<*>): kotlin/Double // com.eignex.util.concurrent/getValue|getValue@com.eignex.util.concurrent.DoubleCounter(kotlin.Any?;kotlin.reflect.KProperty<*>){}[0]
 final fun (com.eignex.util.concurrent/LongCounter).com.eignex.util.concurrent/getValue(kotlin/Any?, kotlin.reflect/KProperty<*>): kotlin/Long // com.eignex.util.concurrent/getValue|getValue@com.eignex.util.concurrent.LongCounter(kotlin.Any?;kotlin.reflect.KProperty<*>){}[0]
+final fun (com.eignex.util.io/CharSource).com.eignex.util.io/lineSequence(): kotlin.sequences/Sequence<kotlin/String> // com.eignex.util.io/lineSequence|lineSequence@com.eignex.util.io.CharSource(){}[0]
+final fun (com.eignex.util.io/CharSource).com.eignex.util.io/readText(): kotlin/String // com.eignex.util.io/readText|readText@com.eignex.util.io.CharSource(){}[0]
 final fun (kotlin/IntArray).com.eignex.util.arrays/binarySearchInt(kotlin/Int, kotlin/Int = ..., kotlin/Int = ...): kotlin/Int // com.eignex.util.arrays/binarySearchInt|binarySearchInt@kotlin.IntArray(kotlin.Int;kotlin.Int;kotlin.Int){}[0]
 final fun (kotlin/LongArray).com.eignex.util.arrays/binarySearchLong(kotlin/Long, kotlin/Int = ..., kotlin/Int = ...): kotlin/Int // com.eignex.util.arrays/binarySearchLong|binarySearchLong@kotlin.LongArray(kotlin.Long;kotlin.Int;kotlin.Int){}[0]
 final fun <#A: kotlin/Any?> (com.eignex.util.collections/MutableIntObjectMap<#A>).com.eignex.util.collections/sortedKeys(): kotlin/IntArray // com.eignex.util.collections/sortedKeys|sortedKeys@com.eignex.util.collections.MutableIntObjectMap<0:0>(){0§<kotlin.Any?>}[0]
@@ -521,9 +543,149 @@ final fun com.eignex.util.numbers/addExact(kotlin/Long, kotlin/Long): kotlin/Lon
 final fun com.eignex.util.numbers/mulExact(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/mulExact|mulExact(kotlin.Long;kotlin.Long){}[0]
 final fun com.eignex.util.numbers/subExact(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/subExact|subExact(kotlin.Long;kotlin.Long){}[0]
 final inline fun <#A: kotlin/Any?> (com.eignex.util.concurrent/Mutex).com.eignex.util.concurrent/guarded(kotlin/Function0<#A>): #A // com.eignex.util.concurrent/guarded|guarded@com.eignex.util.concurrent.Mutex(kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
+final inline fun <#A: kotlin/Any?> (com.eignex.util.io/CharSource).com.eignex.util.io/useSource(kotlin/Function1<com.eignex.util.io/CharSource, #A>): #A // com.eignex.util.io/useSource|useSource@com.eignex.util.io.CharSource(kotlin.Function1<com.eignex.util.io.CharSource,0:0>){0§<kotlin.Any?>}[0]
 final inline fun com.eignex.util.arrays/argsortBy(kotlin/Int, kotlin/Function2<kotlin/Int, kotlin/Int, kotlin/Int>): kotlin/IntArray // com.eignex.util.arrays/argsortBy|argsortBy(kotlin.Int;kotlin.Function2<kotlin.Int,kotlin.Int,kotlin.Int>){}[0]
 final inline fun com.eignex.util.arrays/argsortBy(kotlin/Int, kotlin/IntArray, kotlin/IntArray, kotlin/Function2<kotlin/Int, kotlin/Int, kotlin/Int>): kotlin/IntArray // com.eignex.util.arrays/argsortBy|argsortBy(kotlin.Int;kotlin.IntArray;kotlin.IntArray;kotlin.Function2<kotlin.Int,kotlin.Int,kotlin.Int>){}[0]
 final inline fun com.eignex.util.arrays/argsortByIntKey(kotlin/Int, kotlin/Function1<kotlin/Int, kotlin/Int>): kotlin/IntArray // com.eignex.util.arrays/argsortByIntKey|argsortByIntKey(kotlin.Int;kotlin.Function1<kotlin.Int,kotlin.Int>){}[0]
 
 // Targets: [native]
+final class com.eignex.util.platform/HeapSample { // com.eignex.util.platform/HeapSample|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long, kotlin/Long?) // com.eignex.util.platform/HeapSample.<init>|<init>(kotlin.Long;kotlin.Long;kotlin.Long?){}[0]
+
+    final val committedBytes // com.eignex.util.platform/HeapSample.committedBytes|{}committedBytes[0]
+        final fun <get-committedBytes>(): kotlin/Long // com.eignex.util.platform/HeapSample.committedBytes.<get-committedBytes>|<get-committedBytes>(){}[0]
+    final val peakBytes // com.eignex.util.platform/HeapSample.peakBytes|{}peakBytes[0]
+        final fun <get-peakBytes>(): kotlin/Long? // com.eignex.util.platform/HeapSample.peakBytes.<get-peakBytes>|<get-peakBytes>(){}[0]
+    final val retainedBytes // com.eignex.util.platform/HeapSample.retainedBytes|{}retainedBytes[0]
+        final fun <get-retainedBytes>(): kotlin/Long // com.eignex.util.platform/HeapSample.retainedBytes.<get-retainedBytes>|<get-retainedBytes>(){}[0]
+}
+
+// Targets: [native]
+final val com.eignex.util.numbers/BIG_ONE // com.eignex.util.numbers/BIG_ONE|{}BIG_ONE[0]
+    final inline fun <get-BIG_ONE>(): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/BIG_ONE.<get-BIG_ONE>|<get-BIG_ONE>(){}[0]
+
+// Targets: [native]
+final val com.eignex.util.numbers/BIG_TEN // com.eignex.util.numbers/BIG_TEN|{}BIG_TEN[0]
+    final inline fun <get-BIG_TEN>(): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/BIG_TEN.<get-BIG_TEN>|<get-BIG_TEN>(){}[0]
+
+// Targets: [native]
+final val com.eignex.util.numbers/BIG_TWO // com.eignex.util.numbers/BIG_TWO|{}BIG_TWO[0]
+    final inline fun <get-BIG_TWO>(): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/BIG_TWO.<get-BIG_TWO>|<get-BIG_TWO>(){}[0]
+
+// Targets: [native]
+final val com.eignex.util.numbers/BIG_ZERO // com.eignex.util.numbers/BIG_ZERO|{}BIG_ZERO[0]
+    final inline fun <get-BIG_ZERO>(): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/BIG_ZERO.<get-BIG_ZERO>|<get-BIG_ZERO>(){}[0]
+
+// Targets: [native]
+final fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/fitsLong(): kotlin/Boolean // com.eignex.util.numbers/fitsLong|fitsLong@com.ionspin.kotlin.bignum.integer.BigInteger(){}[0]
+
+// Targets: [native]
+final fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/remainderOf(com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/remainderOf|remainderOf@com.ionspin.kotlin.bignum.integer.BigInteger(com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+
+// Targets: [native]
+final fun <#A: kotlin/Any?> com.eignex.util.concurrent/parallelRun(kotlin.collections/List<kotlin/Function0<#A>>): kotlin.collections/List<#A> // com.eignex.util.concurrent/parallelRun|parallelRun(kotlin.collections.List<kotlin.Function0<0:0>>){0§<kotlin.Any?>}[0]
+
+// Targets: [native]
+final fun com.eignex.util.numbers/floorBigInt(kotlin/Double): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/floorBigInt|floorBigInt(kotlin.Double){}[0]
+
+// Targets: [native]
+final fun com.eignex.util.numbers/maxOf(com.ionspin.kotlin.bignum.integer/BigInteger, com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/maxOf|maxOf(com.ionspin.kotlin.bignum.integer.BigInteger;com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+
+// Targets: [native]
+final fun com.eignex.util.numbers/minOf(com.ionspin.kotlin.bignum.integer/BigInteger, com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/minOf|minOf(com.ionspin.kotlin.bignum.integer.BigInteger;com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+
+// Targets: [native]
+final fun com.eignex.util.numbers/parseBigInt(kotlin/String): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/parseBigInt|parseBigInt(kotlin.String){}[0]
+
+// Targets: [native]
+final fun com.eignex.util.platform/compilationTimeMillis(): kotlin/Long? // com.eignex.util.platform/compilationTimeMillis|compilationTimeMillis(){}[0]
+
+// Targets: [native]
 final fun com.eignex.util.platform/identityHash(kotlin/Any): kotlin/Int // com.eignex.util.platform/identityHash|identityHash(kotlin.Any){}[0]
+
+// Targets: [native]
+final fun com.eignex.util.platform/sampleHeap(): com.eignex.util.platform/HeapSample? // com.eignex.util.platform/sampleHeap|sampleHeap(){}[0]
+
+// Targets: [native]
+final fun com.eignex.util.platform/startHeapPeakSampler() // com.eignex.util.platform/startHeapPeakSampler|startHeapPeakSampler(){}[0]
+
+// Targets: [native]
+final fun com.eignex.util.process/exitProcess(kotlin/Int): kotlin/Nothing // com.eignex.util.process/exitProcess|exitProcess(kotlin.Int){}[0]
+
+// Targets: [native]
+final fun com.eignex.util.process/flushStandardOutput() // com.eignex.util.process/flushStandardOutput|flushStandardOutput(){}[0]
+
+// Targets: [native]
+final fun com.eignex.util.process/printErrorLine(kotlin/String) // com.eignex.util.process/printErrorLine|printErrorLine(kotlin.String){}[0]
+
+// Targets: [native]
+final fun com.eignex.util.process/processProperty(kotlin/String): kotlin/String? // com.eignex.util.process/processProperty|processProperty(kotlin.String){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/abs(): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/abs|abs@com.ionspin.kotlin.bignum.integer.BigInteger(){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/compareTo(com.ionspin.kotlin.bignum.integer/BigInteger): kotlin/Int // com.eignex.util.numbers/compareTo|compareTo@com.ionspin.kotlin.bignum.integer.BigInteger(com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/div(com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/div|div@com.ionspin.kotlin.bignum.integer.BigInteger(com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/gcd(com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/gcd|gcd@com.ionspin.kotlin.bignum.integer.BigInteger(com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/isZero(): kotlin/Boolean // com.eignex.util.numbers/isZero|isZero@com.ionspin.kotlin.bignum.integer.BigInteger(){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/magnitudeBitLength(): kotlin/Int // com.eignex.util.numbers/magnitudeBitLength|magnitudeBitLength@com.ionspin.kotlin.bignum.integer.BigInteger(){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/minus(com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/minus|minus@com.ionspin.kotlin.bignum.integer.BigInteger(com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/negate(): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/negate|negate@com.ionspin.kotlin.bignum.integer.BigInteger(){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/plus(com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/plus|plus@com.ionspin.kotlin.bignum.integer.BigInteger(com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/rem(com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/rem|rem@com.ionspin.kotlin.bignum.integer.BigInteger(com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/shl(kotlin/Int): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/shl|shl@com.ionspin.kotlin.bignum.integer.BigInteger(kotlin.Int){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/shr(kotlin/Int): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/shr|shr@com.ionspin.kotlin.bignum.integer.BigInteger(kotlin.Int){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/signum(): kotlin/Int // com.eignex.util.numbers/signum|signum@com.ionspin.kotlin.bignum.integer.BigInteger(){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/times(com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/times|times@com.ionspin.kotlin.bignum.integer.BigInteger(com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/toDouble(): kotlin/Double // com.eignex.util.numbers/toDouble|toDouble@com.ionspin.kotlin.bignum.integer.BigInteger(){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/toLong(): kotlin/Long // com.eignex.util.numbers/toLong|toLong@com.ionspin.kotlin.bignum.integer.BigInteger(){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/toLongExact(): kotlin/Long // com.eignex.util.numbers/toLongExact|toLongExact@com.ionspin.kotlin.bignum.integer.BigInteger(){}[0]
+
+// Targets: [native]
+final inline fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers/unaryMinus(): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/unaryMinus|unaryMinus@com.ionspin.kotlin.bignum.integer.BigInteger(){}[0]
+
+// Targets: [native]
+final inline fun com.eignex.util.numbers/bigIntOf(kotlin/Int): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/bigIntOf|bigIntOf(kotlin.Int){}[0]
+
+// Targets: [native]
+final inline fun com.eignex.util.numbers/bigIntOf(kotlin/Long): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/bigIntOf|bigIntOf(kotlin.Long){}[0]
+
+// Targets: [native]
+final inline fun com.eignex.util.numbers/bigIntOf(kotlin/ULong): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/bigIntOf|bigIntOf(kotlin.ULong){}[0]
+
+// Targets: [apple, linux]
+final fun com.eignex.util.io/openTextFile(kotlin/String): com.eignex.util.io/CharSource // com.eignex.util.io/openTextFile|openTextFile(kotlin.String){}[0]
+
+// Targets: [apple, linux]
+final fun com.eignex.util.io/readTextFile(kotlin/String): kotlin/String // com.eignex.util.io/readTextFile|readTextFile(kotlin.String){}[0]

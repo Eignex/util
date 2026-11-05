@@ -53,7 +53,16 @@ kotlin {
         jvmTest.get().dependsOn(hostTest)
         nativeTest.get().dependsOn(hostTest)
 
-        val posixMain = create("posixMain") { dependsOn(nativeMain.get()) }
+        nativeMain.dependencies {
+            api("com.ionspin.kotlin:bignum:0.3.10")
+        }
+
+        val systemMain = create("systemMain") { dependsOn(hostMain) }
+        jvmMain.get().dependsOn(systemMain)
+        val posixMain = create("posixMain") {
+            dependsOn(nativeMain.get())
+            dependsOn(systemMain)
+        }
         linuxMain.get().dependsOn(posixMain)
         if (fullTargets) {
             appleMain.get().dependsOn(posixMain)
