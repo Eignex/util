@@ -29,32 +29,3 @@ Initial candidates come from [Klause](https://github.com/Eignex/klause),
 [Koblas](https://github.com/Eignex/koblas) and
 [Kumulant](https://github.com/Eignex/kumulant). Solver policies, BLAS engine
 selection and statistical concurrency guarantees belong in their consuming libraries.
-
-## Targets
-
-The default build configures JVM and Linux x64. `-Ptargets.full` also enables
-JavaScript, Wasm JS, Wasm WASI, Linux ARM64, macOS ARM64, Windows x64 and iOS
-(x64, ARM64 and ARM64 simulator). Target execution depends on the host platform.
-
-The library uses Java 17. Gradle runs on Java 21 or later and provisions the
-compilation toolchain when needed.
-
-## Development
-
-Run the default checks and documentation lint:
-
-```sh
-./gradlew check lintDocs
-```
-
-Validate the full target configuration on the current host:
-
-```sh
-./gradlew check lintDocs -Ptargets.full
-```
-
-The build follows [Kbuild](https://github.com/Eignex/kbuild) conventions, using
-the setup from [KPermute](https://github.com/Eignex/kpermute). CI checks JVM
-and Linux x64 by default; release validation also covers macOS, iOS simulator
-and Windows. Successful builds on `main` trigger snapshot publication, and
-version tags trigger release validation and publication.
