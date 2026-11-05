@@ -1,5 +1,13 @@
 package com.eignex.util.collections
 
+import com.eignex.util.collections.internals.deleteLongKeySlot
+import com.eignex.util.collections.internals.findLongKey
+import com.eignex.util.collections.internals.forEachLongKey
+import com.eignex.util.collections.internals.growLongKeyTable
+import com.eignex.util.collections.internals.longKeySlot
+import com.eignex.util.collections.internals.longKeysToArray
+import com.eignex.util.collections.internals.openAddressingCapacity
+
 /**
  * Primitive-key Long-to-object map with linear probing, power-of-two capacity and load
  * factor at most 0.5. A separate occupancy bitmap permits every key value;

@@ -1,4 +1,4 @@
-package com.eignex.util.collections
+package com.eignex.util.collections.internals
 
 internal object EmptyIntKeyTable {
     val keys = IntArray(1)

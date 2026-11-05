@@ -1,5 +1,8 @@
 package com.eignex.util.collections
 
+import com.eignex.util.collections.internals.mixIntKey
+import com.eignex.util.collections.internals.openAddressingCapacity
+
 /**
  * Read-only primitive Int-to-Long map with the dense/sparse backing choice of [IntIntMap].
  * Missing keys return [absent]; choose a sentinel outside the payload range when needed.

@@ -1,4 +1,4 @@
-package com.eignex.util.collections
+package com.eignex.util.collections.internals
 
 /** Shared empty `IntArray` for zero-length slots, such as a factor's unused variable space. */
 internal val EmptyIntArray: IntArray = IntArray(0)

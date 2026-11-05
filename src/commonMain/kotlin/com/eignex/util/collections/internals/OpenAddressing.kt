@@ -1,4 +1,4 @@
-package com.eignex.util.collections
+package com.eignex.util.collections.internals
 
 /** Next power-of-two capacity that keeps the load factor ≤ 0.5 for [initialCapacity] entries. */
 internal fun openAddressingCapacity(initialCapacity: Int): Int {

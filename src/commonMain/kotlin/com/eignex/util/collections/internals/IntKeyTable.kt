@@ -1,14 +1,10 @@
-package com.eignex.util.collections
+package com.eignex.util.collections.internals
+
+import com.eignex.util.collections.IntConsumer
 
 // Inline hooks preserve typed value storage without an additional table object.
-internal inline fun longKeySlot(
-    keys: LongArray,
-    used: BooleanArray,
-    mask: Int,
-    key: Long,
-    existing: (Int) -> Unit,
-): Int {
-    var index = mixLongKey(key) and mask
+internal inline fun intKeySlot(keys: IntArray, used: BooleanArray, mask: Int, key: Int, existing: (Int) -> Unit): Int {
+    var index = mixIntKey(key) and mask
     while (used[index]) {
         if (keys[index] == key) {
             existing(index)
@@ -19,8 +15,8 @@ internal inline fun longKeySlot(
     return index
 }
 
-internal inline fun findLongKey(keys: LongArray, used: BooleanArray, mask: Int, key: Long, found: (Int) -> Unit) {
-    var index = mixLongKey(key) and mask
+internal inline fun findIntKey(keys: IntArray, used: BooleanArray, mask: Int, key: Int, found: (Int) -> Unit) {
+    var index = mixIntKey(key) and mask
     while (used[index]) {
         if (keys[index] == key) {
             found(index)
@@ -30,8 +26,8 @@ internal inline fun findLongKey(keys: LongArray, used: BooleanArray, mask: Int, 
     }
 }
 
-internal inline fun deleteLongKeySlot(
-    keys: LongArray,
+internal inline fun deleteIntKeySlot(
+    keys: IntArray,
     used: BooleanArray,
     mask: Int,
     slot: Int,
@@ -45,7 +41,7 @@ internal inline fun deleteLongKeySlot(
     while (true) {
         cursor = (cursor + 1) and mask
         if (!used[cursor]) return
-        val home = mixLongKey(keys[cursor]) and mask
+        val home = mixIntKey(keys[cursor]) and mask
         if (mustStayDuringShift(home, hole, cursor)) continue
         keys[hole] = keys[cursor]
         move(cursor, hole)
@@ -56,21 +52,21 @@ internal inline fun deleteLongKeySlot(
     }
 }
 
-internal inline fun growLongKeyTable(
-    oldKeys: LongArray,
+internal inline fun growIntKeyTable(
+    oldKeys: IntArray,
     oldUsed: BooleanArray,
     allocateValues: (Int) -> Unit,
     move: (Int, Int) -> Unit,
-    publish: (LongArray, BooleanArray, Int) -> Unit,
+    publish: (IntArray, BooleanArray, Int) -> Unit,
 ) {
-    val keys = LongArray(oldKeys.size * 2)
+    val keys = IntArray(oldKeys.size * 2)
     val used = BooleanArray(keys.size)
     val mask = keys.size - 1
     allocateValues(keys.size)
     publish(keys, used, mask)
     for (old in oldUsed.indices) {
         if (!oldUsed[old]) continue
-        var destination = mixLongKey(oldKeys[old]) and mask
+        var destination = mixIntKey(oldKeys[old]) and mask
         while (used[destination]) destination = (destination + 1) and mask
         keys[destination] = oldKeys[old]
         used[destination] = true
@@ -78,12 +74,12 @@ internal inline fun growLongKeyTable(
     }
 }
 
-internal fun forEachLongKey(keys: LongArray, used: BooleanArray, action: LongConsumer) {
+internal fun forEachIntKey(keys: IntArray, used: BooleanArray, action: IntConsumer) {
     for (index in used.indices) if (used[index]) action.accept(keys[index])
 }
 
-internal fun longKeysToArray(keys: LongArray, used: BooleanArray, size: Int): LongArray {
-    val result = LongArray(size)
+internal fun intKeysToArray(keys: IntArray, used: BooleanArray, size: Int): IntArray {
+    val result = IntArray(size)
     var destination = 0
     for (index in used.indices) if (used[index]) result[destination++] = keys[index]
     return result

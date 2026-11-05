@@ -1,5 +1,6 @@
 package com.eignex.util.collections
 
+import com.eignex.util.collections.internals.mixLongKey
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

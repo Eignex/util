@@ -1,5 +1,10 @@
 package com.eignex.util.collections
 
+import com.eignex.util.collections.internals.EmptyBooleanArray
+import com.eignex.util.collections.internals.EmptyIntArray
+import com.eignex.util.collections.internals.mixIntKey
+import com.eignex.util.collections.internals.openAddressingCapacity
+
 /**
  * Read-only primitive Int-to-Int map. [build] selects a dense offset array or sparse
  * linear-probed table. Missing keys return [absent]; use a sentinel outside the
