@@ -22,7 +22,8 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
     private var mask: Int = 0
     private val initialCap = openAddressingCapacity(initialCapacity)
 
-    internal val allocatedBytes: Long
+    /** Bytes in allocated primitive arrays, excluding object headers and shared empty storage. */
+    val allocatedBytes: Long
         get() = if (used === EmptyLongKeyTable.used) 0L else keys.size.toLong() * (Long.SIZE_BYTES + 1L)
 
     /** Number of members currently in the set. */
@@ -39,7 +40,11 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
         return false
     }
 
-    internal fun containsBounded(value: Long, maxWork: Long, cancelled: () -> Boolean, charge: () -> Unit): Boolean? {
+    /**
+     * Query membership within [maxWork] slot visits, invoking [charge] for each visit.
+     * Return null on exhaustion or [cancelled]. No mutation occurs.
+     */
+    fun containsBounded(value: Long, maxWork: Long, cancelled: () -> Boolean, charge: () -> Unit): Boolean? {
         require(maxWork >= 0L)
         var work = 0L
         var slot = mixLongKey(value) and mask
@@ -69,7 +74,12 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
         return true
     }
 
-    internal fun tryAddBounded(
+    /**
+     * Add within byte, work and scratch limits, charging each work unit through [charge].
+     * Return true for insertion, false for an existing value, or null on exhaustion or cancellation.
+     * An incomplete attempt preserves membership and the published backing arrays.
+     */
+    fun tryAddBounded(
         value: Long,
         maxBytes: Long,
         maxWork: Long,
@@ -155,12 +165,14 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
     /** Snapshot the members into a fresh [LongArray] (unspecified order). */
     override fun toLongArray(): LongArray = longKeysToArray(keys, used, size)
 
-    internal fun canAddWithoutGrowing(count: Int): Boolean {
+    /** Whether [count] additional members fit without replacing the backing table. */
+    fun canAddWithoutGrowing(count: Int): Boolean {
         require(count >= 0)
         return (size.toLong() + count) * 2L <= keys.size.toLong()
     }
 
-    internal fun release() {
+    /** Remove all members and release owned backing arrays. */
+    fun release() {
         keys = EmptyLongKeyTable.keys
         used = EmptyLongKeyTable.used
         mask = 0

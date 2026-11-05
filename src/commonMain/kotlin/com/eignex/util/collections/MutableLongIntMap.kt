@@ -22,7 +22,8 @@ class MutableLongIntMap(initialCapacity: Int = 8) : LongKeyed {
     private var used: BooleanArray
     private var mask: Int
 
-    internal val primitiveCapacityBytes: Long get() = keys.size.toLong() * 13L
+    /** Bytes in the primitive backing arrays, excluding object headers. */
+    val primitiveCapacityBytes: Long get() = keys.size.toLong() * 13L
 
     /** Number of entries currently stored. */
     override var size: Int = 0
@@ -100,7 +101,13 @@ class MutableLongIntMap(initialCapacity: Int = 8) : LongKeyed {
         return false
     }
 
-    internal fun removeAndUpdate(
+    /**
+     * Remove [key] and update an existing [updateKey] as one funded mutation.
+     * [fund] charges preparation before [ready] runs; neither callback may mutate this map.
+     * A missing non-null [updateKey] returns false without mutation or calling [ready].
+     * [key] and [updateKey] must differ. A null [updateKey] performs removal only.
+     */
+    fun removeAndUpdate(
         key: Long,
         updateKey: Long?,
         updateValue: Int,

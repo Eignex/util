@@ -23,7 +23,8 @@ class IntHashSet(initialCapacity: Int = 8) : MutableIntSet {
     private var mask: Int = 0
     private val initialCap = openAddressingCapacity(initialCapacity)
 
-    internal val allocatedBytes: Long
+    /** Bytes in allocated primitive arrays, excluding object headers and shared empty storage. */
+    val allocatedBytes: Long
         get() = if (used === EmptyIntKeyTable.used) 0L else keys.size.toLong() * (Int.SIZE_BYTES + 1L)
 
     /** Number of members currently in the set. */
@@ -82,6 +83,16 @@ class IntHashSet(initialCapacity: Int = 8) : MutableIntSet {
         val k = keysInternal
         val u = usedInternal
         for (i in u.indices) if (u[i]) action(k[i])
+    }
+
+    /**
+     * Visit each allocated table slot, including unused slots, in table order.
+     * The key is meaningful only when the first argument is true. Mutation is unsupported.
+     */
+    inline fun forEachSlot(action: (occupied: Boolean, key: Int) -> Unit) {
+        val keys = keysInternal
+        val used = usedInternal
+        for (i in used.indices) action(used[i], keys[i])
     }
 
     override fun forEach(action: IntConsumer) = forEachIntKey(keys, used, action)

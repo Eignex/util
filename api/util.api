@@ -11,6 +11,13 @@ public final class com/eignex/util/arrays/BinarySearchKt {
 	public static synthetic fun binarySearchLong$default ([JJIIILjava/lang/Object;)I
 }
 
+public final class com/eignex/util/arrays/EmptyArraysKt {
+	public static final fun emptyBooleanArray ()[Z
+	public static final fun emptyDoubleArray ()[D
+	public static final fun emptyIntArray ()[I
+	public static final fun emptyLongArray ()[J
+}
+
 public abstract interface class com/eignex/util/collections/BitSet {
 	public fun andInPlace (Lcom/eignex/util/collections/BitSet;)V
 	public fun andNotInPlace (Lcom/eignex/util/collections/BitSet;)V
@@ -63,11 +70,14 @@ public final class com/eignex/util/collections/Bits : com/eignex/util/collection
 	public final fun copy ()Lcom/eignex/util/collections/Bits;
 	public fun copyFrom (Lcom/eignex/util/collections/BitSet;)V
 	public final fun copyFrom (Lcom/eignex/util/collections/Bits;)V
+	public final fun copyWordsFrom (Lcom/eignex/util/collections/Bits;II)V
 	public fun equals (Ljava/lang/Object;)Z
 	public fun forEachSet (Lcom/eignex/util/collections/IntConsumer;)V
 	public final fun forEachSet (Lkotlin/jvm/functions/Function1;)V
 	public fun get (I)Z
 	public fun getSize ()I
+	public final fun getWord (I)J
+	public final fun getWordCount ()I
 	public final fun getWords ()[J
 	public fun hashCode ()I
 	public fun orInPlace (Lcom/eignex/util/collections/BitSet;)V
@@ -75,6 +85,7 @@ public final class com/eignex/util/collections/Bits : com/eignex/util/collection
 	public fun set (I)V
 	public fun set (IZ)V
 	public fun setRange (II)V
+	public final fun setWord (IJ)V
 	public fun toBooleanArray ()[Z
 	public fun toIntArray ()[I
 	public fun toString ()Ljava/lang/String;
@@ -159,6 +170,7 @@ public final class com/eignex/util/collections/IntArrayDeque : com/eignex/util/c
 	public fun contains (I)Z
 	public fun forEach (Lcom/eignex/util/collections/IntConsumer;)V
 	public fun get (I)I
+	public final fun getAllocatedBytes ()J
 	public fun getSize ()I
 	public fun isEmpty ()Z
 	public final fun isNotEmpty ()Z
@@ -195,6 +207,7 @@ public final class com/eignex/util/collections/IntArrayList : com/eignex/util/co
 	public static synthetic fun sortByIntKey$default (Lcom/eignex/util/collections/IntArrayList;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public fun toIntArray ()[I
 	public final fun toSet ()Ljava/util/Set;
+	public final fun trim ()V
 	public final fun truncateTo (I)V
 }
 
@@ -232,6 +245,8 @@ public final class com/eignex/util/collections/IntHashSet : com/eignex/util/coll
 	public fun contains (I)Z
 	public fun forEach (Lcom/eignex/util/collections/IntConsumer;)V
 	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
+	public final fun forEachSlot (Lkotlin/jvm/functions/Function2;)V
+	public final fun getAllocatedBytes ()J
 	public final fun getKeysInternal ()[I
 	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
@@ -321,6 +336,7 @@ public final class com/eignex/util/collections/IntSet$DefaultImpls {
 }
 
 public final class com/eignex/util/collections/IntSwapSet : com/eignex/util/collections/IntIndexedCollection, com/eignex/util/collections/MutableIntSet {
+	public static final field Companion Lcom/eignex/util/collections/IntSwapSet$Companion;
 	public fun <init> (I)V
 	public fun add (I)Z
 	public fun clear ()V
@@ -335,6 +351,10 @@ public final class com/eignex/util/collections/IntSwapSet : com/eignex/util/coll
 	public fun toIntArray ()[I
 }
 
+public final class com/eignex/util/collections/IntSwapSet$Companion {
+	public final fun preparation (II)Lkotlin/sequences/Sequence;
+}
+
 public final class com/eignex/util/collections/LongArrayList : com/eignex/util/collections/LongIndexedCollection {
 	public fun <init> ()V
 	public fun <init> (I)V
@@ -345,6 +365,7 @@ public final class com/eignex/util/collections/LongArrayList : com/eignex/util/c
 	public fun forEach (Lcom/eignex/util/collections/LongConsumer;)V
 	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
 	public fun get (I)J
+	public final fun getAllocatedBytes ()J
 	public fun getSize ()I
 	public final fun indexOf (J)I
 	public final fun insertAt (IJ)V
@@ -384,16 +405,21 @@ public final class com/eignex/util/collections/LongHashSet : com/eignex/util/col
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun add (J)Z
+	public final fun canAddWithoutGrowing (I)Z
 	public fun clear ()V
 	public fun contains (J)Z
+	public final fun containsBounded (JJLkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;)Ljava/lang/Boolean;
 	public fun forEach (Lcom/eignex/util/collections/LongConsumer;)V
 	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
+	public final fun getAllocatedBytes ()J
 	public final fun getKeysInternal ()[J
 	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
 	public fun isEmpty ()Z
+	public final fun release ()V
 	public fun remove (J)Z
 	public fun toLongArray ()[J
+	public final fun tryAddBounded (JJJJLkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function0;)Ljava/lang/Boolean;
 }
 
 public abstract interface class com/eignex/util/collections/LongIndexedCollection : com/eignex/util/collections/LongCollection {
@@ -496,12 +522,16 @@ public final class com/eignex/util/collections/MutableIntObjectMap : com/eignex/
 	public fun containsKey (I)Z
 	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
 	public fun forEachKey (Lcom/eignex/util/collections/IntConsumer;)V
+	public final fun forEachValueSlot (Lkotlin/jvm/functions/Function1;)V
 	public final fun get (I)Ljava/lang/Object;
 	public final fun getKeysInternal ()[I
 	public final fun getOrPut (ILkotlin/jvm/functions/Function0;)Ljava/lang/Object;
+	public final fun getPrimitiveCapacityBytes ()J
+	public final fun getReferenceCapacity ()I
 	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
 	public final fun getValue (I)Ljava/lang/Object;
+	public final fun getValueStorageIdentity ()Ljava/lang/Object;
 	public final fun getValuesInternal ()[Ljava/lang/Object;
 	public final fun isEmpty ()Z
 	public fun keysToIntArray ()[I
@@ -533,6 +563,7 @@ public final class com/eignex/util/collections/MutableLongIntMap : com/eignex/ut
 	public fun forEachKey (Lcom/eignex/util/collections/LongConsumer;)V
 	public final fun getKeysInternal ()[J
 	public final fun getOrDefault (JI)I
+	public final fun getPrimitiveCapacityBytes ()J
 	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
 	public final fun getValuesInternal ()[I
@@ -541,6 +572,7 @@ public final class com/eignex/util/collections/MutableLongIntMap : com/eignex/ut
 	public final fun put (JI)V
 	public final fun remove (J)Z
 	public final fun removeAndGet (JI)I
+	public final fun removeAndUpdate (JLjava/lang/Long;ILkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function0;)Z
 }
 
 public final class com/eignex/util/collections/MutableLongObjectMap : com/eignex/util/collections/LongKeyed {

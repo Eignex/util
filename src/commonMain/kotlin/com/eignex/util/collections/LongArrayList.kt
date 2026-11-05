@@ -13,7 +13,8 @@ class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
     override var size: Int = 0
         private set
 
-    internal val allocatedBytes: Long get() = data.size.toLong() * Long.SIZE_BYTES
+    /** Bytes in the backing primitive array, excluding its object header. */
+    val allocatedBytes: Long get() = data.size.toLong() * Long.SIZE_BYTES
 
     /** Append [value], growing the backing array when needed. */
     fun add(value: Long) {

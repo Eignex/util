@@ -11,6 +11,25 @@ class Bits(size: Int) : BitSet {
 
     @PublishedApi internal val words: LongArray = LongArray(bitWordCount(size))
 
+    /** Number of packed 64-bit words, including a partial final word. */
+    val wordCount: Int get() = words.size
+
+    /** Packed word at [index], which must lie in `0 until wordCount`. */
+    fun getWord(index: Int): Long = words[index]
+
+    /** Replace packed word [index], clearing padding beyond [size] in the final word. */
+    fun setWord(index: Int, value: Long) {
+        val tail = size and 63
+        words[index] = if (index == words.lastIndex && tail != 0) value and (-1L ushr (64 - tail)) else value
+    }
+
+    /** Copy matching word positions `[fromIndex, toIndex)` from equal-sized [other]. */
+    fun copyWordsFrom(other: Bits, fromIndex: Int, toIndex: Int) {
+        require(size == other.size)
+        require(fromIndex >= 0 && fromIndex <= toIndex && toIndex <= wordCount)
+        other.words.copyInto(words, fromIndex, fromIndex, toIndex)
+    }
+
     /** Whether bit [i] is set. */
     override operator fun get(i: Int): Boolean = (words[i ushr 6] ushr (i and 63)) and 1L == 1L
 

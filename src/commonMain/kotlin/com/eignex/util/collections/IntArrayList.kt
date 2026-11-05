@@ -67,7 +67,8 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
         size = 0
     }
 
-    internal fun trim() {
+    /** Reduce backing capacity to the live length, retaining at least one slot. */
+    fun trim() {
         if (data.size > size.coerceAtLeast(1)) data = data.copyOf(size.coerceAtLeast(1))
     }
 
@@ -154,5 +155,10 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
     }
 
     // Exposed for the inline [sortByIntKey]; sorting never grows the list, so reading it once is safe.
-    @PublishedApi internal val backingData: IntArray get() = data
+
+    /**
+     * Borrow the backing array without copying; only `0 until size` contains live elements.
+     * Writes to live elements update this list. Growth and [trim] can replace this array.
+     */
+    val backingData: IntArray get() = data
 }

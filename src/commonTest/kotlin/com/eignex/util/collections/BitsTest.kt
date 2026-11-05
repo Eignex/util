@@ -1,11 +1,36 @@
 package com.eignex.util.collections
 
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class BitsTest {
+    @Test
+    fun `packed word writes clear final padding`() {
+        for (size in intArrayOf(1, 63, 64, 65, 130)) {
+            val bits = Bits(size)
+
+            for (word in 0 until bits.wordCount) bits.setWord(word, -1L)
+
+            assertEquals(size, bits.cardinality())
+            assertContentEquals(IntArray(size) { it }, bits.toIntArray())
+            assertEquals(if (size % 64 == 0) -1L else -1L ushr (64 - size % 64), bits.getWord(bits.wordCount - 1))
+        }
+    }
+
+    @Test
+    fun `copying a word range preserves words outside it`() {
+        val source = Bits.full(130)
+        val target = Bits(130)
+
+        target.copyWordsFrom(source, 1, 2)
+
+        assertContentEquals(IntArray(64) { it + 64 }, target.toIntArray())
+        source.clear()
+        assertEquals(64, target.cardinality())
+    }
 
     @Test
     fun `set and get should round-trip across word boundaries`() {

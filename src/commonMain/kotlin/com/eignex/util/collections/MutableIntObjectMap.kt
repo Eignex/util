@@ -20,9 +20,11 @@ class MutableIntObjectMap<V>(initialCapacity: Int = 8) : IntKeyed {
     private var used: BooleanArray
     private var mask: Int
 
-    internal val primitiveCapacityBytes: Long get() = keys.size.toLong() * 5L
+    /** Bytes in the key and occupancy arrays, excluding object headers. */
+    val primitiveCapacityBytes: Long get() = keys.size.toLong() * 5L
 
-    internal val referenceCapacity: Int get() = values.size
+    /** Number of slots in the value array, including unused slots. */
+    val referenceCapacity: Int get() = values.size
 
     /** Number of entries currently stored. */
     override var size: Int = 0
@@ -138,6 +140,15 @@ class MutableIntObjectMap<V>(initialCapacity: Int = 8) : IntKeyed {
     override fun forEachKey(action: IntConsumer) = forEachIntKey(keys, used, action)
 
     override fun keysToIntArray(): IntArray = intKeysToArray(keys, used, size)
+
+    /** Identity of the current value array for ownership accounting; growth replaces it. */
+    val valueStorageIdentity: Any get() = values
+
+    /** Visit every value slot, including nulls in unused slots. Mutation is unsupported. */
+    @Suppress("UNCHECKED_CAST")
+    inline fun forEachValueSlot(action: (V?) -> Unit) {
+        for (value in valuesInternal) action(value as V?)
+    }
 
     @PublishedApi internal val keysInternal: IntArray get() = keys
 

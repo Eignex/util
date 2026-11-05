@@ -191,8 +191,14 @@ final class <#A: kotlin/Any?> com.eignex.util.collections/MutableIntObjectMap : 
 
     final val keysInternal // com.eignex.util.collections/MutableIntObjectMap.keysInternal|{}keysInternal[0]
         final fun <get-keysInternal>(): kotlin/IntArray // com.eignex.util.collections/MutableIntObjectMap.keysInternal.<get-keysInternal>|<get-keysInternal>(){}[0]
+    final val primitiveCapacityBytes // com.eignex.util.collections/MutableIntObjectMap.primitiveCapacityBytes|{}primitiveCapacityBytes[0]
+        final fun <get-primitiveCapacityBytes>(): kotlin/Long // com.eignex.util.collections/MutableIntObjectMap.primitiveCapacityBytes.<get-primitiveCapacityBytes>|<get-primitiveCapacityBytes>(){}[0]
+    final val referenceCapacity // com.eignex.util.collections/MutableIntObjectMap.referenceCapacity|{}referenceCapacity[0]
+        final fun <get-referenceCapacity>(): kotlin/Int // com.eignex.util.collections/MutableIntObjectMap.referenceCapacity.<get-referenceCapacity>|<get-referenceCapacity>(){}[0]
     final val usedInternal // com.eignex.util.collections/MutableIntObjectMap.usedInternal|{}usedInternal[0]
         final fun <get-usedInternal>(): kotlin/BooleanArray // com.eignex.util.collections/MutableIntObjectMap.usedInternal.<get-usedInternal>|<get-usedInternal>(){}[0]
+    final val valueStorageIdentity // com.eignex.util.collections/MutableIntObjectMap.valueStorageIdentity|{}valueStorageIdentity[0]
+        final fun <get-valueStorageIdentity>(): kotlin/Any // com.eignex.util.collections/MutableIntObjectMap.valueStorageIdentity.<get-valueStorageIdentity>|<get-valueStorageIdentity>(){}[0]
     final val valuesInternal // com.eignex.util.collections/MutableIntObjectMap.valuesInternal|{}valuesInternal[0]
         final fun <get-valuesInternal>(): kotlin/Array<kotlin/Any?> // com.eignex.util.collections/MutableIntObjectMap.valuesInternal.<get-valuesInternal>|<get-valuesInternal>(){}[0]
 
@@ -211,6 +217,7 @@ final class <#A: kotlin/Any?> com.eignex.util.collections/MutableIntObjectMap : 
     final fun removeKeysAbove(kotlin/Int) // com.eignex.util.collections/MutableIntObjectMap.removeKeysAbove|removeKeysAbove(kotlin.Int){}[0]
     final fun valueAtMaxKey(): #A? // com.eignex.util.collections/MutableIntObjectMap.valueAtMaxKey|valueAtMaxKey(){}[0]
     final inline fun forEach(kotlin/Function2<kotlin/Int, #A, kotlin/Unit>) // com.eignex.util.collections/MutableIntObjectMap.forEach|forEach(kotlin.Function2<kotlin.Int,1:0,kotlin.Unit>){}[0]
+    final inline fun forEachValueSlot(kotlin/Function1<#A?, kotlin/Unit>) // com.eignex.util.collections/MutableIntObjectMap.forEachValueSlot|forEachValueSlot(kotlin.Function1<1:0?,kotlin.Unit>){}[0]
     final inline fun getOrPut(kotlin/Int, kotlin/Function0<#A>): #A // com.eignex.util.collections/MutableIntObjectMap.getOrPut|getOrPut(kotlin.Int;kotlin.Function0<1:0>){}[0]
 }
 
@@ -245,6 +252,8 @@ final class com.eignex.util.collections/Bits : com.eignex.util.collections/BitSe
 
     final val size // com.eignex.util.collections/Bits.size|{}size[0]
         final fun <get-size>(): kotlin/Int // com.eignex.util.collections/Bits.size.<get-size>|<get-size>(){}[0]
+    final val wordCount // com.eignex.util.collections/Bits.wordCount|{}wordCount[0]
+        final fun <get-wordCount>(): kotlin/Int // com.eignex.util.collections/Bits.wordCount.<get-wordCount>|<get-wordCount>(){}[0]
     final val words // com.eignex.util.collections/Bits.words|{}words[0]
         final fun <get-words>(): kotlin/LongArray // com.eignex.util.collections/Bits.words.<get-words>|<get-words>(){}[0]
 
@@ -257,13 +266,16 @@ final class com.eignex.util.collections/Bits : com.eignex.util.collections/BitSe
     final fun containsAll(com.eignex.util.collections/Bits): kotlin/Boolean // com.eignex.util.collections/Bits.containsAll|containsAll(com.eignex.util.collections.Bits){}[0]
     final fun copy(): com.eignex.util.collections/Bits // com.eignex.util.collections/Bits.copy|copy(){}[0]
     final fun copyFrom(com.eignex.util.collections/Bits) // com.eignex.util.collections/Bits.copyFrom|copyFrom(com.eignex.util.collections.Bits){}[0]
+    final fun copyWordsFrom(com.eignex.util.collections/Bits, kotlin/Int, kotlin/Int) // com.eignex.util.collections/Bits.copyWordsFrom|copyWordsFrom(com.eignex.util.collections.Bits;kotlin.Int;kotlin.Int){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // com.eignex.util.collections/Bits.equals|equals(kotlin.Any?){}[0]
     final fun forEachSet(com.eignex.util.collections/IntConsumer) // com.eignex.util.collections/Bits.forEachSet|forEachSet(com.eignex.util.collections.IntConsumer){}[0]
     final fun get(kotlin/Int): kotlin/Boolean // com.eignex.util.collections/Bits.get|get(kotlin.Int){}[0]
+    final fun getWord(kotlin/Int): kotlin/Long // com.eignex.util.collections/Bits.getWord|getWord(kotlin.Int){}[0]
     final fun hashCode(): kotlin/Int // com.eignex.util.collections/Bits.hashCode|hashCode(){}[0]
     final fun orInPlace(com.eignex.util.collections/Bits) // com.eignex.util.collections/Bits.orInPlace|orInPlace(com.eignex.util.collections.Bits){}[0]
     final fun set(kotlin/Int) // com.eignex.util.collections/Bits.set|set(kotlin.Int){}[0]
     final fun setRange(kotlin/Int, kotlin/Int) // com.eignex.util.collections/Bits.setRange|setRange(kotlin.Int;kotlin.Int){}[0]
+    final fun setWord(kotlin/Int, kotlin/Long) // com.eignex.util.collections/Bits.setWord|setWord(kotlin.Int;kotlin.Long){}[0]
     final fun toIntArray(): kotlin/IntArray // com.eignex.util.collections/Bits.toIntArray|toIntArray(){}[0]
     final fun toString(): kotlin/String // com.eignex.util.collections/Bits.toString|toString(){}[0]
     final inline fun forEachSet(kotlin/Function1<kotlin/Int, kotlin/Unit>) // com.eignex.util.collections/Bits.forEachSet|forEachSet(kotlin.Function1<kotlin.Int,kotlin.Unit>){}[0]
@@ -334,6 +346,8 @@ final class com.eignex.util.collections/IndexedMaxHeap { // com.eignex.util.coll
 final class com.eignex.util.collections/IntArrayDeque : com.eignex.util.collections/IntIndexedCollection { // com.eignex.util.collections/IntArrayDeque|null[0]
     constructor <init>(kotlin/Int = ...) // com.eignex.util.collections/IntArrayDeque.<init>|<init>(kotlin.Int){}[0]
 
+    final val allocatedBytes // com.eignex.util.collections/IntArrayDeque.allocatedBytes|{}allocatedBytes[0]
+        final fun <get-allocatedBytes>(): kotlin/Long // com.eignex.util.collections/IntArrayDeque.allocatedBytes.<get-allocatedBytes>|<get-allocatedBytes>(){}[0]
     final val size // com.eignex.util.collections/IntArrayDeque.size|{}size[0]
         final fun <get-size>(): kotlin/Int // com.eignex.util.collections/IntArrayDeque.size.<get-size>|<get-size>(){}[0]
 
@@ -375,6 +389,7 @@ final class com.eignex.util.collections/IntArrayList : com.eignex.util.collectio
     final fun set(kotlin/Int, kotlin/Int) // com.eignex.util.collections/IntArrayList.set|set(kotlin.Int;kotlin.Int){}[0]
     final fun toIntArray(): kotlin/IntArray // com.eignex.util.collections/IntArrayList.toIntArray|toIntArray(){}[0]
     final fun toSet(): kotlin.collections/Set<kotlin/Int> // com.eignex.util.collections/IntArrayList.toSet|toSet(){}[0]
+    final fun trim() // com.eignex.util.collections/IntArrayList.trim|trim(){}[0]
     final fun truncateTo(kotlin/Int) // com.eignex.util.collections/IntArrayList.truncateTo|truncateTo(kotlin.Int){}[0]
     final inline fun forEach(kotlin/Function1<kotlin/Int, kotlin/Unit>) // com.eignex.util.collections/IntArrayList.forEach|forEach(kotlin.Function1<kotlin.Int,kotlin.Unit>){}[0]
     final inline fun sortByIntKey(kotlin/Boolean = ..., kotlin/Function1<kotlin/Int, kotlin/Int>) // com.eignex.util.collections/IntArrayList.sortByIntKey|sortByIntKey(kotlin.Boolean;kotlin.Function1<kotlin.Int,kotlin.Int>){}[0]
@@ -392,6 +407,8 @@ final class com.eignex.util.collections/IntDisjointSet { // com.eignex.util.coll
 final class com.eignex.util.collections/IntHashSet : com.eignex.util.collections/MutableIntSet { // com.eignex.util.collections/IntHashSet|null[0]
     constructor <init>(kotlin/Int = ...) // com.eignex.util.collections/IntHashSet.<init>|<init>(kotlin.Int){}[0]
 
+    final val allocatedBytes // com.eignex.util.collections/IntHashSet.allocatedBytes|{}allocatedBytes[0]
+        final fun <get-allocatedBytes>(): kotlin/Long // com.eignex.util.collections/IntHashSet.allocatedBytes.<get-allocatedBytes>|<get-allocatedBytes>(){}[0]
     final val keysInternal // com.eignex.util.collections/IntHashSet.keysInternal|{}keysInternal[0]
         final fun <get-keysInternal>(): kotlin/IntArray // com.eignex.util.collections/IntHashSet.keysInternal.<get-keysInternal>|<get-keysInternal>(){}[0]
     final val usedInternal // com.eignex.util.collections/IntHashSet.usedInternal|{}usedInternal[0]
@@ -408,6 +425,7 @@ final class com.eignex.util.collections/IntHashSet : com.eignex.util.collections
     final fun remove(kotlin/Int): kotlin/Boolean // com.eignex.util.collections/IntHashSet.remove|remove(kotlin.Int){}[0]
     final fun toIntArray(): kotlin/IntArray // com.eignex.util.collections/IntHashSet.toIntArray|toIntArray(){}[0]
     final inline fun forEach(kotlin/Function1<kotlin/Int, kotlin/Unit>) // com.eignex.util.collections/IntHashSet.forEach|forEach(kotlin.Function1<kotlin.Int,kotlin.Unit>){}[0]
+    final inline fun forEachSlot(kotlin/Function2<kotlin/Boolean, kotlin/Int, kotlin/Unit>) // com.eignex.util.collections/IntHashSet.forEachSlot|forEachSlot(kotlin.Function2<kotlin.Boolean,kotlin.Int,kotlin.Unit>){}[0]
 }
 
 final class com.eignex.util.collections/IntIntMap : com.eignex.util.collections/IntIntLookup { // com.eignex.util.collections/IntIntMap|null[0]
@@ -456,10 +474,17 @@ final class com.eignex.util.collections/IntSwapSet : com.eignex.util.collections
     final fun remove(kotlin/Int): kotlin/Boolean // com.eignex.util.collections/IntSwapSet.remove|remove(kotlin.Int){}[0]
     final fun toIntArray(): kotlin/IntArray // com.eignex.util.collections/IntSwapSet.toIntArray|toIntArray(){}[0]
     final inline fun forEach(kotlin/Function1<kotlin/Int, kotlin/Unit>) // com.eignex.util.collections/IntSwapSet.forEach|forEach(kotlin.Function1<kotlin.Int,kotlin.Unit>){}[0]
+
+    final object Companion { // com.eignex.util.collections/IntSwapSet.Companion|null[0]
+        final fun preparation(kotlin/Int, kotlin/Int): kotlin.sequences/Sequence<com.eignex.util.collections/IntSwapSet?> // com.eignex.util.collections/IntSwapSet.Companion.preparation|preparation(kotlin.Int;kotlin.Int){}[0]
+    }
 }
 
 final class com.eignex.util.collections/LongArrayList : com.eignex.util.collections/LongIndexedCollection { // com.eignex.util.collections/LongArrayList|null[0]
     constructor <init>(kotlin/Int = ...) // com.eignex.util.collections/LongArrayList.<init>|<init>(kotlin.Int){}[0]
+
+    final val allocatedBytes // com.eignex.util.collections/LongArrayList.allocatedBytes|{}allocatedBytes[0]
+        final fun <get-allocatedBytes>(): kotlin/Long // com.eignex.util.collections/LongArrayList.allocatedBytes.<get-allocatedBytes>|<get-allocatedBytes>(){}[0]
 
     final var size // com.eignex.util.collections/LongArrayList.size|{}size[0]
         final fun <get-size>(): kotlin/Int // com.eignex.util.collections/LongArrayList.size.<get-size>|<get-size>(){}[0]
@@ -488,6 +513,8 @@ final class com.eignex.util.collections/LongArrayList : com.eignex.util.collecti
 final class com.eignex.util.collections/LongHashSet : com.eignex.util.collections/MutableLongSet { // com.eignex.util.collections/LongHashSet|null[0]
     constructor <init>(kotlin/Int = ...) // com.eignex.util.collections/LongHashSet.<init>|<init>(kotlin.Int){}[0]
 
+    final val allocatedBytes // com.eignex.util.collections/LongHashSet.allocatedBytes|{}allocatedBytes[0]
+        final fun <get-allocatedBytes>(): kotlin/Long // com.eignex.util.collections/LongHashSet.allocatedBytes.<get-allocatedBytes>|<get-allocatedBytes>(){}[0]
     final val keysInternal // com.eignex.util.collections/LongHashSet.keysInternal|{}keysInternal[0]
         final fun <get-keysInternal>(): kotlin/LongArray // com.eignex.util.collections/LongHashSet.keysInternal.<get-keysInternal>|<get-keysInternal>(){}[0]
     final val usedInternal // com.eignex.util.collections/LongHashSet.usedInternal|{}usedInternal[0]
@@ -497,12 +524,16 @@ final class com.eignex.util.collections/LongHashSet : com.eignex.util.collection
         final fun <get-size>(): kotlin/Int // com.eignex.util.collections/LongHashSet.size.<get-size>|<get-size>(){}[0]
 
     final fun add(kotlin/Long): kotlin/Boolean // com.eignex.util.collections/LongHashSet.add|add(kotlin.Long){}[0]
+    final fun canAddWithoutGrowing(kotlin/Int): kotlin/Boolean // com.eignex.util.collections/LongHashSet.canAddWithoutGrowing|canAddWithoutGrowing(kotlin.Int){}[0]
     final fun clear() // com.eignex.util.collections/LongHashSet.clear|clear(){}[0]
     final fun contains(kotlin/Long): kotlin/Boolean // com.eignex.util.collections/LongHashSet.contains|contains(kotlin.Long){}[0]
+    final fun containsBounded(kotlin/Long, kotlin/Long, kotlin/Function0<kotlin/Boolean>, kotlin/Function0<kotlin/Unit>): kotlin/Boolean? // com.eignex.util.collections/LongHashSet.containsBounded|containsBounded(kotlin.Long;kotlin.Long;kotlin.Function0<kotlin.Boolean>;kotlin.Function0<kotlin.Unit>){}[0]
     final fun forEach(com.eignex.util.collections/LongConsumer) // com.eignex.util.collections/LongHashSet.forEach|forEach(com.eignex.util.collections.LongConsumer){}[0]
     final fun isEmpty(): kotlin/Boolean // com.eignex.util.collections/LongHashSet.isEmpty|isEmpty(){}[0]
+    final fun release() // com.eignex.util.collections/LongHashSet.release|release(){}[0]
     final fun remove(kotlin/Long): kotlin/Boolean // com.eignex.util.collections/LongHashSet.remove|remove(kotlin.Long){}[0]
     final fun toLongArray(): kotlin/LongArray // com.eignex.util.collections/LongHashSet.toLongArray|toLongArray(){}[0]
+    final fun tryAddBounded(kotlin/Long, kotlin/Long, kotlin/Long, kotlin/Long, kotlin/Function0<kotlin/Boolean>, kotlin/Function0<kotlin/Unit>): kotlin/Boolean? // com.eignex.util.collections/LongHashSet.tryAddBounded|tryAddBounded(kotlin.Long;kotlin.Long;kotlin.Long;kotlin.Long;kotlin.Function0<kotlin.Boolean>;kotlin.Function0<kotlin.Unit>){}[0]
     final inline fun forEach(kotlin/Function1<kotlin/Long, kotlin/Unit>) // com.eignex.util.collections/LongHashSet.forEach|forEach(kotlin.Function1<kotlin.Long,kotlin.Unit>){}[0]
 }
 
@@ -586,6 +617,8 @@ final class com.eignex.util.collections/MutableLongIntMap : com.eignex.util.coll
 
     final val keysInternal // com.eignex.util.collections/MutableLongIntMap.keysInternal|{}keysInternal[0]
         final fun <get-keysInternal>(): kotlin/LongArray // com.eignex.util.collections/MutableLongIntMap.keysInternal.<get-keysInternal>|<get-keysInternal>(){}[0]
+    final val primitiveCapacityBytes // com.eignex.util.collections/MutableLongIntMap.primitiveCapacityBytes|{}primitiveCapacityBytes[0]
+        final fun <get-primitiveCapacityBytes>(): kotlin/Long // com.eignex.util.collections/MutableLongIntMap.primitiveCapacityBytes.<get-primitiveCapacityBytes>|<get-primitiveCapacityBytes>(){}[0]
     final val usedInternal // com.eignex.util.collections/MutableLongIntMap.usedInternal|{}usedInternal[0]
         final fun <get-usedInternal>(): kotlin/BooleanArray // com.eignex.util.collections/MutableLongIntMap.usedInternal.<get-usedInternal>|<get-usedInternal>(){}[0]
     final val valuesInternal // com.eignex.util.collections/MutableLongIntMap.valuesInternal|{}valuesInternal[0]
@@ -604,6 +637,7 @@ final class com.eignex.util.collections/MutableLongIntMap : com.eignex.util.coll
     final fun put(kotlin/Long, kotlin/Int) // com.eignex.util.collections/MutableLongIntMap.put|put(kotlin.Long;kotlin.Int){}[0]
     final fun remove(kotlin/Long): kotlin/Boolean // com.eignex.util.collections/MutableLongIntMap.remove|remove(kotlin.Long){}[0]
     final fun removeAndGet(kotlin/Long, kotlin/Int): kotlin/Int // com.eignex.util.collections/MutableLongIntMap.removeAndGet|removeAndGet(kotlin.Long;kotlin.Int){}[0]
+    final fun removeAndUpdate(kotlin/Long, kotlin/Long?, kotlin/Int, kotlin/Function1<kotlin/Long, kotlin/Unit>, kotlin/Function0<kotlin/Unit>): kotlin/Boolean // com.eignex.util.collections/MutableLongIntMap.removeAndUpdate|removeAndUpdate(kotlin.Long;kotlin.Long?;kotlin.Int;kotlin.Function1<kotlin.Long,kotlin.Unit>;kotlin.Function0<kotlin.Unit>){}[0]
     final inline fun forEach(kotlin/Function2<kotlin/Long, kotlin/Int, kotlin/Unit>) // com.eignex.util.collections/MutableLongIntMap.forEach|forEach(kotlin.Function2<kotlin.Long,kotlin.Int,kotlin.Unit>){}[0]
 }
 
@@ -685,6 +719,10 @@ final fun (com.eignex.util.io/CharSource).com.eignex.util.io/lineSequence(): kot
 final fun (com.eignex.util.io/CharSource).com.eignex.util.io/readText(): kotlin/String // com.eignex.util.io/readText|readText@com.eignex.util.io.CharSource(){}[0]
 final fun (kotlin/IntArray).com.eignex.util.arrays/binarySearchInt(kotlin/Int, kotlin/Int = ..., kotlin/Int = ...): kotlin/Int // com.eignex.util.arrays/binarySearchInt|binarySearchInt@kotlin.IntArray(kotlin.Int;kotlin.Int;kotlin.Int){}[0]
 final fun (kotlin/LongArray).com.eignex.util.arrays/binarySearchLong(kotlin/Long, kotlin/Int = ..., kotlin/Int = ...): kotlin/Int // com.eignex.util.arrays/binarySearchLong|binarySearchLong@kotlin.LongArray(kotlin.Long;kotlin.Int;kotlin.Int){}[0]
+final fun com.eignex.util.arrays/emptyBooleanArray(): kotlin/BooleanArray // com.eignex.util.arrays/emptyBooleanArray|emptyBooleanArray(){}[0]
+final fun com.eignex.util.arrays/emptyDoubleArray(): kotlin/DoubleArray // com.eignex.util.arrays/emptyDoubleArray|emptyDoubleArray(){}[0]
+final fun com.eignex.util.arrays/emptyIntArray(): kotlin/IntArray // com.eignex.util.arrays/emptyIntArray|emptyIntArray(){}[0]
+final fun com.eignex.util.arrays/emptyLongArray(): kotlin/LongArray // com.eignex.util.arrays/emptyLongArray|emptyLongArray(){}[0]
 final fun com.eignex.util.concurrent/Mutex(kotlin/Boolean = ...): com.eignex.util.concurrent/Mutex // com.eignex.util.concurrent/Mutex|Mutex(kotlin.Boolean){}[0]
 final fun com.eignex.util.concurrent/casMax(com.eignex.util.concurrent/DoubleCell, kotlin/Double) // com.eignex.util.concurrent/casMax|casMax(com.eignex.util.concurrent.DoubleCell;kotlin.Double){}[0]
 final fun com.eignex.util.concurrent/casMax(com.eignex.util.concurrent/LongCell, kotlin/Long) // com.eignex.util.concurrent/casMax|casMax(com.eignex.util.concurrent.LongCell;kotlin.Long){}[0]

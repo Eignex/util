@@ -13,8 +13,15 @@ class IntSwapSet private constructor(private val elements: IntArrayList, private
     /** Create an empty set for ids in `0 until capacity`. */
     constructor(capacity: Int) : this(IntArrayList(capacity.coerceAtLeast(8)), IntArray(capacity) { -1 })
 
-    internal companion object {
+    /** Cooperative construction of a dense membership index. */
+    companion object {
+        /**
+         * Allocate an empty set, yielding null between allocation and initialization steps.
+         * Initialization visits at most [batch] positions per step; the final value is the set.
+         * [capacity] must be non-negative and [batch] positive.
+         */
         fun preparation(capacity: Int, batch: Int): Sequence<IntSwapSet?> = sequence {
+            require(capacity >= 0 && batch > 0)
             val elements = IntArrayList(capacity.coerceAtLeast(8))
             yield(null)
             val position = IntArray(capacity)
