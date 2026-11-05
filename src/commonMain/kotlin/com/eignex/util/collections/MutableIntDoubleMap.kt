@@ -6,75 +6,59 @@ package com.eignex.util.collections
  * backward-shift deletion avoids tombstones. See [MutableIntIntMap] for related lookup
  * storage. Not thread-safe; iteration order is unspecified.
  */
-class MutableIntDoubleMap(initialCapacity: Int = 8) {
+class MutableIntDoubleMap(initialCapacity: Int = 8) : IntKeyed {
     private var keys: IntArray
     private var values: DoubleArray
     private var used: BooleanArray
     private var mask: Int
 
     /** Number of entries currently stored. */
-    var size: Int = 0
+    override var size: Int = 0
         private set
 
     init {
-        val cap = openAddressingCapacity(initialCapacity)
-        keys = IntArray(cap)
-        values = DoubleArray(cap)
-        used = BooleanArray(cap)
-        mask = cap - 1
+        val capacity = openAddressingCapacity(initialCapacity)
+        keys = IntArray(capacity)
+        values = DoubleArray(capacity)
+        used = BooleanArray(capacity)
+        mask = capacity - 1
     }
 
     /** Value for [key], or [default] if absent. */
     fun getOrDefault(key: Int, default: Double): Double {
-        var i = mixIntKey(key) and mask
-        while (used[i]) {
-            if (keys[i] == key) return values[i]
-            i = (i + 1) and mask
-        }
+        findIntKey(keys, used, mask, key) { return values[it] }
         return default
     }
 
     /** Whether [key] has an entry, independently of its stored value. */
-    fun containsKey(key: Int): Boolean {
-        var i = mixIntKey(key) and mask
-        while (used[i]) {
-            if (keys[i] == key) return true
-            i = (i + 1) and mask
-        }
+    override fun containsKey(key: Int): Boolean {
+        findIntKey(keys, used, mask, key) { return true }
         return false
     }
 
     /** Insert or overwrite [key] → [value]. */
     fun put(key: Int, value: Double) {
-        var i = mixIntKey(key) and mask
-        while (used[i]) {
-            if (keys[i] == key) {
-                values[i] = value
-                return
-            }
-            i = (i + 1) and mask
+        val slot = intKeySlot(keys, used, mask, key) {
+            values[it] = value
+            return
         }
-        used[i] = true
-        keys[i] = key
-        values[i] = value
+        used[slot] = true
+        keys[slot] = key
+        values[slot] = value
         size++
         if (size * 2 > keys.size) grow()
     }
 
     /** Add [delta] to the value at [key] (treating an absent key as `0.0`) and return the new value. */
     fun addTo(key: Int, delta: Double): Double {
-        var i = mixIntKey(key) and mask
-        while (used[i]) {
-            if (keys[i] == key) {
-                val nv = values[i] + delta
-                values[i] = nv
-                return nv
-            }
-            i = (i + 1) and mask
+        val slot = intKeySlot(keys, used, mask, key) {
+            val updated = values[it] + delta
+            values[it] = updated
+            return updated
         }
-        used[i] = true
-        keys[i] = key
-        values[i] = delta
+        used[slot] = true
+        keys[slot] = key
+        values[slot] = delta
         size++
         if (size * 2 > keys.size) grow()
         return delta
@@ -82,14 +66,10 @@ class MutableIntDoubleMap(initialCapacity: Int = 8) {
 
     /** Remove [key]; returns true if it was present. Backward-shift keeps the table tombstone-free. */
     fun remove(key: Int): Boolean {
-        var i = mixIntKey(key) and mask
-        while (used[i]) {
-            if (keys[i] == key) {
-                deleteSlot(i)
-                size--
-                return true
-            }
-            i = (i + 1) and mask
+        findIntKey(keys, used, mask, key) {
+            deleteSlot(it)
+            size--
+            return true
         }
         return false
     }
@@ -111,6 +91,11 @@ class MutableIntDoubleMap(initialCapacity: Int = 8) {
         for (i in u.indices) if (u[i]) action(k[i], v[i])
     }
 
+    /** Visit each key without exposing its associated value. */
+    override fun forEachKey(action: IntConsumer) = forEachIntKey(keys, used, action)
+
+    override fun keysToIntArray(): IntArray = intKeysToArray(keys, used, size)
+
     @PublishedApi internal val keysInternal: IntArray get() = keys
 
     @PublishedApi internal val valuesInternal: DoubleArray get() = values
@@ -118,38 +103,17 @@ class MutableIntDoubleMap(initialCapacity: Int = 8) {
     @PublishedApi internal val usedInternal: BooleanArray get() = used
 
     private fun deleteSlot(start: Int) {
-        var i = start
-        used[i] = false
-        var j = i
-        while (true) {
-            j = (j + 1) and mask
-            if (!used[j]) return
-            val home = mixIntKey(keys[j]) and mask
-            if (mustStayDuringShift(home, i, j)) continue
-            keys[i] = keys[j]
-            values[i] = values[j]
-            used[i] = true
-            i = j
-            used[i] = false
-        }
+        deleteIntKeySlot(keys, used, mask, start, { from, to -> values[to] = values[from] }, {})
     }
 
     private fun grow() {
-        val oldKeys = keys
         val oldValues = values
-        val oldUsed = used
-        val newCap = keys.size * 2
-        keys = IntArray(newCap)
-        values = DoubleArray(newCap)
-        used = BooleanArray(newCap)
-        mask = newCap - 1
-        for (i in oldUsed.indices) {
-            if (!oldUsed[i]) continue
-            var j = mixIntKey(oldKeys[i]) and mask
-            while (used[j]) j = (j + 1) and mask
-            used[j] = true
-            keys[j] = oldKeys[i]
-            values[j] = oldValues[i]
-        }
+        growIntKeyTable(keys, used, { values = DoubleArray(it) }, { from, to ->
+            values[to] = oldValues[from]
+        }, { nextKeys, nextUsed, nextMask ->
+            keys = nextKeys
+            used = nextUsed
+            mask = nextMask
+        })
     }
 }

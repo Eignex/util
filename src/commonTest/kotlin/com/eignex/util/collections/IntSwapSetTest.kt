@@ -3,10 +3,32 @@ package com.eignex.util.collections
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class IntSwapSetTest {
+    @Test
+    fun `values outside the supported range are absent`() {
+        val set: MutableIntSet = IntSwapSet(4)
+
+        for (value in listOf(Int.MIN_VALUE, -1, 4, Int.MAX_VALUE)) {
+            assertFalse(value in set)
+            assertFalse(set.remove(value))
+        }
+    }
+
+    @Test
+    fun `adding outside the supported range leaves membership unchanged`() {
+        val set: MutableIntSet = IntSwapSet(4)
+        set.add(1)
+
+        assertFailsWith<IllegalArgumentException> { set.add(4) }
+
+        assertEquals(1, set.size)
+        assertTrue(1 in set)
+    }
+
     @Test
     fun `add should make an element contained`() {
         val s = IntSwapSet(8)

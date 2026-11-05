@@ -1,11 +1,22 @@
 package com.eignex.util.consumer
 
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class CommonConsumerTest {
+    @Test
+    fun `collection defaults work for implementations in consuming modules`() {
+        assertContentEquals(intArrayOf(1, 3, 3), CommonConsumer().sortedElements())
+    }
+
+    @Test
+    fun `mutable and immutable maps share lookup contracts across modules`() {
+        assertEquals(listOf(42, 42), CommonConsumer().lookupDefaults())
+    }
+
     @Test
     fun `big integer remainder retains the dividend sign outside its defining module`() {
         val consumer = CommonConsumer()

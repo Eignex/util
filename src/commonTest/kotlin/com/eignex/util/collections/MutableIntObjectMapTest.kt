@@ -9,6 +9,15 @@ import kotlin.test.assertTrue
 class MutableIntObjectMapTest {
 
     @Test
+    fun `value at the greatest key can be null`() {
+        val map = MutableIntObjectMap<String?>()
+        map.put(16, null)
+        map.put(1, "one")
+
+        assertNull(map.valueAtMaxKey())
+    }
+
+    @Test
     fun `getValue returns a stored null`() {
         val map = MutableIntObjectMap<String?>()
         map.put(7, null)

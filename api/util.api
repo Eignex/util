@@ -50,14 +50,10 @@ public final class com/eignex/util/collections/Bits$Companion {
 }
 
 public final class com/eignex/util/collections/CollectionExtrasKt {
-	public static final fun sortedKeys (Lcom/eignex/util/collections/MutableIntDoubleMap;)[I
-	public static final fun sortedKeys (Lcom/eignex/util/collections/MutableIntIntMap;)[I
-	public static final fun sortedKeys (Lcom/eignex/util/collections/MutableIntLongMap;)[I
-	public static final fun sortedKeys (Lcom/eignex/util/collections/MutableIntObjectMap;)[I
-	public static final fun toSortedIntArray (Lcom/eignex/util/collections/IntArrayList;)[I
-	public static final fun toSortedIntArray (Lcom/eignex/util/collections/IntHashSet;)[I
-	public static final fun toSortedLongArray (Lcom/eignex/util/collections/LongArrayList;)[J
-	public static final fun toSortedLongArray (Lcom/eignex/util/collections/LongHashSet;)[J
+	public static final fun sortedKeys (Lcom/eignex/util/collections/IntKeyed;)[I
+	public static final fun sortedKeys (Lcom/eignex/util/collections/LongKeyed;)[J
+	public static final fun toSortedIntArray (Lcom/eignex/util/collections/IntCollection;)[I
+	public static final fun toSortedLongArray (Lcom/eignex/util/collections/LongCollection;)[J
 }
 
 public final class com/eignex/util/collections/IndexedMaxHeap {
@@ -76,38 +72,42 @@ public final class com/eignex/util/collections/IndexedMaxHeap {
 	public final fun updateKey (ID)V
 }
 
-public final class com/eignex/util/collections/IntArrayDeque {
+public final class com/eignex/util/collections/IntArrayDeque : com/eignex/util/collections/IntIndexedCollection {
 	public fun <init> ()V
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun addFirst (I)V
 	public final fun addLast (I)V
 	public final fun clear ()V
-	public final fun get (I)I
-	public final fun getSize ()I
-	public final fun isEmpty ()Z
+	public fun contains (I)Z
+	public fun forEach (Lcom/eignex/util/collections/IntConsumer;)V
+	public fun get (I)I
+	public fun getSize ()I
+	public fun isEmpty ()Z
 	public final fun isNotEmpty ()Z
 	public final fun removeAt (I)I
 	public final fun removeFirst ()I
 	public final fun removeFirstOr (I)I
 	public final fun removeLast ()I
+	public fun toIntArray ()[I
 }
 
-public final class com/eignex/util/collections/IntArrayList {
+public final class com/eignex/util/collections/IntArrayList : com/eignex/util/collections/IntIndexedCollection {
 	public fun <init> ()V
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun add (I)V
 	public final fun addAll ([I)V
 	public final fun clear ()V
-	public final fun contains (I)Z
+	public fun contains (I)Z
+	public fun forEach (Lcom/eignex/util/collections/IntConsumer;)V
 	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
-	public final fun get (I)I
+	public fun get (I)I
 	public final fun getBackingData ()[I
-	public final fun getSize ()I
+	public fun getSize ()I
 	public final fun indexOf (I)I
 	public final fun insertAt (II)V
-	public final fun isEmpty ()Z
+	public fun isEmpty ()Z
 	public final fun last ()I
 	public final fun lowerBound (I)I
 	public final fun lowerBoundDescending (I)I
@@ -116,9 +116,26 @@ public final class com/eignex/util/collections/IntArrayList {
 	public final fun set (II)V
 	public final fun sortByIntKey (ZLkotlin/jvm/functions/Function1;)V
 	public static synthetic fun sortByIntKey$default (Lcom/eignex/util/collections/IntArrayList;ZLkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
-	public final fun toIntArray ()[I
+	public fun toIntArray ()[I
 	public final fun toSet ()Ljava/util/Set;
 	public final fun truncateTo (I)V
+}
+
+public abstract interface class com/eignex/util/collections/IntCollection {
+	public abstract fun contains (I)Z
+	public abstract fun forEach (Lcom/eignex/util/collections/IntConsumer;)V
+	public abstract fun getSize ()I
+	public fun isEmpty ()Z
+	public fun toIntArray ()[I
+}
+
+public final class com/eignex/util/collections/IntCollection$DefaultImpls {
+	public static fun isEmpty (Lcom/eignex/util/collections/IntCollection;)Z
+	public static fun toIntArray (Lcom/eignex/util/collections/IntCollection;)[I
+}
+
+public abstract interface class com/eignex/util/collections/IntConsumer {
+	public abstract fun accept (I)V
 }
 
 public final class com/eignex/util/collections/IntDisjointSet {
@@ -129,26 +146,53 @@ public final class com/eignex/util/collections/IntDisjointSet {
 	public final fun union (II)V
 }
 
-public final class com/eignex/util/collections/IntHashSet {
+public final class com/eignex/util/collections/IntHashSet : com/eignex/util/collections/MutableIntSet {
 	public fun <init> ()V
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun add (I)Z
-	public final fun clear ()V
-	public final fun contains (I)Z
+	public fun add (I)Z
+	public fun clear ()V
+	public fun contains (I)Z
+	public fun forEach (Lcom/eignex/util/collections/IntConsumer;)V
 	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
 	public final fun getKeysInternal ()[I
-	public final fun getSize ()I
+	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
-	public final fun isEmpty ()Z
-	public final fun remove (I)Z
-	public final fun toIntArray ()[I
+	public fun isEmpty ()Z
+	public fun remove (I)Z
+	public fun toIntArray ()[I
 }
 
-public final class com/eignex/util/collections/IntIntMap {
+public abstract interface class com/eignex/util/collections/IntIndexedCollection : com/eignex/util/collections/IntCollection {
+	public fun contains (I)Z
+	public fun forEach (Lcom/eignex/util/collections/IntConsumer;)V
+	public abstract fun get (I)I
+}
+
+public final class com/eignex/util/collections/IntIndexedCollection$DefaultImpls {
+	public static fun contains (Lcom/eignex/util/collections/IntIndexedCollection;I)Z
+	public static fun forEach (Lcom/eignex/util/collections/IntIndexedCollection;Lcom/eignex/util/collections/IntConsumer;)V
+	public static fun isEmpty (Lcom/eignex/util/collections/IntIndexedCollection;)Z
+	public static fun toIntArray (Lcom/eignex/util/collections/IntIndexedCollection;)[I
+}
+
+public abstract interface class com/eignex/util/collections/IntIntLookup : com/eignex/util/collections/IntKeyed {
+	public abstract fun getOrDefault (II)I
+}
+
+public final class com/eignex/util/collections/IntIntLookup$DefaultImpls {
+	public static fun keysToIntArray (Lcom/eignex/util/collections/IntIntLookup;)[I
+}
+
+public final class com/eignex/util/collections/IntIntMap : com/eignex/util/collections/IntIntLookup {
 	public static final field Companion Lcom/eignex/util/collections/IntIntMap$Companion;
 	public final fun contains (I)Z
+	public fun containsKey (I)Z
+	public fun forEachKey (Lcom/eignex/util/collections/IntConsumer;)V
 	public final fun get (I)I
+	public fun getOrDefault (II)I
+	public fun getSize ()I
+	public fun keysToIntArray ()[I
 }
 
 public final class com/eignex/util/collections/IntIntMap$Companion {
@@ -156,10 +200,34 @@ public final class com/eignex/util/collections/IntIntMap$Companion {
 	public static synthetic fun build$default (Lcom/eignex/util/collections/IntIntMap$Companion;[I[IIIILjava/lang/Object;)Lcom/eignex/util/collections/IntIntMap;
 }
 
-public final class com/eignex/util/collections/IntLongMap {
+public abstract interface class com/eignex/util/collections/IntKeyed {
+	public abstract fun containsKey (I)Z
+	public abstract fun forEachKey (Lcom/eignex/util/collections/IntConsumer;)V
+	public abstract fun getSize ()I
+	public fun keysToIntArray ()[I
+}
+
+public final class com/eignex/util/collections/IntKeyed$DefaultImpls {
+	public static fun keysToIntArray (Lcom/eignex/util/collections/IntKeyed;)[I
+}
+
+public abstract interface class com/eignex/util/collections/IntLongLookup : com/eignex/util/collections/IntKeyed {
+	public abstract fun getOrDefault (IJ)J
+}
+
+public final class com/eignex/util/collections/IntLongLookup$DefaultImpls {
+	public static fun keysToIntArray (Lcom/eignex/util/collections/IntLongLookup;)[I
+}
+
+public final class com/eignex/util/collections/IntLongMap : com/eignex/util/collections/IntLongLookup {
 	public static final field Companion Lcom/eignex/util/collections/IntLongMap$Companion;
 	public final fun contains (I)Z
+	public fun containsKey (I)Z
+	public fun forEachKey (Lcom/eignex/util/collections/IntConsumer;)V
 	public final fun get (I)J
+	public fun getOrDefault (IJ)J
+	public fun getSize ()I
+	public fun keysToIntArray ()[I
 }
 
 public final class com/eignex/util/collections/IntLongMap$Companion {
@@ -167,33 +235,43 @@ public final class com/eignex/util/collections/IntLongMap$Companion {
 	public static synthetic fun build$default (Lcom/eignex/util/collections/IntLongMap$Companion;[I[JJIILjava/lang/Object;)Lcom/eignex/util/collections/IntLongMap;
 }
 
-public final class com/eignex/util/collections/IntSwapSet {
-	public fun <init> (I)V
-	public final fun add (I)Z
-	public final fun clear ()V
-	public final fun contains (I)Z
-	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
-	public final fun get (I)I
-	public final fun getSize ()I
-	public final fun isEmpty ()Z
-	public final fun random (Lkotlin/random/Random;)I
-	public final fun remove (I)Z
-	public final fun toIntArray ()[I
+public abstract interface class com/eignex/util/collections/IntSet : com/eignex/util/collections/IntCollection {
 }
 
-public final class com/eignex/util/collections/LongArrayList {
+public final class com/eignex/util/collections/IntSet$DefaultImpls {
+	public static fun isEmpty (Lcom/eignex/util/collections/IntSet;)Z
+	public static fun toIntArray (Lcom/eignex/util/collections/IntSet;)[I
+}
+
+public final class com/eignex/util/collections/IntSwapSet : com/eignex/util/collections/IntIndexedCollection, com/eignex/util/collections/MutableIntSet {
+	public fun <init> (I)V
+	public fun add (I)Z
+	public fun clear ()V
+	public fun contains (I)Z
+	public fun forEach (Lcom/eignex/util/collections/IntConsumer;)V
+	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
+	public fun get (I)I
+	public fun getSize ()I
+	public fun isEmpty ()Z
+	public final fun random (Lkotlin/random/Random;)I
+	public fun remove (I)Z
+	public fun toIntArray ()[I
+}
+
+public final class com/eignex/util/collections/LongArrayList : com/eignex/util/collections/LongIndexedCollection {
 	public fun <init> ()V
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun add (J)V
 	public final fun clear ()V
-	public final fun contains (J)Z
+	public fun contains (J)Z
+	public fun forEach (Lcom/eignex/util/collections/LongConsumer;)V
 	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
-	public final fun get (I)J
-	public final fun getSize ()I
+	public fun get (I)J
+	public fun getSize ()I
 	public final fun indexOf (J)I
 	public final fun insertAt (IJ)V
-	public final fun isEmpty ()Z
+	public fun isEmpty ()Z
 	public final fun last ()J
 	public final fun lowerBound (J)I
 	public final fun removeAt (I)V
@@ -201,139 +279,223 @@ public final class com/eignex/util/collections/LongArrayList {
 	public final fun set (IJ)V
 	public final fun sort (Z)V
 	public static synthetic fun sort$default (Lcom/eignex/util/collections/LongArrayList;ZILjava/lang/Object;)V
-	public final fun toLongArray ()[J
+	public fun toLongArray ()[J
 	public final fun toSet ()Ljava/util/Set;
 	public final fun trim ()V
 	public final fun truncateTo (I)V
 }
 
-public final class com/eignex/util/collections/LongHashSet {
+public abstract interface class com/eignex/util/collections/LongCollection {
+	public abstract fun contains (J)Z
+	public abstract fun forEach (Lcom/eignex/util/collections/LongConsumer;)V
+	public abstract fun getSize ()I
+	public fun isEmpty ()Z
+	public fun toLongArray ()[J
+}
+
+public final class com/eignex/util/collections/LongCollection$DefaultImpls {
+	public static fun isEmpty (Lcom/eignex/util/collections/LongCollection;)Z
+	public static fun toLongArray (Lcom/eignex/util/collections/LongCollection;)[J
+}
+
+public abstract interface class com/eignex/util/collections/LongConsumer {
+	public abstract fun accept (J)V
+}
+
+public final class com/eignex/util/collections/LongHashSet : com/eignex/util/collections/MutableLongSet {
 	public fun <init> ()V
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun add (J)Z
-	public final fun clear ()V
-	public final fun contains (J)Z
+	public fun add (J)Z
+	public fun clear ()V
+	public fun contains (J)Z
+	public fun forEach (Lcom/eignex/util/collections/LongConsumer;)V
 	public final fun forEach (Lkotlin/jvm/functions/Function1;)V
 	public final fun getKeysInternal ()[J
-	public final fun getSize ()I
+	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
-	public final fun isEmpty ()Z
-	public final fun remove (J)Z
-	public final fun toLongArray ()[J
+	public fun isEmpty ()Z
+	public fun remove (J)Z
+	public fun toLongArray ()[J
 }
 
-public final class com/eignex/util/collections/MutableIntDoubleMap {
+public abstract interface class com/eignex/util/collections/LongIndexedCollection : com/eignex/util/collections/LongCollection {
+	public fun contains (J)Z
+	public fun forEach (Lcom/eignex/util/collections/LongConsumer;)V
+	public abstract fun get (I)J
+}
+
+public final class com/eignex/util/collections/LongIndexedCollection$DefaultImpls {
+	public static fun contains (Lcom/eignex/util/collections/LongIndexedCollection;J)Z
+	public static fun forEach (Lcom/eignex/util/collections/LongIndexedCollection;Lcom/eignex/util/collections/LongConsumer;)V
+	public static fun isEmpty (Lcom/eignex/util/collections/LongIndexedCollection;)Z
+	public static fun toLongArray (Lcom/eignex/util/collections/LongIndexedCollection;)[J
+}
+
+public abstract interface class com/eignex/util/collections/LongKeyed {
+	public abstract fun containsKey (J)Z
+	public abstract fun forEachKey (Lcom/eignex/util/collections/LongConsumer;)V
+	public abstract fun getSize ()I
+	public fun keysToLongArray ()[J
+}
+
+public final class com/eignex/util/collections/LongKeyed$DefaultImpls {
+	public static fun keysToLongArray (Lcom/eignex/util/collections/LongKeyed;)[J
+}
+
+public abstract interface class com/eignex/util/collections/LongSet : com/eignex/util/collections/LongCollection {
+}
+
+public final class com/eignex/util/collections/LongSet$DefaultImpls {
+	public static fun isEmpty (Lcom/eignex/util/collections/LongSet;)Z
+	public static fun toLongArray (Lcom/eignex/util/collections/LongSet;)[J
+}
+
+public final class com/eignex/util/collections/MutableIntDoubleMap : com/eignex/util/collections/IntKeyed {
 	public fun <init> ()V
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun addTo (ID)D
 	public final fun clear ()V
-	public final fun containsKey (I)Z
+	public fun containsKey (I)Z
 	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public fun forEachKey (Lcom/eignex/util/collections/IntConsumer;)V
 	public final fun getKeysInternal ()[I
 	public final fun getOrDefault (ID)D
-	public final fun getSize ()I
+	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
 	public final fun getValuesInternal ()[D
 	public final fun isEmpty ()Z
+	public fun keysToIntArray ()[I
 	public final fun put (ID)V
 	public final fun remove (I)Z
 }
 
-public final class com/eignex/util/collections/MutableIntIntMap {
+public final class com/eignex/util/collections/MutableIntIntMap : com/eignex/util/collections/IntIntLookup {
 	public fun <init> ()V
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun addTo (II)I
 	public final fun clear ()V
-	public final fun containsKey (I)Z
+	public fun containsKey (I)Z
 	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public fun forEachKey (Lcom/eignex/util/collections/IntConsumer;)V
 	public final fun getKeysInternal ()[I
-	public final fun getOrDefault (II)I
-	public final fun getSize ()I
+	public fun getOrDefault (II)I
+	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
 	public final fun getValuesInternal ()[I
 	public final fun isEmpty ()Z
+	public fun keysToIntArray ()[I
 	public final fun put (II)V
 	public final fun remove (I)Z
 }
 
-public final class com/eignex/util/collections/MutableIntLongMap {
+public final class com/eignex/util/collections/MutableIntLongMap : com/eignex/util/collections/IntLongLookup {
 	public fun <init> ()V
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun addTo (IJ)J
 	public final fun clear ()V
-	public final fun containsKey (I)Z
+	public fun containsKey (I)Z
 	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public fun forEachKey (Lcom/eignex/util/collections/IntConsumer;)V
 	public final fun getKeysInternal ()[I
-	public final fun getOrDefault (IJ)J
-	public final fun getSize ()I
+	public fun getOrDefault (IJ)J
+	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
 	public final fun getValuesInternal ()[J
 	public final fun isEmpty ()Z
+	public fun keysToIntArray ()[I
 	public final fun put (IJ)V
 	public final fun remove (I)Z
 }
 
-public final class com/eignex/util/collections/MutableIntObjectMap {
+public final class com/eignex/util/collections/MutableIntObjectMap : com/eignex/util/collections/IntKeyed {
 	public fun <init> ()V
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun clear ()V
-	public final fun containsKey (I)Z
+	public fun containsKey (I)Z
 	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public fun forEachKey (Lcom/eignex/util/collections/IntConsumer;)V
 	public final fun get (I)Ljava/lang/Object;
 	public final fun getKeysInternal ()[I
 	public final fun getOrPut (ILkotlin/jvm/functions/Function0;)Ljava/lang/Object;
-	public final fun getSize ()I
+	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
 	public final fun getValue (I)Ljava/lang/Object;
 	public final fun getValuesInternal ()[Ljava/lang/Object;
 	public final fun isEmpty ()Z
+	public fun keysToIntArray ()[I
 	public final fun put (ILjava/lang/Object;)V
 	public final fun remove (I)Z
 	public final fun removeKeysAbove (I)V
 	public final fun valueAtMaxKey ()Ljava/lang/Object;
 }
 
-public final class com/eignex/util/collections/MutableLongIntMap {
+public abstract interface class com/eignex/util/collections/MutableIntSet : com/eignex/util/collections/IntSet {
+	public abstract fun add (I)Z
+	public abstract fun clear ()V
+	public abstract fun remove (I)Z
+}
+
+public final class com/eignex/util/collections/MutableIntSet$DefaultImpls {
+	public static fun isEmpty (Lcom/eignex/util/collections/MutableIntSet;)Z
+	public static fun toIntArray (Lcom/eignex/util/collections/MutableIntSet;)[I
+}
+
+public final class com/eignex/util/collections/MutableLongIntMap : com/eignex/util/collections/LongKeyed {
 	public fun <init> ()V
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun addTo (JI)I
 	public final fun clear ()V
-	public final fun containsKey (J)Z
+	public fun containsKey (J)Z
 	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public fun forEachKey (Lcom/eignex/util/collections/LongConsumer;)V
 	public final fun getKeysInternal ()[J
 	public final fun getOrDefault (JI)I
-	public final fun getSize ()I
+	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
 	public final fun getValuesInternal ()[I
 	public final fun isEmpty ()Z
+	public fun keysToLongArray ()[J
 	public final fun put (JI)V
 	public final fun remove (J)Z
 	public final fun removeAndGet (JI)I
 }
 
-public final class com/eignex/util/collections/MutableLongObjectMap {
+public final class com/eignex/util/collections/MutableLongObjectMap : com/eignex/util/collections/LongKeyed {
 	public fun <init> ()V
 	public fun <init> (I)V
 	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun clear ()V
-	public final fun containsKey (J)Z
+	public fun containsKey (J)Z
 	public final fun forEach (Lkotlin/jvm/functions/Function2;)V
+	public fun forEachKey (Lcom/eignex/util/collections/LongConsumer;)V
 	public final fun get (J)Ljava/lang/Object;
 	public final fun getKeysInternal ()[J
 	public final fun getOrPut (JLkotlin/jvm/functions/Function0;)Ljava/lang/Object;
-	public final fun getSize ()I
+	public fun getSize ()I
 	public final fun getUsedInternal ()[Z
 	public final fun getValue (J)Ljava/lang/Object;
 	public final fun getValuesInternal ()[Ljava/lang/Object;
 	public final fun isEmpty ()Z
+	public fun keysToLongArray ()[J
 	public final fun put (JLjava/lang/Object;)V
 	public final fun remove (J)Z
+}
+
+public abstract interface class com/eignex/util/collections/MutableLongSet : com/eignex/util/collections/LongSet {
+	public abstract fun add (J)Z
+	public abstract fun clear ()V
+	public abstract fun remove (J)Z
+}
+
+public final class com/eignex/util/collections/MutableLongSet$DefaultImpls {
+	public static fun isEmpty (Lcom/eignex/util/collections/MutableLongSet;)Z
+	public static fun toLongArray (Lcom/eignex/util/collections/MutableLongSet;)[J
 }
 
 public final class com/eignex/util/concurrent/AdderCountersKt {

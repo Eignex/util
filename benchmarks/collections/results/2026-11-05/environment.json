@@ -1,0 +1,18 @@
+{
+  "baselineRevision": "0160741ae181d9327579ce1a8a49896b7d2fb5c7",
+  "baselineJarSha256": "e7a53f37e7e4c4b997fd7116e5b5e8e7c3daa217f02f50f0c742ec690541f1ec",
+  "candidateJarSha256": "84a66afd86a10a6491f3213de31b46bcd60def83f80ec39230c1d29c8b3f6dd9",
+  "benchmarkSourceSha256": "33b85aafacc9bbe538519378148f1f4a490e3b1ddca0f966a0dc3a81f56add0c",
+  "cpu": "12th Gen Intel(R) Core(TM) i9-12900H",
+  "system": "Linux",
+  "architecture": "x86_64",
+  "keys": 1024,
+  "seed": 42,
+  "repetitions": 2,
+  "forksPerArmAndRepetition": 1,
+  "warmupIterations": 3,
+  "measurementIterations": 5,
+  "iterationDuration": "300ms",
+  "placement": "Same local machine, adjacent arms, reversed order between repetitions",
+  "scope": "JVM only, cache-resident keys; CPU contention varied during measurement"
+}

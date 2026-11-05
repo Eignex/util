@@ -1,0 +1,266 @@
+[
+  {
+    "repetition": 1,
+    "case": "intGrowth",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:49:46Z"
+  },
+  {
+    "repetition": 1,
+    "case": "intGrowth",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:49:48Z"
+  },
+  {
+    "repetition": 1,
+    "case": "intInsert",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:49:51Z"
+  },
+  {
+    "repetition": 1,
+    "case": "intInsert",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:49:54Z"
+  },
+  {
+    "repetition": 1,
+    "case": "intLookup",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:49:57Z"
+  },
+  {
+    "repetition": 1,
+    "case": "intLookup",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:49:59Z"
+  },
+  {
+    "repetition": 1,
+    "case": "intRemoveRestore",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:50:02Z"
+  },
+  {
+    "repetition": 1,
+    "case": "intRemoveRestore",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:50:05Z"
+  },
+  {
+    "repetition": 1,
+    "case": "intSetContains",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:50:08Z"
+  },
+  {
+    "repetition": 1,
+    "case": "intSetContains",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:50:10Z"
+  },
+  {
+    "repetition": 1,
+    "case": "longGrowth",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:50:13Z"
+  },
+  {
+    "repetition": 1,
+    "case": "longGrowth",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:50:16Z"
+  },
+  {
+    "repetition": 1,
+    "case": "longInsert",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:50:19Z"
+  },
+  {
+    "repetition": 1,
+    "case": "longInsert",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:50:22Z"
+  },
+  {
+    "repetition": 1,
+    "case": "longLookup",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:50:24Z"
+  },
+  {
+    "repetition": 1,
+    "case": "longLookup",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:50:27Z"
+  },
+  {
+    "repetition": 1,
+    "case": "longRemoveRestore",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:50:30Z"
+  },
+  {
+    "repetition": 1,
+    "case": "longRemoveRestore",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:50:33Z"
+  },
+  {
+    "repetition": 1,
+    "case": "longSetContains",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:50:35Z"
+  },
+  {
+    "repetition": 1,
+    "case": "longSetContains",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:50:38Z"
+  },
+  {
+    "repetition": 1,
+    "case": "objectRemoveRestore",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:50:41Z"
+  },
+  {
+    "repetition": 1,
+    "case": "objectRemoveRestore",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:50:44Z"
+  },
+  {
+    "repetition": 2,
+    "case": "intGrowth",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:50:46Z"
+  },
+  {
+    "repetition": 2,
+    "case": "intGrowth",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:50:49Z"
+  },
+  {
+    "repetition": 2,
+    "case": "intInsert",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:50:52Z"
+  },
+  {
+    "repetition": 2,
+    "case": "intInsert",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:50:55Z"
+  },
+  {
+    "repetition": 2,
+    "case": "intLookup",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:50:57Z"
+  },
+  {
+    "repetition": 2,
+    "case": "intLookup",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:51:00Z"
+  },
+  {
+    "repetition": 2,
+    "case": "intRemoveRestore",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:51:03Z"
+  },
+  {
+    "repetition": 2,
+    "case": "intRemoveRestore",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:51:06Z"
+  },
+  {
+    "repetition": 2,
+    "case": "intSetContains",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:51:08Z"
+  },
+  {
+    "repetition": 2,
+    "case": "intSetContains",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:51:11Z"
+  },
+  {
+    "repetition": 2,
+    "case": "longGrowth",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:51:14Z"
+  },
+  {
+    "repetition": 2,
+    "case": "longGrowth",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:51:17Z"
+  },
+  {
+    "repetition": 2,
+    "case": "longInsert",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:51:20Z"
+  },
+  {
+    "repetition": 2,
+    "case": "longInsert",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:51:22Z"
+  },
+  {
+    "repetition": 2,
+    "case": "longLookup",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:51:25Z"
+  },
+  {
+    "repetition": 2,
+    "case": "longLookup",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:51:28Z"
+  },
+  {
+    "repetition": 2,
+    "case": "longRemoveRestore",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:51:31Z"
+  },
+  {
+    "repetition": 2,
+    "case": "longRemoveRestore",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:51:33Z"
+  },
+  {
+    "repetition": 2,
+    "case": "longSetContains",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:51:36Z"
+  },
+  {
+    "repetition": 2,
+    "case": "longSetContains",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:51:39Z"
+  },
+  {
+    "repetition": 2,
+    "case": "objectRemoveRestore",
+    "arm": "candidate",
+    "startedUtc": "2026-11-05T19:51:42Z"
+  },
+  {
+    "repetition": 2,
+    "case": "objectRemoveRestore",
+    "arm": "baseline",
+    "startedUtc": "2026-11-05T19:51:44Z"
+  }
+]

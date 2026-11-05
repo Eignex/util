@@ -1,0 +1,134 @@
+[
+  {
+    "benchmark": "bench.CollectionsBench.intGrowth",
+    "baselineNsPerKeyByRepetition": [
+      6.027402621438708,
+      6.1585228820614315
+    ],
+    "candidateNsPerKeyByRepetition": [
+      6.2229077859489195,
+      7.149808105412601
+    ],
+    "meanCandidateToBaselineRatio": 1.0973902546442205
+  },
+  {
+    "benchmark": "bench.CollectionsBench.intInsert",
+    "baselineNsPerKeyByRepetition": [
+      2.0265226198235027,
+      2.0287998150857405
+    ],
+    "candidateNsPerKeyByRepetition": [
+      2.0122684496675625,
+      1.9994837083572317
+    ],
+    "meanCandidateToBaselineRatio": 0.9892560264729175
+  },
+  {
+    "benchmark": "bench.CollectionsBench.intLookup",
+    "baselineNsPerKeyByRepetition": [
+      1.4796100906720302,
+      1.4894590349034504
+    ],
+    "candidateNsPerKeyByRepetition": [
+      1.2961813316823454,
+      1.2933622842446637
+    ],
+    "meanCandidateToBaselineRatio": 0.8721735690222738
+  },
+  {
+    "benchmark": "bench.CollectionsBench.intRemoveRestore",
+    "baselineNsPerKeyByRepetition": [
+      7.343389771008314,
+      7.233207901953721
+    ],
+    "candidateNsPerKeyByRepetition": [
+      7.241848239341081,
+      7.367254526488487
+    ],
+    "meanCandidateToBaselineRatio": 1.0022299506096561
+  },
+  {
+    "benchmark": "bench.CollectionsBench.intSetContains",
+    "baselineNsPerKeyByRepetition": [
+      1.0558092222828361,
+      1.048964149265251
+    ],
+    "candidateNsPerKeyByRepetition": [
+      1.041799890972841,
+      1.0516548716737344
+    ],
+    "meanCandidateToBaselineRatio": 0.9946224096833823
+  },
+  {
+    "benchmark": "bench.CollectionsBench.longGrowth",
+    "baselineNsPerKeyByRepetition": [
+      9.079709310683327,
+      11.009609466090852
+    ],
+    "candidateNsPerKeyByRepetition": [
+      7.876981629047097,
+      7.972695603172961
+    ],
+    "meanCandidateToBaselineRatio": 0.7889604126618923
+  },
+  {
+    "benchmark": "bench.CollectionsBench.longInsert",
+    "baselineNsPerKeyByRepetition": [
+      1.977265527258218,
+      2.0095552222648263
+    ],
+    "candidateNsPerKeyByRepetition": [
+      2.0295716202842153,
+      1.9947277901082134
+    ],
+    "meanCandidateToBaselineRatio": 1.0094006385599021
+  },
+  {
+    "benchmark": "bench.CollectionsBench.longLookup",
+    "baselineNsPerKeyByRepetition": [
+      1.695749725448297,
+      1.7430645417504151
+    ],
+    "candidateNsPerKeyByRepetition": [
+      1.4826368687016092,
+      1.3921577393202382
+    ],
+    "meanCandidateToBaselineRatio": 0.8359842622043325
+  },
+  {
+    "benchmark": "bench.CollectionsBench.longRemoveRestore",
+    "baselineNsPerKeyByRepetition": [
+      8.499190014279048,
+      8.59773718432452
+    ],
+    "candidateNsPerKeyByRepetition": [
+      8.491203296992996,
+      8.739094364580216
+    ],
+    "meanCandidateToBaselineRatio": 1.0078008440593078
+  },
+  {
+    "benchmark": "bench.CollectionsBench.longSetContains",
+    "baselineNsPerKeyByRepetition": [
+      1.4867726369818557,
+      1.35854480131622
+    ],
+    "candidateNsPerKeyByRepetition": [
+      1.4530592465635683,
+      1.4224226042918002
+    ],
+    "meanCandidateToBaselineRatio": 1.0106014225869067
+  },
+  {
+    "benchmark": "bench.CollectionsBench.objectRemoveRestore",
+    "baselineNsPerKeyByRepetition": [
+      11.844114346733178,
+      12.346588019053552
+    ],
+    "candidateNsPerKeyByRepetition": [
+      12.667940051055908,
+      12.288263662213676
+    ],
+    "meanCandidateToBaselineRatio": 1.0316444448742221
+  }
+]

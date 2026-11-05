@@ -6,11 +6,11 @@ import com.eignex.util.arrays.binarySearchInt
  * Growable primitive Int list. Removal swaps in the last element and does not preserve order.
  * Not thread-safe; element indices must be within the live length.
  */
-class IntArrayList(initialCapacity: Int = 8) {
+class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
     private var data: IntArray = IntArray(initialCapacity.coerceAtLeast(1))
 
     /** Number of live elements. */
-    var size: Int = 0
+    override var size: Int = 0
         private set
 
     /** Append [value], growing the backing array when needed. */
@@ -28,7 +28,7 @@ class IntArrayList(initialCapacity: Int = 8) {
     }
 
     /** Return the element at [index]. The index must be within the live elements. */
-    operator fun get(index: Int): Int = data[index]
+    override operator fun get(index: Int): Int = data[index]
 
     /** Replace the element at [index]. The index must be within the live elements. */
     operator fun set(index: Int, value: Int) {
@@ -77,7 +77,7 @@ class IntArrayList(initialCapacity: Int = 8) {
     }
 
     /** Copy the live elements into a new array. */
-    fun toIntArray(): IntArray = data.copyOf(size)
+    override fun toIntArray(): IntArray = data.copyOf(size)
 
     /** Snapshot the current contents as a `Set<Int>`. Boxes, so not for hot loops. */
     fun toSet(): Set<Int> {
@@ -93,10 +93,10 @@ class IntArrayList(initialCapacity: Int = 8) {
     }
 
     /** Whether [value] is present, independently of the stored payload. */
-    fun contains(value: Int): Boolean = indexOf(value) >= 0
+    override fun contains(value: Int): Boolean = indexOf(value) >= 0
 
     /** Whether there are no live elements. */
-    fun isEmpty(): Boolean = size == 0
+    override fun isEmpty(): Boolean = size == 0
 
     /** Return the last live element; requires a nonempty collection. */
     fun last(): Int = data[size - 1]
@@ -126,6 +126,10 @@ class IntArrayList(initialCapacity: Int = 8) {
             if (data[mid] <= element) hi = mid else lo = mid + 1
         }
         return lo
+    }
+
+    override fun forEach(action: IntConsumer) {
+        forEach { action.accept(it) }
     }
 
     /** Invoke [action] for each live element without boxing primitive storage. */

@@ -6,11 +6,11 @@ import com.eignex.util.arrays.binarySearchLong
  * Primitive growable Long list backed by a doubling [LongArray]. [removeAt] and
  * [removeValue] swap-remove without preserving order. Not thread-safe.
  */
-class LongArrayList(initialCapacity: Int = 8) {
+class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
     private var data: LongArray = LongArray(initialCapacity.coerceAtLeast(1))
 
     /** Number of live elements. */
-    var size: Int = 0
+    override var size: Int = 0
         private set
 
     internal val allocatedBytes: Long get() = data.size.toLong() * Long.SIZE_BYTES
@@ -22,7 +22,7 @@ class LongArrayList(initialCapacity: Int = 8) {
     }
 
     /** Return the element at [index]. The index must be within the live elements. */
-    operator fun get(index: Int): Long = data[index]
+    override operator fun get(index: Int): Long = data[index]
 
     /** Replace the element at [index]. The index must be within the live elements. */
     operator fun set(index: Int, value: Long) {
@@ -72,7 +72,7 @@ class LongArrayList(initialCapacity: Int = 8) {
     }
 
     /** Copy the live elements into a new array. */
-    fun toLongArray(): LongArray = data.copyOf(size)
+    override fun toLongArray(): LongArray = data.copyOf(size)
 
     /** Snapshot the current contents as a `Set<Long>`. Boxes, so not for hot loops. */
     fun toSet(): Set<Long> {
@@ -88,10 +88,10 @@ class LongArrayList(initialCapacity: Int = 8) {
     }
 
     /** Whether [value] is present, independently of the stored payload. */
-    fun contains(value: Long): Boolean = indexOf(value) >= 0
+    override fun contains(value: Long): Boolean = indexOf(value) >= 0
 
     /** Whether there are no live elements. */
-    fun isEmpty(): Boolean = size == 0
+    override fun isEmpty(): Boolean = size == 0
 
     /** Return the last live element; requires a nonempty collection. */
     fun last(): Long = data[size - 1]
@@ -121,6 +121,10 @@ class LongArrayList(initialCapacity: Int = 8) {
     fun lowerBound(element: Long): Int {
         val idx = data.binarySearchLong(element, 0, size)
         return if (idx >= 0) idx else -(idx + 1)
+    }
+
+    override fun forEach(action: LongConsumer) {
+        forEach { action.accept(it) }
     }
 
     /** Invoke [action] for each live element without boxing primitive storage. */

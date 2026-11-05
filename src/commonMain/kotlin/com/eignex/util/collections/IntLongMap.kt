@@ -4,7 +4,15 @@ package com.eignex.util.collections
  * Read-only primitive Int-to-Long map with the dense/sparse backing choice of [IntIntMap].
  * Missing keys return [absent]; choose a sentinel outside the payload range when needed.
  */
-class IntLongMap private constructor(private val backing: Backing, private val absent: Long) {
+class IntLongMap private constructor(private val backing: Backing, private val absent: Long) : IntLongLookup {
+    override val size: Int get() = backing.size
+
+    override fun containsKey(key: Int): Boolean = contains(key)
+
+    override fun getOrDefault(key: Int, default: Long): Long = backing.get(key, default)
+
+    override fun forEachKey(action: IntConsumer) = backing.forEachKey(action)
+
     /** Return the value for [key], or the configured absent value when missing. */
     operator fun get(key: Int): Long = backing.get(key, absent)
 
@@ -47,16 +55,25 @@ class IntLongMap private constructor(private val backing: Backing, private val a
     }
 
     private sealed interface Backing {
+        val size: Int
+        fun forEachKey(action: IntConsumer)
         fun get(key: Int, absent: Long): Long
         fun contains(key: Int): Boolean
     }
 
     private data object EmptyBacking : Backing {
+        override val size: Int = 0
+        override fun forEachKey(action: IntConsumer) = Unit
         override fun get(key: Int, absent: Long): Long = absent
         override fun contains(key: Int): Boolean = false
     }
 
     private class ArrayBacking(val minKey: Int, val values: LongArray, val present: BooleanArray) : Backing {
+        override val size: Int = present.count { it }
+        override fun forEachKey(action: IntConsumer) {
+            for (slot in present.indices) if (present[slot]) action.accept(minKey + slot)
+        }
+
         override fun get(key: Int, absent: Long): Long {
             val idx = key.toLong() - minKey
             return if (idx >= 0L && idx < values.size && present[idx.toInt()]) values[idx.toInt()] else absent
@@ -79,6 +96,11 @@ class IntLongMap private constructor(private val backing: Backing, private val a
         private val values: LongArray,
         private val present: BooleanArray,
     ) : Backing {
+        override val size: Int = present.count { it }
+        override fun forEachKey(action: IntConsumer) {
+            for (slot in present.indices) if (present[slot]) action.accept(keys[slot])
+        }
+
         override fun contains(key: Int): Boolean {
             val mask = keys.size - 1
             var index = mixIntKey(key) and mask

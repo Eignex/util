@@ -1,5 +1,11 @@
 package com.eignex.util.consumer
 
+import com.eignex.util.collections.IntIndexedCollection
+import com.eignex.util.collections.IntIntLookup
+import com.eignex.util.collections.IntIntMap
+import com.eignex.util.collections.MutableIntIntMap
+import com.eignex.util.collections.sortedKeys
+import com.eignex.util.collections.toSortedIntArray
 import com.eignex.util.concurrent.AdderCounters
 import com.eignex.util.concurrent.AtomicCells
 import com.eignex.util.concurrent.Mutex
@@ -26,6 +32,24 @@ internal class CommonConsumer {
     private val lock = Mutex()
     private val counter = AdderCounters.newLong()
     private val first = AtomicCells.newReference<Any?>(null)
+
+    fun sortedElements(): IntArray {
+        val values = intArrayOf(3, 1, 3)
+        val collection = object : IntIndexedCollection {
+            override val size: Int = values.size
+            override fun get(index: Int): Int = values[index]
+        }
+        return collection.toSortedIntArray()
+    }
+
+    fun lookupDefaults(): List<Int> {
+        val maps = listOf<IntIntLookup>(
+            IntIntMap.build(intArrayOf(3), intArrayOf(0)),
+            MutableIntIntMap().apply { put(3, 0) },
+        )
+        check(maps.all { it.sortedKeys().contentEquals(intArrayOf(3)) })
+        return maps.map { it.getOrDefault(7, 42) }
+    }
 
     fun update(value: Long): Long = lock.guarded {
         counter.add(value)

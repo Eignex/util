@@ -11,7 +11,17 @@ class IntIntMap private constructor(
     private val values: IntArray,
     private val present: BooleanArray,
     private val absent: Int,
-) {
+) : IntIntLookup {
+    override val size: Int = present.count { it }
+
+    override fun containsKey(key: Int): Boolean = contains(key)
+
+    override fun forEachKey(action: IntConsumer) {
+        for (slot in present.indices) {
+            if (present[slot]) action.accept(if (keys.isEmpty()) minKey + slot else keys[slot])
+        }
+    }
+
     /** Return the value for [key], or the configured absent value when missing. */
     operator fun get(key: Int): Int = getOrDefault(key, absent)
 
@@ -30,10 +40,10 @@ class IntIntMap private constructor(
         return false
     }
 
-    private fun getOrDefault(key: Int, fallback: Int): Int {
+    override fun getOrDefault(key: Int, default: Int): Int {
         if (keys.isEmpty()) {
             val index = key.toLong() - minKey
-            return if (index >= 0L && index < values.size && present[index.toInt()]) values[index.toInt()] else fallback
+            return if (index >= 0L && index < values.size && present[index.toInt()]) values[index.toInt()] else default
         }
         val mask = keys.size - 1
         var index = mixIntKey(key) and mask
@@ -41,7 +51,7 @@ class IntIntMap private constructor(
             if (keys[index] == key) return values[index]
             index = (index + 1) and mask
         }
-        return fallback
+        return default
     }
 
     /** Factories for immutable primitive maps. */

@@ -6,20 +6,21 @@ package com.eignex.util.collections
  * avoids tombstones. Empty sets share an immutable one-slot table until insertion.
  * Not thread-safe; iteration order is unspecified.
  */
-class LongHashSet(initialCapacity: Int = 8) {
-    private var keys: LongArray = EMPTY_KEYS
-    private var used: BooleanArray = EMPTY_USED
+class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
+    private var keys: LongArray = EmptyLongKeyTable.keys
+    private var used: BooleanArray = EmptyLongKeyTable.used
     private var mask: Int = 0
+    private val initialCap = openAddressingCapacity(initialCapacity)
 
-    /** Backing size to allocate on the first [add] — next power of two keeping load ≤ 0.5. */
-    private val initialCap: Int = openAddressingCapacity(initialCapacity)
+    internal val allocatedBytes: Long
+        get() = if (used === EmptyLongKeyTable.used) 0L else keys.size.toLong() * (Long.SIZE_BYTES + 1L)
 
     /** Number of members currently in the set. */
-    var size: Int = 0
+    override var size: Int = 0
         private set
 
     /** Whether [value] is present, independently of the stored payload. */
-    operator fun contains(value: Long): Boolean {
+    override operator fun contains(value: Long): Boolean {
         var i = mix(value) and mask
         while (used[i]) {
             if (keys[i] == value) return true
@@ -31,7 +32,7 @@ class LongHashSet(initialCapacity: Int = 8) {
     internal fun containsBounded(value: Long, maxWork: Long, cancelled: () -> Boolean, charge: () -> Unit): Boolean? {
         require(maxWork >= 0L)
         var work = 0L
-        var slot = mix(value) and mask
+        var slot = mixLongKey(value) and mask
         while (true) {
             if (work >= maxWork || cancelled()) return null
             charge()
@@ -44,15 +45,15 @@ class LongHashSet(initialCapacity: Int = 8) {
     }
 
     /** Add [value]; returns true if it was newly inserted, false if already present. */
-    fun add(value: Long): Boolean {
-        if (used === EMPTY_USED) allocateBacking()
-        var i = mix(value) and mask
-        while (used[i]) {
-            if (keys[i] == value) return false
-            i = (i + 1) and mask
+    override fun add(value: Long): Boolean {
+        if (used === EmptyLongKeyTable.used) {
+            keys = LongArray(initialCap)
+            used = BooleanArray(initialCap)
+            mask = initialCap - 1
         }
-        used[i] = true
-        keys[i] = value
+        val slot = longKeySlot(keys, used, mask, value) { return false }
+        used[slot] = true
+        keys[slot] = value
         size++
         if (size * 2 > keys.size) grow()
         return true
@@ -74,7 +75,7 @@ class LongHashSet(initialCapacity: Int = 8) {
             work++
             return !cancelled()
         }
-        var slot = mix(value) and mask
+        var slot = mixLongKey(value) and mask
         while (true) {
             if (!step()) return null
             if (!used[slot]) break
@@ -82,12 +83,12 @@ class LongHashSet(initialCapacity: Int = 8) {
             slot = (slot + 1) and mask
         }
         val capacity = when {
-            used === EMPTY_USED -> initialCap
+            used === EmptyLongKeyTable.used -> initialCap
             (size + 1L) * 2L > keys.size -> if (keys.size <= Int.MAX_VALUE / 2) keys.size * 2 else return null
             else -> keys.size
         }
         if (capacity.toLong() * 9L > maxBytes) return null
-        if (capacity == keys.size && used !== EMPTY_USED) {
+        if (capacity == keys.size && used !== EmptyLongKeyTable.used) {
             if (!step()) return null
             used[slot] = true
             keys[slot] = value
@@ -103,7 +104,7 @@ class LongHashSet(initialCapacity: Int = 8) {
         for (index in used.indices) {
             if (!step()) return null
             if (!used[index]) continue
-            var target = mix(keys[index]) and nextMask
+            var target = mixLongKey(keys[index]) and nextMask
             while (true) {
                 if (!step()) return null
                 if (!nextUsed[target]) break
@@ -112,7 +113,7 @@ class LongHashSet(initialCapacity: Int = 8) {
             nextKeys[target] = keys[index]
             nextUsed[target] = true
         }
-        slot = mix(value) and nextMask
+        slot = mixLongKey(value) and nextMask
         while (true) {
             if (!step()) return null
             if (!nextUsed[slot]) break
@@ -129,49 +130,36 @@ class LongHashSet(initialCapacity: Int = 8) {
     }
 
     /** Remove [value]; returns true if it was present. Never writes through the shared empty table. */
-    fun remove(value: Long): Boolean {
-        var i = mix(value) and mask
-        while (used[i]) {
-            if (keys[i] == value) {
-                deleteSlot(i)
-                size--
-                return true
-            }
-            i = (i + 1) and mask
+    override fun remove(value: Long): Boolean {
+        findLongKey(keys, used, mask, value) { slot ->
+            deleteLongKeySlot(keys, used, mask, slot, { _, _ -> }, {})
+            size--
+            return true
         }
         return false
     }
 
     /** Whether there are no live elements. */
-    fun isEmpty(): Boolean = size == 0
+    override fun isEmpty(): Boolean = size == 0
 
     /** Snapshot the members into a fresh [LongArray] (unspecified order). */
-    fun toLongArray(): LongArray {
-        val out = LongArray(size)
-        var w = 0
-        val k = keys
-        val u = used
-        for (i in u.indices) if (u[i]) out[w++] = k[i]
-        return out
-    }
+    override fun toLongArray(): LongArray = longKeysToArray(keys, used, size)
 
     internal fun canAddWithoutGrowing(count: Int): Boolean {
         require(count >= 0)
         return (size.toLong() + count) * 2L <= keys.size.toLong()
     }
 
-    internal val allocatedBytes: Long get() = if (used === EMPTY_USED) 0L else keys.size.toLong() * 9L
-
     internal fun release() {
-        keys = EMPTY_KEYS
-        used = EMPTY_USED
+        keys = EmptyLongKeyTable.keys
+        used = EmptyLongKeyTable.used
         mask = 0
         size = 0
     }
 
     /** Remove all live elements while retaining the allocated storage. */
-    fun clear() {
-        if (used !== EMPTY_USED) used.fill(false)
+    override fun clear() {
+        if (used !== EmptyLongKeyTable.used) used.fill(false)
         size = 0
     }
 
@@ -182,55 +170,19 @@ class LongHashSet(initialCapacity: Int = 8) {
         for (i in u.indices) if (u[i]) action(k[i])
     }
 
+    override fun forEach(action: LongConsumer) = forEachLongKey(keys, used, action)
+
     @PublishedApi internal val keysInternal: LongArray get() = keys
 
     @PublishedApi internal val usedInternal: BooleanArray get() = used
 
-    private fun allocateBacking() {
-        keys = LongArray(initialCap)
-        used = BooleanArray(initialCap)
-        mask = initialCap - 1
-    }
-
-    /** Backward-shift deletion; see [mustStayDuringShift]. */
-    private fun deleteSlot(start: Int) {
-        var i = start
-        used[i] = false
-        var j = i
-        while (true) {
-            j = (j + 1) and mask
-            if (!used[j]) return
-            val home = mix(keys[j]) and mask
-            if (mustStayDuringShift(home, i, j)) continue
-            keys[i] = keys[j]
-            used[i] = true
-            i = j
-            used[i] = false
-        }
-    }
-
     private fun grow() {
-        val oldKeys = keys
-        val oldUsed = used
-        val newCap = keys.size * 2
-        keys = LongArray(newCap)
-        used = BooleanArray(newCap)
-        mask = newCap - 1
-        for (i in oldUsed.indices) {
-            if (!oldUsed[i]) continue
-            var j = mix(oldKeys[i]) and mask
-            while (used[j]) j = (j + 1) and mask
-            used[j] = true
-            keys[j] = oldKeys[i]
-        }
+        growLongKeyTable(keys, used, {}, { _, _ -> }, { nextKeys, nextUsed, nextMask ->
+            keys = nextKeys
+            used = nextUsed
+            mask = nextMask
+        })
     }
 
     private fun mix(x: Long): Int = mixLongKey(x)
-
-    private companion object {
-        // A permanently unoccupied single slot shared by every set until its first add, so sets
-        // that stay empty allocate nothing and reads probe it like any table (mask 0 → slot 0).
-        val EMPTY_KEYS = LongArray(1)
-        val EMPTY_USED = BooleanArray(1)
-    }
 }

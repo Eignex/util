@@ -6,32 +6,28 @@ package com.eignex.util.collections
  * backward-shift deletion avoids tombstones. See [MutableIntObjectMap] for related lookup
  * storage. Not thread-safe; iteration order is unspecified.
  */
-class MutableLongObjectMap<V>(initialCapacity: Int = 8) {
+class MutableLongObjectMap<V>(initialCapacity: Int = 8) : LongKeyed {
     private var keys: LongArray
     private var values: Array<Any?>
     private var used: BooleanArray
     private var mask: Int
 
     /** Number of entries currently stored. */
-    var size: Int = 0
+    override var size: Int = 0
         private set
 
     init {
-        val cap = openAddressingCapacity(initialCapacity)
-        keys = LongArray(cap)
-        values = arrayOfNulls(cap)
-        used = BooleanArray(cap)
-        mask = cap - 1
+        val capacity = openAddressingCapacity(initialCapacity)
+        keys = LongArray(capacity)
+        values = arrayOfNulls<Any?>(capacity)
+        used = BooleanArray(capacity)
+        mask = capacity - 1
     }
 
     /** Value for [key], or `null` if absent. */
     @Suppress("UNCHECKED_CAST")
     operator fun get(key: Long): V? {
-        var i = mixLongKey(key) and mask
-        while (used[i]) {
-            if (keys[i] == key) return values[i] as V
-            i = (i + 1) and mask
-        }
+        findLongKey(keys, used, mask, key) { return values[it] as V }
         return null
     }
 
@@ -44,28 +40,20 @@ class MutableLongObjectMap<V>(initialCapacity: Int = 8) {
     }
 
     /** Whether [key] has an entry, independently of its stored value. */
-    fun containsKey(key: Long): Boolean {
-        var i = mixLongKey(key) and mask
-        while (used[i]) {
-            if (keys[i] == key) return true
-            i = (i + 1) and mask
-        }
+    override fun containsKey(key: Long): Boolean {
+        findLongKey(keys, used, mask, key) { return true }
         return false
     }
 
     /** Insert or overwrite [key] → [value]. */
     fun put(key: Long, value: V) {
-        var i = mixLongKey(key) and mask
-        while (used[i]) {
-            if (keys[i] == key) {
-                values[i] = value
-                return
-            }
-            i = (i + 1) and mask
+        val slot = longKeySlot(keys, used, mask, key) {
+            values[it] = value
+            return
         }
-        used[i] = true
-        keys[i] = key
-        values[i] = value
+        used[slot] = true
+        keys[slot] = key
+        values[slot] = value
         size++
         if (size * 2 > keys.size) grow()
     }
@@ -82,14 +70,10 @@ class MutableLongObjectMap<V>(initialCapacity: Int = 8) {
 
     /** Remove [key]; returns true if it was present. Backward-shift keeps the table tombstone-free. */
     fun remove(key: Long): Boolean {
-        var i = mixLongKey(key) and mask
-        while (used[i]) {
-            if (keys[i] == key) {
-                deleteSlot(i)
-                size--
-                return true
-            }
-            i = (i + 1) and mask
+        findLongKey(keys, used, mask, key) {
+            deleteSlot(it)
+            size--
+            return true
         }
         return false
     }
@@ -100,8 +84,8 @@ class MutableLongObjectMap<V>(initialCapacity: Int = 8) {
     /** Remove all live elements while retaining the allocated storage. */
     fun clear() {
         used.fill(false)
-        values.fill(null)
         size = 0
+        values.fill(null)
     }
 
     /** Invoke [action] for each (key, value) entry. Iteration order is unspecified. */
@@ -113,6 +97,11 @@ class MutableLongObjectMap<V>(initialCapacity: Int = 8) {
         for (i in u.indices) if (u[i]) action(k[i], v[i] as V)
     }
 
+    /** Visit each key without exposing its associated value. */
+    override fun forEachKey(action: LongConsumer) = forEachLongKey(keys, used, action)
+
+    override fun keysToLongArray(): LongArray = longKeysToArray(keys, used, size)
+
     @PublishedApi internal val keysInternal: LongArray get() = keys
 
     @PublishedApi internal val valuesInternal: Array<Any?> get() = values
@@ -120,40 +109,17 @@ class MutableLongObjectMap<V>(initialCapacity: Int = 8) {
     @PublishedApi internal val usedInternal: BooleanArray get() = used
 
     private fun deleteSlot(start: Int) {
-        var i = start
-        used[i] = false
-        values[i] = null
-        var j = i
-        while (true) {
-            j = (j + 1) and mask
-            if (!used[j]) return
-            val home = mixLongKey(keys[j]) and mask
-            if (mustStayDuringShift(home, i, j)) continue
-            keys[i] = keys[j]
-            values[i] = values[j]
-            used[i] = true
-            i = j
-            used[i] = false
-            values[i] = null
-        }
+        deleteLongKeySlot(keys, used, mask, start, { from, to -> values[to] = values[from] }, { values[it] = null })
     }
 
     private fun grow() {
-        val oldKeys = keys
         val oldValues = values
-        val oldUsed = used
-        val newCap = keys.size * 2
-        keys = LongArray(newCap)
-        values = arrayOfNulls(newCap)
-        used = BooleanArray(newCap)
-        mask = newCap - 1
-        for (i in oldUsed.indices) {
-            if (!oldUsed[i]) continue
-            var j = mixLongKey(oldKeys[i]) and mask
-            while (used[j]) j = (j + 1) and mask
-            used[j] = true
-            keys[j] = oldKeys[i]
-            values[j] = oldValues[i]
-        }
+        growLongKeyTable(keys, used, { values = arrayOfNulls<Any?>(it) }, { from, to ->
+            values[to] = oldValues[from]
+        }, { nextKeys, nextUsed, nextMask ->
+            keys = nextKeys
+            used = nextUsed
+            mask = nextMask
+        })
     }
 }

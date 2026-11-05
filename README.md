@@ -76,6 +76,17 @@ uses striped JVM adders with best-effort totals and atomic cells on other target
 JS and Wasm operations run within a single execution agent; these primitives do
 not synchronize separate workers. Mutexes are synchronous and do not support re-entry.
 
+The collection interfaces expose primitive elements: `IntCollection`/`LongCollection`
+provide reading and snapshots, indexed variants provide positional access, and
+`MutableIntSet`/`MutableLongSet` provide membership changes. Maps expose `IntKeyed` or
+`LongKeyed` for key traversal and snapshots. `IntIntLookup` and `IntLongLookup` work
+with both mutable hash maps and immutable dense/sparse maps. Read-only interfaces
+do not make a mutable backing collection immutable.
+
+Concrete collections retain inline `forEach` calls. Through an interface, pass an
+`IntConsumer` or `LongConsumer` for primitive traversal. Sorted snapshot helpers
+accept the interfaces, including deques, swap sets and immutable map keys.
+
 Collections are mutable and require external synchronization when shared. List
 removal uses swap removal, which does not preserve element order.
 

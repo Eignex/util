@@ -1,9 +1,5 @@
 package com.eignex.util.collections
 
-// Shared index/hash arithmetic for the primitive-specialised open-addressing collections. Only the
-// parts that touch no typed storage live here; probe loops, growth and backward-shift bodies stay in
-// each class so primitive keys and values never round-trip through boxed Any.
-
 /** Next power-of-two capacity that keeps the load factor ≤ 0.5 for [initialCapacity] entries. */
 internal fun openAddressingCapacity(initialCapacity: Int): Int {
     var cap = 8

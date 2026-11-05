@@ -5,7 +5,7 @@ package com.eignex.util.collections
  * are amortized O(1); [removeFirstOr] returns a caller-provided sentinel when empty.
  * Not thread-safe.
  */
-class IntArrayDeque(initialCapacity: Int = 8) {
+class IntArrayDeque(initialCapacity: Int = 8) : IntIndexedCollection {
 
     private var buf: IntArray = IntArray(nextPow2(maxOf(initialCapacity, 1)))
     internal val allocatedBytes: Long get() = buf.size.toLong() * Int.SIZE_BYTES
@@ -13,16 +13,16 @@ class IntArrayDeque(initialCapacity: Int = 8) {
     private var count: Int = 0
 
     /** Number of live elements. */
-    val size: Int get() = count
+    override val size: Int get() = count
 
     /** Whether there are no live elements. */
-    fun isEmpty(): Boolean = count == 0
+    override fun isEmpty(): Boolean = count == 0
 
     /** Whether there is at least one live element. */
     fun isNotEmpty(): Boolean = count != 0
 
     /** Return the element at [index]. The index must be within the live elements. */
-    operator fun get(index: Int): Int {
+    override operator fun get(index: Int): Int {
         require(index in 0 until count)
         return buf[(head + index) and (buf.size - 1)]
     }
