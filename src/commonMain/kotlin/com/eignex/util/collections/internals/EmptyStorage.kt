@@ -11,3 +11,13 @@ internal val EmptyBooleanArray: BooleanArray = BooleanArray(0)
 
 /** Shared empty `DoubleArray` for zero-length real-coefficient and real-bound slots. */
 internal val EmptyDoubleArray: DoubleArray = DoubleArray(0)
+
+internal object EmptyIntKeyTable {
+    val keys = IntArray(1)
+    val used = BooleanArray(1)
+}
+
+internal object EmptyLongKeyTable {
+    val keys = LongArray(1)
+    val used = BooleanArray(1)
+}
