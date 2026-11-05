@@ -1,5 +1,8 @@
 package com.eignex.util.consumer
 
+import com.eignex.util.collections.BitSet
+import com.eignex.util.collections.Bits
+import com.eignex.util.collections.DynamicBits
 import com.eignex.util.collections.IntIndexedCollection
 import com.eignex.util.collections.IntIntLookup
 import com.eignex.util.collections.IntIntMap
@@ -40,6 +43,25 @@ internal class CommonConsumer {
             override fun get(index: Int): Int = values[index]
         }
         return collection.toSortedIntArray()
+    }
+
+    fun dynamicHeader(): BooleanArray {
+        val dynamic = DynamicBits()
+        val start = dynamic.reserve(130)
+        dynamic[start + 64] = true
+        val fixed: BitSet = Bits(130)
+        fixed.copyFrom(dynamic)
+        check(fixed.toIntArray().contentEquals(intArrayOf(64)))
+        fixed.clearRange(0, 65)
+        fixed.setRange(129, 130)
+        dynamic.copyFrom(fixed)
+        return dynamic.toBooleanArray()
+    }
+
+    fun firstDynamicFlag(): Int {
+        val bits = DynamicBits().apply { set(64) }
+        bits.forEachSet { return it }
+        return -1
     }
 
     fun lookupDefaults(): List<Int> {

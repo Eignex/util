@@ -87,6 +87,25 @@ Concrete collections retain inline `forEach` calls. Through an interface, pass a
 `IntConsumer` or `LongConsumer` for primitive traversal. Sorted snapshot helpers
 accept the interfaces, including deques, swap sets and immutable map keys.
 
+`Bits` provides fixed-size packed flags; `DynamicBits` grows when setting an index
+or appending values. Both implement `BitSet`, including indexed updates, range
+operations, set-bit traversal and snapshots. Logical size includes trailing false
+bits. `clear()` preserves that size; `DynamicBits.reset()` empties the sequence
+while retaining its backing storage.
+
+```kotlin
+import com.eignex.util.collections.BitSet
+import com.eignex.util.collections.DynamicBits
+
+val header = DynamicBits()
+val start = header.reserve(130) // Append 130 false bits.
+header[start + 64] = true
+header.add(false)
+val flags: BitSet = header
+check(flags.size == 131)
+check(flags.toIntArray().contentEquals(intArrayOf(64)))
+```
+
 Collections are mutable and require external synchronization when shared. List
 removal uses swap removal, which does not preserve element order.
 

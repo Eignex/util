@@ -11,25 +11,72 @@ public final class com/eignex/util/arrays/BinarySearchKt {
 	public static synthetic fun binarySearchLong$default ([JJIIILjava/lang/Object;)I
 }
 
-public final class com/eignex/util/collections/Bits {
+public abstract interface class com/eignex/util/collections/BitSet {
+	public fun andInPlace (Lcom/eignex/util/collections/BitSet;)V
+	public fun andNotInPlace (Lcom/eignex/util/collections/BitSet;)V
+	public fun cardinality ()I
+	public fun clear ()V
+	public abstract fun clear (I)V
+	public fun clearRange (II)V
+	public fun containsAll (Lcom/eignex/util/collections/BitSet;)Z
+	public fun copyFrom (Lcom/eignex/util/collections/BitSet;)V
+	public fun forEachSet (Lcom/eignex/util/collections/IntConsumer;)V
+	public abstract fun get (I)Z
+	public abstract fun getSize ()I
+	public fun orInPlace (Lcom/eignex/util/collections/BitSet;)V
+	public abstract fun set (I)V
+	public fun set (IZ)V
+	public fun setRange (II)V
+	public fun toBooleanArray ()[Z
+	public fun toIntArray ()[I
+}
+
+public final class com/eignex/util/collections/BitSet$DefaultImpls {
+	public static fun andInPlace (Lcom/eignex/util/collections/BitSet;Lcom/eignex/util/collections/BitSet;)V
+	public static fun andNotInPlace (Lcom/eignex/util/collections/BitSet;Lcom/eignex/util/collections/BitSet;)V
+	public static fun cardinality (Lcom/eignex/util/collections/BitSet;)I
+	public static fun clear (Lcom/eignex/util/collections/BitSet;)V
+	public static fun clearRange (Lcom/eignex/util/collections/BitSet;II)V
+	public static fun containsAll (Lcom/eignex/util/collections/BitSet;Lcom/eignex/util/collections/BitSet;)Z
+	public static fun copyFrom (Lcom/eignex/util/collections/BitSet;Lcom/eignex/util/collections/BitSet;)V
+	public static fun forEachSet (Lcom/eignex/util/collections/BitSet;Lcom/eignex/util/collections/IntConsumer;)V
+	public static fun orInPlace (Lcom/eignex/util/collections/BitSet;Lcom/eignex/util/collections/BitSet;)V
+	public static fun set (Lcom/eignex/util/collections/BitSet;IZ)V
+	public static fun setRange (Lcom/eignex/util/collections/BitSet;II)V
+	public static fun toBooleanArray (Lcom/eignex/util/collections/BitSet;)[Z
+	public static fun toIntArray (Lcom/eignex/util/collections/BitSet;)[I
+}
+
+public final class com/eignex/util/collections/Bits : com/eignex/util/collections/BitSet {
 	public static final field Companion Lcom/eignex/util/collections/Bits$Companion;
 	public fun <init> (I)V
+	public fun andInPlace (Lcom/eignex/util/collections/BitSet;)V
 	public final fun andInPlace (Lcom/eignex/util/collections/Bits;)V
+	public fun andNotInPlace (Lcom/eignex/util/collections/BitSet;)V
 	public final fun andNotInPlace (Lcom/eignex/util/collections/Bits;)V
-	public final fun cardinality ()I
-	public final fun clear (I)V
+	public fun cardinality ()I
+	public fun clear ()V
+	public fun clear (I)V
+	public fun clearRange (II)V
+	public fun containsAll (Lcom/eignex/util/collections/BitSet;)Z
 	public final fun containsAll (Lcom/eignex/util/collections/Bits;)Z
 	public final fun copy ()Lcom/eignex/util/collections/Bits;
+	public fun copyFrom (Lcom/eignex/util/collections/BitSet;)V
 	public final fun copyFrom (Lcom/eignex/util/collections/Bits;)V
 	public fun equals (Ljava/lang/Object;)Z
+	public fun forEachSet (Lcom/eignex/util/collections/IntConsumer;)V
 	public final fun forEachSet (Lkotlin/jvm/functions/Function1;)V
-	public final fun get (I)Z
-	public final fun getSize ()I
+	public fun get (I)Z
+	public fun getSize ()I
 	public final fun getWords ()[J
 	public fun hashCode ()I
+	public fun orInPlace (Lcom/eignex/util/collections/BitSet;)V
 	public final fun orInPlace (Lcom/eignex/util/collections/Bits;)V
-	public final fun set (I)V
-	public final fun toIntArray ()[I
+	public fun set (I)V
+	public fun set (IZ)V
+	public fun setRange (II)V
+	public fun toBooleanArray ()[Z
+	public fun toIntArray ()[I
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -54,6 +101,36 @@ public final class com/eignex/util/collections/CollectionExtrasKt {
 	public static final fun sortedKeys (Lcom/eignex/util/collections/LongKeyed;)[J
 	public static final fun toSortedIntArray (Lcom/eignex/util/collections/IntCollection;)[I
 	public static final fun toSortedLongArray (Lcom/eignex/util/collections/LongCollection;)[J
+}
+
+public final class com/eignex/util/collections/DynamicBits : com/eignex/util/collections/BitSet {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public synthetic fun <init> (IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun add (Z)V
+	public fun andInPlace (Lcom/eignex/util/collections/BitSet;)V
+	public fun andNotInPlace (Lcom/eignex/util/collections/BitSet;)V
+	public fun cardinality ()I
+	public fun clear ()V
+	public fun clear (I)V
+	public fun clearRange (II)V
+	public fun containsAll (Lcom/eignex/util/collections/BitSet;)Z
+	public final fun copy ()Lcom/eignex/util/collections/DynamicBits;
+	public fun copyFrom (Lcom/eignex/util/collections/BitSet;)V
+	public fun forEachSet (Lcom/eignex/util/collections/IntConsumer;)V
+	public final fun forEachSet (Lkotlin/jvm/functions/Function1;)V
+	public fun get (I)Z
+	public fun getSize ()I
+	public final fun getWords ()[J
+	public fun orInPlace (Lcom/eignex/util/collections/BitSet;)V
+	public final fun reserve (I)I
+	public final fun reset ()V
+	public final fun resize (I)V
+	public fun set (I)V
+	public fun set (IZ)V
+	public fun setRange (II)V
+	public fun toBooleanArray ()[Z
+	public fun toIntArray ()[I
 }
 
 public final class com/eignex/util/collections/IndexedMaxHeap {
@@ -496,6 +573,10 @@ public abstract interface class com/eignex/util/collections/MutableLongSet : com
 public final class com/eignex/util/collections/MutableLongSet$DefaultImpls {
 	public static fun isEmpty (Lcom/eignex/util/collections/MutableLongSet;)Z
 	public static fun toLongArray (Lcom/eignex/util/collections/MutableLongSet;)[J
+}
+
+public final class com/eignex/util/collections/internals/BitWordsKt {
+	public static final fun forEachSetBit ([JILkotlin/jvm/functions/Function1;)V
 }
 
 public final class com/eignex/util/concurrent/AdderCountersKt {

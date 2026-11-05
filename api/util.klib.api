@@ -24,6 +24,28 @@ abstract interface <#A: kotlin/Any?> com.eignex.util.concurrent/ReferenceCell { 
     abstract fun store(#A) // com.eignex.util.concurrent/ReferenceCell.store|store(1:0){}[0]
 }
 
+abstract interface com.eignex.util.collections/BitSet { // com.eignex.util.collections/BitSet|null[0]
+    abstract val size // com.eignex.util.collections/BitSet.size|{}size[0]
+        abstract fun <get-size>(): kotlin/Int // com.eignex.util.collections/BitSet.size.<get-size>|<get-size>(){}[0]
+
+    abstract fun clear(kotlin/Int) // com.eignex.util.collections/BitSet.clear|clear(kotlin.Int){}[0]
+    abstract fun get(kotlin/Int): kotlin/Boolean // com.eignex.util.collections/BitSet.get|get(kotlin.Int){}[0]
+    abstract fun set(kotlin/Int) // com.eignex.util.collections/BitSet.set|set(kotlin.Int){}[0]
+    open fun andInPlace(com.eignex.util.collections/BitSet) // com.eignex.util.collections/BitSet.andInPlace|andInPlace(com.eignex.util.collections.BitSet){}[0]
+    open fun andNotInPlace(com.eignex.util.collections/BitSet) // com.eignex.util.collections/BitSet.andNotInPlace|andNotInPlace(com.eignex.util.collections.BitSet){}[0]
+    open fun cardinality(): kotlin/Int // com.eignex.util.collections/BitSet.cardinality|cardinality(){}[0]
+    open fun clear() // com.eignex.util.collections/BitSet.clear|clear(){}[0]
+    open fun clearRange(kotlin/Int, kotlin/Int) // com.eignex.util.collections/BitSet.clearRange|clearRange(kotlin.Int;kotlin.Int){}[0]
+    open fun containsAll(com.eignex.util.collections/BitSet): kotlin/Boolean // com.eignex.util.collections/BitSet.containsAll|containsAll(com.eignex.util.collections.BitSet){}[0]
+    open fun copyFrom(com.eignex.util.collections/BitSet) // com.eignex.util.collections/BitSet.copyFrom|copyFrom(com.eignex.util.collections.BitSet){}[0]
+    open fun forEachSet(com.eignex.util.collections/IntConsumer) // com.eignex.util.collections/BitSet.forEachSet|forEachSet(com.eignex.util.collections.IntConsumer){}[0]
+    open fun orInPlace(com.eignex.util.collections/BitSet) // com.eignex.util.collections/BitSet.orInPlace|orInPlace(com.eignex.util.collections.BitSet){}[0]
+    open fun set(kotlin/Int, kotlin/Boolean) // com.eignex.util.collections/BitSet.set|set(kotlin.Int;kotlin.Boolean){}[0]
+    open fun setRange(kotlin/Int, kotlin/Int) // com.eignex.util.collections/BitSet.setRange|setRange(kotlin.Int;kotlin.Int){}[0]
+    open fun toBooleanArray(): kotlin/BooleanArray // com.eignex.util.collections/BitSet.toBooleanArray|toBooleanArray(){}[0]
+    open fun toIntArray(): kotlin/IntArray // com.eignex.util.collections/BitSet.toIntArray|toIntArray(){}[0]
+}
+
 abstract interface com.eignex.util.collections/IntCollection { // com.eignex.util.collections/IntCollection|null[0]
     abstract val size // com.eignex.util.collections/IntCollection.size|{}size[0]
         abstract fun <get-size>(): kotlin/Int // com.eignex.util.collections/IntCollection.size.<get-size>|<get-size>(){}[0]
@@ -218,7 +240,7 @@ final class <#A: kotlin/Any?> com.eignex.util.collections/MutableLongObjectMap :
     final inline fun getOrPut(kotlin/Long, kotlin/Function0<#A>): #A // com.eignex.util.collections/MutableLongObjectMap.getOrPut|getOrPut(kotlin.Long;kotlin.Function0<1:0>){}[0]
 }
 
-final class com.eignex.util.collections/Bits { // com.eignex.util.collections/Bits|null[0]
+final class com.eignex.util.collections/Bits : com.eignex.util.collections/BitSet { // com.eignex.util.collections/Bits|null[0]
     constructor <init>(kotlin/Int) // com.eignex.util.collections/Bits.<init>|<init>(kotlin.Int){}[0]
 
     final val size // com.eignex.util.collections/Bits.size|{}size[0]
@@ -229,15 +251,19 @@ final class com.eignex.util.collections/Bits { // com.eignex.util.collections/Bi
     final fun andInPlace(com.eignex.util.collections/Bits) // com.eignex.util.collections/Bits.andInPlace|andInPlace(com.eignex.util.collections.Bits){}[0]
     final fun andNotInPlace(com.eignex.util.collections/Bits) // com.eignex.util.collections/Bits.andNotInPlace|andNotInPlace(com.eignex.util.collections.Bits){}[0]
     final fun cardinality(): kotlin/Int // com.eignex.util.collections/Bits.cardinality|cardinality(){}[0]
+    final fun clear() // com.eignex.util.collections/Bits.clear|clear(){}[0]
     final fun clear(kotlin/Int) // com.eignex.util.collections/Bits.clear|clear(kotlin.Int){}[0]
+    final fun clearRange(kotlin/Int, kotlin/Int) // com.eignex.util.collections/Bits.clearRange|clearRange(kotlin.Int;kotlin.Int){}[0]
     final fun containsAll(com.eignex.util.collections/Bits): kotlin/Boolean // com.eignex.util.collections/Bits.containsAll|containsAll(com.eignex.util.collections.Bits){}[0]
     final fun copy(): com.eignex.util.collections/Bits // com.eignex.util.collections/Bits.copy|copy(){}[0]
     final fun copyFrom(com.eignex.util.collections/Bits) // com.eignex.util.collections/Bits.copyFrom|copyFrom(com.eignex.util.collections.Bits){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // com.eignex.util.collections/Bits.equals|equals(kotlin.Any?){}[0]
+    final fun forEachSet(com.eignex.util.collections/IntConsumer) // com.eignex.util.collections/Bits.forEachSet|forEachSet(com.eignex.util.collections.IntConsumer){}[0]
     final fun get(kotlin/Int): kotlin/Boolean // com.eignex.util.collections/Bits.get|get(kotlin.Int){}[0]
     final fun hashCode(): kotlin/Int // com.eignex.util.collections/Bits.hashCode|hashCode(){}[0]
     final fun orInPlace(com.eignex.util.collections/Bits) // com.eignex.util.collections/Bits.orInPlace|orInPlace(com.eignex.util.collections.Bits){}[0]
     final fun set(kotlin/Int) // com.eignex.util.collections/Bits.set|set(kotlin.Int){}[0]
+    final fun setRange(kotlin/Int, kotlin/Int) // com.eignex.util.collections/Bits.setRange|setRange(kotlin.Int;kotlin.Int){}[0]
     final fun toIntArray(): kotlin/IntArray // com.eignex.util.collections/Bits.toIntArray|toIntArray(){}[0]
     final fun toString(): kotlin/String // com.eignex.util.collections/Bits.toString|toString(){}[0]
     final inline fun forEachSet(kotlin/Function1<kotlin/Int, kotlin/Unit>) // com.eignex.util.collections/Bits.forEachSet|forEachSet(kotlin.Function1<kotlin.Int,kotlin.Unit>){}[0]
@@ -257,6 +283,31 @@ final class com.eignex.util.collections/Bits { // com.eignex.util.collections/Bi
         final fun set(kotlin/LongArray, kotlin/Int) // com.eignex.util.collections/Bits.Companion.set|set(kotlin.LongArray;kotlin.Int){}[0]
         final fun xorInto(kotlin/LongArray, kotlin/LongArray) // com.eignex.util.collections/Bits.Companion.xorInto|xorInto(kotlin.LongArray;kotlin.LongArray){}[0]
     }
+}
+
+final class com.eignex.util.collections/DynamicBits : com.eignex.util.collections/BitSet { // com.eignex.util.collections/DynamicBits|null[0]
+    constructor <init>(kotlin/Int = ...) // com.eignex.util.collections/DynamicBits.<init>|<init>(kotlin.Int){}[0]
+
+    final var size // com.eignex.util.collections/DynamicBits.size|{}size[0]
+        final fun <get-size>(): kotlin/Int // com.eignex.util.collections/DynamicBits.size.<get-size>|<get-size>(){}[0]
+    final var words // com.eignex.util.collections/DynamicBits.words|{}words[0]
+        final fun <get-words>(): kotlin/LongArray // com.eignex.util.collections/DynamicBits.words.<get-words>|<get-words>(){}[0]
+
+    final fun add(kotlin/Boolean) // com.eignex.util.collections/DynamicBits.add|add(kotlin.Boolean){}[0]
+    final fun cardinality(): kotlin/Int // com.eignex.util.collections/DynamicBits.cardinality|cardinality(){}[0]
+    final fun clear() // com.eignex.util.collections/DynamicBits.clear|clear(){}[0]
+    final fun clear(kotlin/Int) // com.eignex.util.collections/DynamicBits.clear|clear(kotlin.Int){}[0]
+    final fun clearRange(kotlin/Int, kotlin/Int) // com.eignex.util.collections/DynamicBits.clearRange|clearRange(kotlin.Int;kotlin.Int){}[0]
+    final fun copy(): com.eignex.util.collections/DynamicBits // com.eignex.util.collections/DynamicBits.copy|copy(){}[0]
+    final fun forEachSet(com.eignex.util.collections/IntConsumer) // com.eignex.util.collections/DynamicBits.forEachSet|forEachSet(com.eignex.util.collections.IntConsumer){}[0]
+    final fun get(kotlin/Int): kotlin/Boolean // com.eignex.util.collections/DynamicBits.get|get(kotlin.Int){}[0]
+    final fun reserve(kotlin/Int): kotlin/Int // com.eignex.util.collections/DynamicBits.reserve|reserve(kotlin.Int){}[0]
+    final fun reset() // com.eignex.util.collections/DynamicBits.reset|reset(){}[0]
+    final fun resize(kotlin/Int) // com.eignex.util.collections/DynamicBits.resize|resize(kotlin.Int){}[0]
+    final fun set(kotlin/Int) // com.eignex.util.collections/DynamicBits.set|set(kotlin.Int){}[0]
+    final fun set(kotlin/Int, kotlin/Boolean) // com.eignex.util.collections/DynamicBits.set|set(kotlin.Int;kotlin.Boolean){}[0]
+    final fun setRange(kotlin/Int, kotlin/Int) // com.eignex.util.collections/DynamicBits.setRange|setRange(kotlin.Int;kotlin.Int){}[0]
+    final inline fun forEachSet(kotlin/Function1<kotlin/Int, kotlin/Unit>) // com.eignex.util.collections/DynamicBits.forEachSet|forEachSet(kotlin.Function1<kotlin.Int,kotlin.Unit>){}[0]
 }
 
 final class com.eignex.util.collections/IndexedMaxHeap { // com.eignex.util.collections/IndexedMaxHeap|null[0]
@@ -654,6 +705,7 @@ final inline fun <#A: kotlin/Any?> (com.eignex.util.io/CharSource).com.eignex.ut
 final inline fun com.eignex.util.arrays/argsortBy(kotlin/Int, kotlin/Function2<kotlin/Int, kotlin/Int, kotlin/Int>): kotlin/IntArray // com.eignex.util.arrays/argsortBy|argsortBy(kotlin.Int;kotlin.Function2<kotlin.Int,kotlin.Int,kotlin.Int>){}[0]
 final inline fun com.eignex.util.arrays/argsortBy(kotlin/Int, kotlin/IntArray, kotlin/IntArray, kotlin/Function2<kotlin/Int, kotlin/Int, kotlin/Int>): kotlin/IntArray // com.eignex.util.arrays/argsortBy|argsortBy(kotlin.Int;kotlin.IntArray;kotlin.IntArray;kotlin.Function2<kotlin.Int,kotlin.Int,kotlin.Int>){}[0]
 final inline fun com.eignex.util.arrays/argsortByIntKey(kotlin/Int, kotlin/Function1<kotlin/Int, kotlin/Int>): kotlin/IntArray // com.eignex.util.arrays/argsortByIntKey|argsortByIntKey(kotlin.Int;kotlin.Function1<kotlin.Int,kotlin.Int>){}[0]
+final inline fun com.eignex.util.collections.internals/forEachSetBit(kotlin/LongArray, kotlin/Int, kotlin/Function1<kotlin/Int, kotlin/Unit>) // com.eignex.util.collections.internals/forEachSetBit|forEachSetBit(kotlin.LongArray;kotlin.Int;kotlin.Function1<kotlin.Int,kotlin.Unit>){}[0]
 
 // Targets: [native]
 final class com.eignex.util.platform/HeapSample { // com.eignex.util.platform/HeapSample|null[0]

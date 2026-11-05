@@ -8,6 +8,16 @@ import kotlin.test.assertTrue
 
 class CommonConsumerTest {
     @Test
+    fun `fixed and dynamic bitsets share contracts across modules`() {
+        assertContentEquals(BooleanArray(130) { it == 129 }, CommonConsumer().dynamicHeader())
+    }
+
+    @Test
+    fun `dynamic traversal can inline a nonlocal return across modules`() {
+        assertEquals(64, CommonConsumer().firstDynamicFlag())
+    }
+
+    @Test
     fun `collection defaults work for implementations in consuming modules`() {
         assertContentEquals(intArrayOf(1, 3, 3), CommonConsumer().sortedElements())
     }

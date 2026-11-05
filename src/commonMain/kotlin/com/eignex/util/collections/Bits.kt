@@ -1,46 +1,61 @@
 package com.eignex.util.collections
 
-/** Multiplatform mutable bitset over `[0, size)`, packed into a [LongArray]. */
-class Bits(size: Int) {
-    /** Number of addressable bits. */
-    val size: Int = size
+import com.eignex.util.collections.internals.bitWordCount
+import com.eignex.util.collections.internals.fillBitRange
+import com.eignex.util.collections.internals.forEachSetBit
 
-    @PublishedApi internal val words: LongArray = LongArray((size + 63) ushr 6)
+/** Multiplatform mutable bitset over `[0, size)`, packed into a [LongArray]. */
+class Bits(size: Int) : BitSet {
+    /** Number of addressable bits. */
+    override val size: Int = size
+
+    @PublishedApi internal val words: LongArray = LongArray(bitWordCount(size))
 
     /** Whether bit [i] is set. */
-    fun get(i: Int): Boolean = (words[i ushr 6] ushr (i and 63)) and 1L == 1L
+    override operator fun get(i: Int): Boolean = (words[i ushr 6] ushr (i and 63)) and 1L == 1L
 
     /** Set bit [i]. */
-    fun set(i: Int) {
+    override fun set(i: Int) {
         words[i ushr 6] = words[i ushr 6] or (1L shl (i and 63))
     }
 
     /** Clear bit [i]. */
-    fun clear(i: Int) {
+    override fun clear(i: Int) {
         words[i ushr 6] = words[i ushr 6] and (1L shl (i and 63)).inv()
+    }
+
+    override fun clear() {
+        words.fill(0L)
+    }
+
+    override fun setRange(from: Int, to: Int) {
+        require(from >= 0 && from <= to && to <= size)
+        fillBitRange(words, from, to, true)
+    }
+
+    override fun clearRange(from: Int, to: Int) {
+        require(from >= 0 && from <= to && to <= size)
+        fillBitRange(words, from, to, false)
+    }
+
+    override fun forEachSet(action: IntConsumer) {
+        forEachSet { action.accept(it) }
     }
 
     /** Iterate over set bits in ascending order. */
     inline fun forEachSet(block: (Int) -> Unit) {
-        for (wi in words.indices) {
-            var w = words[wi]
-            while (w != 0L) {
-                val bit = w.countTrailingZeroBits()
-                block((wi shl 6) + bit)
-                w = w and (w - 1)
-            }
-        }
+        forEachSetBit(words, words.size, block)
     }
 
     /** Return the number of set bits. */
-    fun cardinality(): Int {
+    override fun cardinality(): Int {
         var c = 0
         for (w in words) c += w.countOneBits()
         return c
     }
 
     /** Return the set-bit indices in ascending order. */
-    fun toIntArray(): IntArray {
+    override fun toIntArray(): IntArray {
         val out = IntArray(cardinality())
         var k = 0
         forEachSet { out[k++] = it }
@@ -124,20 +139,7 @@ class Bits(size: Int) {
         /** Set bits `[from, to)`. */
         fun fillRange(bits: LongArray, from: Int, to: Int) {
             if (from >= to) return
-            val firstWord = from ushr 6
-            val lastWord = (to - 1) ushr 6
-            val firstBit = from and 63
-            val lastBit = (to - 1) and 63
-            if (firstWord == lastWord) {
-                val width = lastBit - firstBit + 1
-                val mask = (if (width == 64) -1L else (1L shl width) - 1L) shl firstBit
-                bits[firstWord] = bits[firstWord] or mask
-                return
-            }
-            bits[firstWord] = bits[firstWord] or (-1L shl firstBit)
-            for (w in firstWord + 1 until lastWord) bits[w] = -1L
-            val tailMask = if (lastBit == 63) -1L else (1L shl (lastBit + 1)) - 1L
-            bits[lastWord] = bits[lastWord] or tailMask
+            fillBitRange(bits, from, to, true)
         }
 
         /** Clear all bits with index `< exclusiveBit`. */
