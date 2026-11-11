@@ -8,6 +8,13 @@ import kotlin.test.assertTrue
 class IntArrayDequeTest {
 
     @Test
+    fun `initial capacities above the largest positive power of two should be rejected`() {
+        for (capacity in intArrayOf((1 shl 30) + 1, Int.MAX_VALUE)) {
+            assertFailsWith<IllegalArgumentException> { IntArrayDeque(capacity) }
+        }
+    }
+
+    @Test
     fun `indexed removal should preserve pending order across ring wrap`() {
         val q = IntArrayDeque(initialCapacity = 4)
         repeat(4) { q.addLast(it) }
