@@ -13,7 +13,7 @@ pluginManagement {
         mavenCentral()
     }
     resolutionStrategy.eachPlugin {
-        if (requested.id.id in setOf("com.eignex.kmp", "com.eignex.publish.github", "org.jetbrains.kotlin.plugin.serialization")) {
+        if (requested.id.id in setOf("com.eignex.kmp", "com.eignex.jvm", "com.eignex.publish.github", "org.jetbrains.kotlin.plugin.serialization")) {
             useModule("com.eignex:kbuild:$kbuildVersion")
         }
     }
@@ -25,3 +25,5 @@ plugins {
 
 include(":common-main-consumer")
 project(":common-main-consumer").projectDir = file("tests/common-main")
+
+include(":util-bench")
