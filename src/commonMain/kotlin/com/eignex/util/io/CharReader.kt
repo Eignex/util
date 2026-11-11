@@ -10,15 +10,19 @@ class CharReader(private val source: CharSource) {
     private var pos = 0
     private var drained = false
 
-    /** The character `offset` positions ahead of the cursor as an `Int`, or -1 at end of input. Pulls
-     *  further chunks from the source as needed to satisfy the lookahead. */
+    /**
+     * The character [offset] positions ahead of the cursor as an `Int`, or -1 at end of input.
+     * Pulls further chunks from the source as needed to satisfy the lookahead.
+     * @throws IllegalArgumentException when [offset] is negative.
+     */
     fun peek(offset: Int = 0): Int {
-        val want = pos + offset
+        require(offset >= 0) { "Lookahead offset must be non-negative: $offset" }
+        val want = pos.toLong() + offset
         while (buf.length <= want && !drained) {
             val chunk = source.next()
             if (chunk == null) drained = true else buf.append(chunk)
         }
-        return if (want < buf.length) buf[want].code else -1
+        return if (want < buf.length) buf[want.toInt()].code else -1
     }
 
     /** Consume one character, compacting the buffer once the consumed prefix grows. */

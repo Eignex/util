@@ -6,6 +6,21 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
+class FibonacciHashTest {
+    @Test
+    fun `int hash should spread sequential and strided keys across power of two tables`() {
+        for (shift in listOf(0, 8, 16, 24)) {
+            val samples = if (shift == 24) 256 else 4096
+            val mask = samples * 2 - 1
+            for (base in listOf(0, -1, Int.MIN_VALUE)) {
+                val slots = HashSet<Int>()
+                repeat(samples) { slots.add(fibonacciHash(base + (it shl shift)) and mask) }
+                assertTrue(slots.size > samples / 2, "shift=$shift base=$base occupied slots=${slots.size}")
+            }
+        }
+    }
+}
+
 class SplitMix64Test {
 
     @Test
