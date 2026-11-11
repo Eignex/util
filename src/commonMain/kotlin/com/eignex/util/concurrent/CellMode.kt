@@ -35,8 +35,8 @@ interface DoubleCounter {
     fun load(): Double
 
     /**
-     * Replace the value. Striped counters use a relative adjustment and concurrent stores
-     * are best-effort. Non-finite striped replacements reset storage and can lose racing adds.
+     * Replace the value. Striped floating-point counters reset storage and can lose racing adds;
+     * concurrent stores are best-effort.
      */
     fun store(value: Double)
 

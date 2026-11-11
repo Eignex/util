@@ -21,8 +21,9 @@ class CharReader(private val source: CharSource) {
         return if (want < buf.length) buf[want].code else -1
     }
 
-    /** Consume one character, compacting the buffer once the consumed prefix grows. */
+    /** Consume one character, or do nothing at end of input; compact consumed prefixes as needed. */
     fun advance() {
+        if (pos >= buf.length && peek() < 0) return
         pos++
         if (pos >= COMPACT_THRESHOLD) compact()
     }
