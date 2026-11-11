@@ -1,0 +1,9 @@
+{
+  "main": "com.eignex.util.bench.LabAdapterKt",
+  "sourceHistory": "snapshot",
+  "buildTasks": [":util-bench:installDist"],
+  "classpath": ["util-bench/build/install/util-bench/lib/*"],
+  "jvmArgs": ["-Xmx256m"],
+  "runtime": {"java": 17},
+  "workspaceInputs": ["util-bench/build/install/util-bench"]
+}

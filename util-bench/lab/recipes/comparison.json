@@ -1,0 +1,19 @@
+{
+  "name": "util-collections-comparison",
+  "description": "Paired revision comparison across primitive collections, retaining all JMH forks and samples. Set both config refs before submission.",
+  "repository": "Eignex/util",
+  "base": {"ref": "main"},
+  "configs": [
+    {"label": "baseline", "ref": "main"},
+    {"label": "candidate", "ref": "main"}
+  ],
+  "parallel": 4,
+  "repeats": 3,
+  "bench": {
+    "manifest": "util-bench/lab/bench.json",
+    "request": {"parameters": {
+      "sizes": "65,1024,65536", "seeds": "42",
+      "warmups": "5", "samples": "5", "iteration-ms": "300", "forks": "2"
+    }}
+  }
+}

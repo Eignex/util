@@ -1,0 +1,12 @@
+{
+  "name": "util-collections-smoke",
+  "description": "Primitive collection adapter wiring check; short timings are not performance evidence.",
+  "repository": "Eignex/util",
+  "base": {"ref": "main"},
+  "parallel": 2,
+  "repeats": 1,
+  "bench": {
+    "manifest": "util-bench/lab/bench.json",
+    "request": {"parameters": {"smoke": "true", "sizes": "65"}}
+  }
+}
