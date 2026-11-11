@@ -2,10 +2,37 @@ package com.eignex.util.collections
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class IntArrayListTest {
+
+    @Test
+    fun `invalid indices and truncation leave the list unchanged`() {
+        for (values in listOf(intArrayOf(), intArrayOf(10, 20, 30))) {
+            val list = IntArrayList(8).apply { addAll(values) }
+            for (index in listOf(-1, values.size, values.size + 1, Int.MAX_VALUE)) {
+                assertFailsWith<IndexOutOfBoundsException> { list[index] }
+                assertFailsWith<IndexOutOfBoundsException> { list[index] = 99 }
+                assertFailsWith<IndexOutOfBoundsException> { list.removeAt(index) }
+                assertEquals(values.toList(), list.toIntArray().toList())
+                assertEquals(values.size, list.size)
+            }
+            for (index in listOf(-1, values.size + 1, Int.MAX_VALUE)) {
+                assertFailsWith<IndexOutOfBoundsException> { list.insertAt(index, 99) }
+                assertEquals(values.toList(), list.toIntArray().toList())
+                assertEquals(values.size, list.size)
+            }
+            for (size in listOf(-1, Int.MIN_VALUE)) {
+                assertFailsWith<IllegalArgumentException> { list.truncateTo(size) }
+                assertEquals(values.toList(), list.toIntArray().toList())
+                assertEquals(values.size, list.size)
+            }
+            list.insertAt(list.size, 99)
+            assertEquals(values.toList() + 99, list.toIntArray().toList())
+        }
+    }
 
     @Test
     fun `add should grow past initial capacity and preserve order`() {

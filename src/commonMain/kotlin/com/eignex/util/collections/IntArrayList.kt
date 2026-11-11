@@ -27,23 +27,41 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
         size = newSize
     }
 
-    /** Return the element at [index]. The index must be within the live elements. */
-    override operator fun get(index: Int): Int = data[index]
+    /**
+     * Return the element at [index].
+     * @throws IndexOutOfBoundsException when [index] is outside the live elements.
+     */
+    override operator fun get(index: Int): Int {
+        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
+        return data[index]
+    }
 
-    /** Replace the element at [index]. The index must be within the live elements. */
+    /**
+     * Replace the element at [index].
+     * @throws IndexOutOfBoundsException when [index] is outside the live elements.
+     */
     operator fun set(index: Int, value: Int) {
+        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
         data[index] = value
     }
 
-    /** Insert [value] at [index], shifting the tail right. */
+    /**
+     * Insert [value] at [index], shifting the tail right; [size] appends to the list.
+     * @throws IndexOutOfBoundsException when [index] is outside `0..size`.
+     */
     fun insertAt(index: Int, value: Int) {
+        if (index < 0 || index > size) throw IndexOutOfBoundsException("Index $index, size $size")
         add(0)
         for (i in size - 1 downTo index + 1) data[i] = data[i - 1]
         data[index] = value
     }
 
-    /** Swap-remove the element at [index] (O(1); does not preserve order). */
+    /**
+     * Swap-remove the element at [index] (O(1); does not preserve order).
+     * @throws IndexOutOfBoundsException when [index] is outside the live elements.
+     */
     fun removeAt(index: Int) {
+        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
         data[index] = data[--size]
     }
 
@@ -72,8 +90,12 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
         if (data.size > size.coerceAtLeast(1)) data = data.copyOf(size.coerceAtLeast(1))
     }
 
-    /** Truncate to [newSize], dropping the suffix. No-op if [newSize] is `>= size`. */
+    /**
+     * Truncate to [newSize], dropping the suffix. No-op if [newSize] is `>= size`.
+     * @throws IllegalArgumentException when [newSize] is negative.
+     */
     fun truncateTo(newSize: Int) {
+        require(newSize >= 0) { "Size must be non-negative: $newSize" }
         if (newSize < size) size = newSize
     }
 
