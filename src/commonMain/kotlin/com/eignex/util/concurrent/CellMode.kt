@@ -134,7 +134,6 @@ operator fun DoubleCounter.getValue(thisRef: Any?, property: KProperty<*>): Doub
 /** Read an integer counter as a delegated property. */
 operator fun LongCounter.getValue(thisRef: Any?, property: KProperty<*>): Long = load()
 
-// Reference CAS compares identity; boxed numeric values need primitive storage.
 internal fun rejectBoxedPrimitive(initial: Any?) {
     require(initial !is Double && initial !is Long) {
         "ReferenceCell does not support boxed Double/Long; use newDouble/newLong instead"

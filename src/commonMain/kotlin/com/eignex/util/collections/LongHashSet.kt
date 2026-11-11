@@ -26,11 +26,9 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
     val allocatedBytes: Long
         get() = if (used === EmptyLongKeyTable.used) 0L else keys.size.toLong() * (Long.SIZE_BYTES + 1L)
 
-    /** Number of members currently in the set. */
     override var size: Int = 0
         private set
 
-    /** Whether [value] is present, independently of the stored payload. */
     override operator fun contains(value: Long): Boolean {
         var i = mix(value) and mask
         while (used[i]) {
@@ -59,7 +57,6 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
         }
     }
 
-    /** Add [value]; returns true if it was newly inserted, false if already present. */
     override fun add(value: Long): Boolean {
         if (used === EmptyLongKeyTable.used) {
             keys = LongArray(initialCap)
@@ -149,7 +146,6 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
         return true
     }
 
-    /** Remove [value]; returns true if it was present. Never writes through the shared empty table. */
     override fun remove(value: Long): Boolean {
         findLongKey(keys, used, mask, value) { slot ->
             deleteLongKeySlot(keys, used, mask, slot, { _, _ -> }, {})
@@ -159,10 +155,8 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
         return false
     }
 
-    /** Whether there are no live elements. */
     override fun isEmpty(): Boolean = size == 0
 
-    /** Snapshot the members into a fresh [LongArray] (unspecified order). */
     override fun toLongArray(): LongArray = longKeysToArray(keys, used, size)
 
     /** Whether [count] additional members fit without replacing the backing table. */

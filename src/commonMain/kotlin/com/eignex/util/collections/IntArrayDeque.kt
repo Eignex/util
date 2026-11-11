@@ -14,10 +14,8 @@ class IntArrayDeque(initialCapacity: Int = 8) : IntIndexedCollection {
     private var head: Int = 0
     private var count: Int = 0
 
-    /** Number of live elements. */
     override val size: Int get() = count
 
-    /** Whether there are no live elements. */
     override fun isEmpty(): Boolean = count == 0
 
     /** Whether there is at least one live element. */
@@ -68,8 +66,7 @@ class IntArrayDeque(initialCapacity: Int = 8) : IntIndexedCollection {
         return buf[(head + count) and (buf.size - 1)]
     }
 
-    /** Pop the front element, or return [sentinel] if empty. Avoids the throw on the
-     *  common "drain until empty" pattern. */
+    /** Pop the front element, or return [sentinel] if empty. */
     fun removeFirstOr(sentinel: Int): Int {
         if (count == 0) return sentinel
         val v = buf[head]

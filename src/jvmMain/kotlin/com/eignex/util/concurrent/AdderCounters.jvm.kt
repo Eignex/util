@@ -20,9 +20,7 @@ internal value class DoubleAdder(val ref: JDoubleAdder) : DoubleCounter {
 
     override fun load(): Double = ref.sum()
 
-    // Resetting stripes can discard racing adds; a relative add preserves their contributions.
-    // Concurrent stores and the intermediate sum remain best-effort. A non-finite current sum or
-    // target has no finite delta to add, so that case resets the stripes and accepts the race.
+    // A relative add preserves racing contributions; non-finite deltas require resetting the stripes.
     override fun store(value: Double) {
         val delta = value - ref.sum()
         if (delta.isFinite()) {
@@ -38,15 +36,12 @@ internal value class DoubleAdder(val ref: JDoubleAdder) : DoubleCounter {
         ref.add(delta)
     }
 
-    // A racing add may be included in this total, so this cannot elect a first writer.
-    // Use atomic cells when the returned value must elect a unique writer.
     override fun addAndGet(delta: Double): Double {
         ref.add(delta)
         return ref.sum()
     }
 }
 
-// Striped storage provides additive updates without a linearizable read.
 @JvmInline
 internal value class LongAdder(val ref: JLongAdder) : LongCounter {
     constructor(initial: Long = 0L) : this(JLongAdder().also { it.add(initial) })
@@ -54,7 +49,6 @@ internal value class LongAdder(val ref: JLongAdder) : LongCounter {
     override fun load(): Long = ref.sum()
 
     // Resetting stripes can discard racing adds; a relative add preserves their contributions.
-    // Concurrent stores and the intermediate sum remain best-effort.
     override fun store(value: Long) {
         ref.add(value - ref.sum())
     }
@@ -64,8 +58,6 @@ internal value class LongAdder(val ref: JLongAdder) : LongCounter {
         ref.add(delta)
     }
 
-    // A racing add may be included in this total, so this cannot elect a first writer.
-    // Use atomic cells when the returned value must elect a unique writer.
     override fun addAndGet(delta: Long): Long {
         ref.add(delta)
         return ref.sum()

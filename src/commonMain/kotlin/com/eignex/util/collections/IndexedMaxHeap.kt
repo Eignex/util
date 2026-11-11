@@ -2,9 +2,7 @@ package com.eignex.util.collections
 
 /**
  * Fixed-capacity binary max-heap over integer ids, with O(log n) key updates and removal.
- * A position array tracks membership; `pos(id) = -1` means absent. [restore] reinserts
- * an id at its cached key, including updates made while absent. Separate primitive
- * id and key arrays avoid per-entry allocation.
+ * [restore] reinserts an id at its cached key, including updates made while absent.
  */
 class IndexedMaxHeap(
     /** Maximum number of integer ids, in `0 until capacity`. */
@@ -19,7 +17,7 @@ class IndexedMaxHeap(
     var size: Int = 0
         private set
 
-    /** Whether [id] is present, independently of the stored payload. */
+    /** Whether [id] is present in the heap. */
     fun contains(id: Int): Boolean = pos[id] >= 0
 
     /** Return the cached priority of [id], including priorities of absent ids. */
@@ -35,8 +33,7 @@ class IndexedMaxHeap(
         siftUp(size - 1)
     }
 
-    /** Reinsert [id] at its stored key, e.g. after [extractMax] / [remove] popped an id the caller
-     *  could not use. */
+    /** Reinsert [id] at its stored key; no-op if already present. */
     fun restore(id: Int) {
         if (pos[id] >= 0) return
         heap[size] = id
@@ -45,9 +42,7 @@ class IndexedMaxHeap(
         siftUp(size - 1)
     }
 
-    /** Change [id]'s key. The stored key is updated even when [id] is absent from the heap (so
-     *  activity bumps on a currently-removed/assigned variable persist and take effect when the
-     *  id is later [restore]d); the sift only runs when the id is present. */
+    /** Change [id]'s cached key, updating heap order if the id is present. */
     fun updateKey(id: Int, newKey: Double) {
         val old = keys[id]
         keys[id] = newKey
@@ -78,8 +73,7 @@ class IndexedMaxHeap(
     /** Peek the id with the largest current key without removing it. -1 if empty. */
     fun peekMax(): Int = if (size > 0) heap[0] else -1
 
-    /** Remove [id] from the heap regardless of position; no-op if absent. The cached key in
-     *  [keys] is preserved so [restore] can re-add at the same priority. */
+    /** Remove [id] if present, preserving its cached key for [restore]. */
     fun remove(id: Int) {
         val p = pos[id]
         if (p < 0) return
@@ -94,16 +88,13 @@ class IndexedMaxHeap(
         siftUp(p)
     }
 
-    /** Scale every key by [factor] in place in O(n). A uniform positive multiplier preserves heap
-     *  order, so no resifting is needed. */
+    /** Scale every cached key by a positive [factor] in O(capacity). */
     fun scaleKeys(factor: Double) {
         require(factor > 0.0) { "scale factor must be positive, got $factor" }
         for (i in 0 until capacity) keys[i] *= factor
     }
 
-    /** Reset every id's key to [value] and rebuild the heap in ascending id order in O(n), so
-     *  equal-key ties resolve to the lowest id deterministically. Requires `size == capacity`: callers
-     *  restore skipped ids before a pick returns, so the heap holds the full set between picks. */
+    /** Reset every key to [value] and arrange the heap in ascending id order. Requires `size == capacity`. */
     fun resetAllKeysInIdOrder(value: Double) {
         require(size == capacity) {
             "resetAllKeysInIdOrder requires full heap (size=$size, capacity=$capacity)"

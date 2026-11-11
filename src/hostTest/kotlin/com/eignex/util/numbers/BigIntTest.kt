@@ -21,7 +21,6 @@ class BigIntTest {
 
     @Test
     fun `remainder should take the sign of the dividend`() {
-        // Outside its module BigInt is the platform type, whose own `rem` member would shadow `%` here.
         assertEquals(bigIntOf(-1), bigIntOf(-7).remainderOf(bigIntOf(2)))
         assertEquals(bigIntOf(1), bigIntOf(7).remainderOf(bigIntOf(-2)))
         assertEquals(bigIntOf(-1), bigIntOf(-7).remainderOf(bigIntOf(-2)))

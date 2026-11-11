@@ -102,7 +102,6 @@ internal class CommonConsumer {
         return openTextFile(inputPath).useSource { it.readText() }
     }
 
-    // Binding these functions verifies that a CLI can forward them entirely from commonMain.
     val input: (String) -> CharSource = ::openTextFile
     val property: (String) -> String? = ::processProperty
     val errorLine: (String) -> Unit = ::printErrorLine

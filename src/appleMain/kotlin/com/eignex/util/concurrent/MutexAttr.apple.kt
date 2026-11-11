@@ -6,6 +6,5 @@ package com.eignex.util.concurrent
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.posix.PTHREAD_MUTEX_ERRORCHECK
 
-// toInt() regardless of the declared width: the constant is unsigned on some targets and signed on
-// others, and Int.toInt() is the identity.
+// POSIX constants differ in signedness and width across targets.
 internal actual val ERRORCHECK_MUTEX_TYPE: Int = PTHREAD_MUTEX_ERRORCHECK

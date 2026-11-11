@@ -1,9 +1,7 @@
 package com.eignex.util.arrays
 
 /**
- * Indices ordered by integer [key], ties by index. Packs each signed key in the high
- * word of a `Long` and its nonnegative index in the low word, then uses primitive
- * [LongArray.sort] without boxing. Packing preserves negative-key ordering.
+ * Indices in `0 until n` ordered by integer [key], with ties ordered by index and no boxing.
  */
 inline fun argsortByIntKey(n: Int, key: (Int) -> Int): IntArray {
     val packed = LongArray(n) { (key(it).toLong() shl 32) or (it.toLong() and 0xFFFFFFFFL) }
@@ -12,9 +10,8 @@ inline fun argsortByIntKey(n: Int, key: (Int) -> Int): IntArray {
 }
 
 /**
- * Stable, boxing-free argsort using bottom-up merge sort over primitive indices.
- * [compare] returns negative when its first index sorts before the second. Equal
- * indices retain input order, giving deterministic ties.
+ * Stable, boxing-free argsort of `0 until n`.
+ * [compare] returns negative when its first index sorts before the second; ties retain index order.
  */
 inline fun argsortBy(n: Int, compare: (Int, Int) -> Int): IntArray {
     val order = IntArray(n)

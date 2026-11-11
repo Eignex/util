@@ -4,10 +4,7 @@ import com.eignex.util.collections.internals.mixIntKey
 import com.eignex.util.collections.internals.mixLongKey
 
 /**
- * SplitMix64 - a fast, high-quality 64-bit mixer suitable for spreading sequential
- * or low-entropy keys into a uniform 64-bit hash before feeding them to cardinality
- * sketches. Output passes BigCrush; not collision-resistant (use a cryptographic hash
- * if adversarial input is a concern).
+ * Deterministic SplitMix64 mixer. Not a cryptographic hash.
  */
 fun splitmix64(value: Long): Long {
     var z = value + -7046029254386353133L // 0x9E3779B97F4A7C15
@@ -17,17 +14,8 @@ fun splitmix64(value: Long): Long {
 }
 
 /**
- * 64-bit hash of [bytes] for cardinality / sketch families: SplitMix64 over 8-byte
- * little-endian chunks, folding tail bytes in last and seeding with the input length so
- * zero-prefixed inputs of different lengths hash distinctly. Stable byte-for-byte across
- * platforms.
- *
- * Prefer this over `value.hashCode().toLong()` when feeding HLL,
- * Bloom filters, or
- * count-min sketches - those rely on
- * uniform 64-bit entropy, and JVM `hashCode` only provides 32 bits.
- *
- * Not collision-resistant. Use a cryptographic hash for adversarial input.
+ * Deterministic 64-bit hash of [bytes], stable across platforms.
+ * Mixes the input length, little-endian 8-byte chunks and a final tail. Not a cryptographic hash.
  */
 fun hash64(bytes: ByteArray): Long {
     var h = bytes.size.toLong()
@@ -40,9 +28,7 @@ fun hash64(bytes: ByteArray): Long {
         h = splitmix64(h xor chunk)
         i += 8
     }
-    // Always finalize with a tail mix - even when bytes.size is a multiple of 8 -
-    // so chunk-aligned and unaligned inputs that happen to reach the same
-    // intermediate state cannot collide.
+    // Mix even an empty tail so aligned inputs receive the same finalization step.
     var tail = 0L
     var shift = 0
     while (i < bytes.size) {

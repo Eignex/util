@@ -7,8 +7,7 @@ import com.eignex.util.collections.internals.openAddressingCapacity
 
 /**
  * Read-only primitive Int-to-Int map. [build] selects a dense offset array or sparse
- * linear-probed table. Missing keys return [absent]; use a sentinel outside the
- * payload range when callers need to distinguish absence.
+ * linear-probed table. Missing keys return [absent]; [contains] distinguishes absence from stored values.
  */
 class IntIntMap private constructor(
     private val minKey: Int,
@@ -62,10 +61,8 @@ class IntIntMap private constructor(
     /** Factories for immutable primitive maps. */
     companion object {
         /**
-         * Build a map from parallel key/value arrays. When the key range relative to the
-         * entry count is dense (≤ [denseThreshold]×), uses an offset IntArray; otherwise
-         * falls back to an open-addressing primitive hash table. [absent] is returned by
-         * [get] for keys that aren't present.
+         * Build from parallel key/value arrays, using dense storage when the key range is at most
+         * [denseThreshold] times the entry count. Missing keys return [absent].
          */
         fun build(keys: IntArray, values: IntArray, absent: Int = 0, denseThreshold: Int = 4): IntIntMap {
             require(keys.size == values.size) { "keys/values length mismatch" }
@@ -76,9 +73,7 @@ class IntIntMap private constructor(
                 if (k < lo) lo = k
                 if (k > hi) hi = k
             }
-            // Widen before subtracting: `hi - lo` in Int overflows for spans ≥ 2^31 (e.g. keys
-            // straddling Int.MIN_VALUE / Int.MAX_VALUE), yielding a bogus tiny range and a dense
-            // backing sized to garbage.
+            // Widen before subtracting to avoid Int overflow across the full key range.
             val range = hi.toLong() - lo.toLong() + 1
             return if (range <= Int.MAX_VALUE && range <= denseThreshold.toLong() * keys.size) {
                 val arr = IntArray(range.toInt()) { absent }

@@ -27,11 +27,9 @@ class IntHashSet(initialCapacity: Int = 8) : MutableIntSet {
     val allocatedBytes: Long
         get() = if (used === EmptyIntKeyTable.used) 0L else keys.size.toLong() * (Int.SIZE_BYTES + 1L)
 
-    /** Number of members currently in the set. */
     override var size: Int = 0
         private set
 
-    /** Whether [value] is present, independently of the stored payload. */
     override operator fun contains(value: Int): Boolean {
         var i = mix(value) and mask
         while (used[i]) {
@@ -41,7 +39,6 @@ class IntHashSet(initialCapacity: Int = 8) : MutableIntSet {
         return false
     }
 
-    /** Add [value]; returns true if it was newly inserted, false if already present. */
     override fun add(value: Int): Boolean {
         if (used === EmptyIntKeyTable.used) {
             keys = IntArray(initialCap)
@@ -56,7 +53,6 @@ class IntHashSet(initialCapacity: Int = 8) : MutableIntSet {
         return true
     }
 
-    /** Remove [value]; returns true if it was present. Never writes through the shared empty table. */
     override fun remove(value: Int): Boolean {
         findIntKey(keys, used, mask, value) { slot ->
             deleteIntKeySlot(keys, used, mask, slot, { _, _ -> }, {})
@@ -66,10 +62,8 @@ class IntHashSet(initialCapacity: Int = 8) : MutableIntSet {
         return false
     }
 
-    /** Whether there are no live elements. */
     override fun isEmpty(): Boolean = size == 0
 
-    /** Snapshot the members into a fresh [IntArray] (unspecified order). */
     override fun toIntArray(): IntArray = intKeysToArray(keys, used, size)
 
     /** Remove all live elements while retaining the allocated storage. */

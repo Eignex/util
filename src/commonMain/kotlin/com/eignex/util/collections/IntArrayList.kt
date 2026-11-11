@@ -9,7 +9,6 @@ import com.eignex.util.arrays.binarySearchInt
 class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
     private var data: IntArray = IntArray(initialCapacity.coerceAtLeast(1))
 
-    /** Number of live elements. */
     override var size: Int = 0
         private set
 
@@ -65,8 +64,7 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
         data[index] = data[--size]
     }
 
-    /** Find the first occurrence of [value] and swap-remove it; returns true if found. The scan
-     *  uses swap removal and does not preserve order. */
+    /** Swap-remove the first occurrence of [value], returning true if found. Does not preserve order. */
     fun removeValue(value: Int): Boolean {
         val d = data
         val n = size
@@ -102,7 +100,7 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
     /** Copy the live elements into a new array. */
     override fun toIntArray(): IntArray = data.copyOf(size)
 
-    /** Snapshot the current contents as a `Set<Int>`. Boxes, so not for hot loops. */
+    /** Snapshot the current contents as a boxed `Set<Int>`. */
     fun toSet(): Set<Int> {
         val s = HashSet<Int>(size)
         for (i in 0 until size) s.add(data[i])
@@ -115,21 +113,15 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
         return -1
     }
 
-    /** Whether [value] is present, independently of the stored payload. */
     override fun contains(value: Int): Boolean = indexOf(value) >= 0
 
-    /** Whether there are no live elements. */
     override fun isEmpty(): Boolean = size == 0
 
     /** Return the last live element; requires a nonempty collection. */
     fun last(): Int = data[size - 1]
 
     /**
-     * Index of the first element `>= element` in `[0, size)`, assuming the list is sorted
-     * **strictly ascending** (no duplicates) — the lower-bound / insertion point. Returns
-     * [size] when every element is strictly below [element]. O(log size) via [binarySearchInt],
-     * whose exact-or-`-(insertion)-1` result is an exact lower bound only when elements are
-     * distinct.
+     * Index of the first element `>= element` in an ascending list, or [size] when none exists.
      */
     fun lowerBound(element: Int): Int {
         val idx = data.binarySearchInt(element, 0, size)
@@ -137,9 +129,7 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
     }
 
     /**
-     * Index of the first element `<= element` in `[0, size)`, assuming the list is sorted
-     * **descending** — the symmetric lower bound for a monotone-decreasing sequence. Returns [size]
-     * when every element is strictly above [element]. O(log size).
+     * Index of the first element `<= element` in a descending list, or [size] when none exists.
      */
     fun lowerBoundDescending(element: Int): Int {
         var lo = 0
@@ -160,10 +150,8 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
         for (i in 0 until size) action(this[i])
     }
 
-    /** Sort the live elements in place by an integer [key]. Each element is packed with its key
-     *  into one `Long` (key in the high word, element in the low) so a primitive sort orders by key
-     *  with no boxing or comparator; ties break by the element's unsigned bits. [descending]
-     *  reverses the result. */
+    /** Sort by integer [key] without boxing; ties use the element's unsigned bits.
+     *  [descending] reverses the result. */
     inline fun sortByIntKey(descending: Boolean = false, key: (Int) -> Int) {
         val d = backingData
         val n = size
@@ -175,8 +163,6 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
             for (i in 0 until n) d[i] = (packed[i] and 0xFFFFFFFFL).toInt()
         }
     }
-
-    // Exposed for the inline [sortByIntKey]; sorting never grows the list, so reading it once is safe.
 
     /**
      * Borrow the backing array without copying; only `0 until size` contains live elements.

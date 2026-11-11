@@ -97,7 +97,6 @@ internal class SerialDoubleArray(val ref: DoubleArray) : DoubleCellArray {
         ref[index] = value
     }
     override fun add(index: Int, delta: Double) {
-        // See SerialDouble.add.
         if (delta == 0.0) return
         ref[index] += delta
     }
