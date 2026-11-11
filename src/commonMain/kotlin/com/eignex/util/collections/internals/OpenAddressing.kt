@@ -2,6 +2,7 @@ package com.eignex.util.collections.internals
 
 /** Next power-of-two capacity that keeps the load factor ≤ 0.5 for [initialCapacity] entries. */
 internal fun openAddressingCapacity(initialCapacity: Int): Int {
+    require(initialCapacity in 0..(1 shl 29)) { "Entry count exceeds the supported table range" }
     var cap = 8
     while (cap < initialCapacity * 2) cap *= 2
     return cap

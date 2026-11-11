@@ -7,6 +7,25 @@ import kotlin.test.assertFailsWith
 
 class CollectionExtrasTest {
     @Test
+    fun `hash collection constructors reject unsupported capacities`() {
+        val constructors: List<(Int) -> Any> = listOf(
+            { IntHashSet(it) },
+            { LongHashSet(it) },
+            { MutableIntIntMap(it) },
+            { MutableIntLongMap(it) },
+            { MutableIntDoubleMap(it) },
+            { MutableIntObjectMap<String>(it) },
+            { MutableLongIntMap(it) },
+            { MutableLongObjectMap<String>(it) },
+        )
+        for (capacity in listOf(Int.MIN_VALUE, -1, (1 shl 29) + 1, 1 shl 30, Int.MAX_VALUE)) {
+            for (construct in constructors) {
+                assertFailsWith<IllegalArgumentException>("capacity=$capacity") { construct(capacity) }
+            }
+        }
+    }
+
+    @Test
     fun `table sizing provides half load capacity without overflow`() {
         for ((entries, capacity) in listOf(0 to 8, 4 to 8, 5 to 16, 1000 to 2048, (1 shl 29) to (1 shl 30))) {
             assertEquals(capacity, hashTableCapacity(entries))

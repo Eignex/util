@@ -36,6 +36,29 @@ class AdderCountersTest {
     }
 
     @Test
+    fun `DoubleAdder store preserves replacements across large magnitude changes`() {
+        for (initial in listOf(1e20, -1e20, Double.MAX_VALUE, -Double.MAX_VALUE)) {
+            val counter = AdderCounters.newDouble(initial)
+            for (value in listOf(1.0, initial, -1.0, initial, Double.MIN_VALUE, 0.0)) {
+                counter.store(value)
+                assertEquals(value, counter.load(), "initial=$initial, value=$value")
+            }
+        }
+    }
+
+    @Test
+    fun `DoubleAdder store clears stripes after concurrent additions`() {
+        val counter = AdderCounters.newDouble(0.0)
+        runConcurrently(8, 10_000) { _, _ -> counter.add(1e20) }
+
+        counter.store(1.0)
+
+        assertEquals(1.0, counter.load())
+        counter.add(2.0)
+        assertEquals(3.0, counter.load())
+    }
+
+    @Test
     fun `LongAdder round trips and accumulates`() {
         val l = AdderCounters.newLong(0L)
         l.add(3L)

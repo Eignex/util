@@ -20,17 +20,11 @@ internal value class DoubleAdder(val ref: JDoubleAdder) : DoubleCounter {
 
     override fun load(): Double = ref.sum()
 
-    // Resetting stripes can discard racing adds; a relative add preserves their contributions.
-    // Concurrent stores and the intermediate sum remain best-effort. A non-finite current sum or
-    // target has no finite delta to add, so that case resets the stripes and accepts the race.
+    // A relative adjustment can lose the replacement to rounding or cancellation across stripes.
+    // Reset and seed instead; as with all striped replacements, racing operations are best-effort.
     override fun store(value: Double) {
-        val delta = value - ref.sum()
-        if (delta.isFinite()) {
-            ref.add(delta)
-        } else {
-            ref.reset()
-            ref.add(value)
-        }
+        ref.reset()
+        ref.add(value)
     }
 
     override fun add(delta: Double) {

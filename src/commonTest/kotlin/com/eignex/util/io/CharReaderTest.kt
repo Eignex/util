@@ -60,4 +60,35 @@ class CharReaderTest {
         }
         assertEquals(n, count)
     }
+
+    @Test
+    fun `advance without peeking should preserve the cursor through compaction`() {
+        val n = (1 shl 16) * 2 + 3
+        val reader = CharReader(StringCharSource("a".repeat(n) + "tail"))
+
+        repeat(n) { reader.advance() }
+
+        assertEquals("tail", drain(reader))
+    }
+
+    @Test
+    fun `advance should pull unread chunks when skipping across compaction`() {
+        val chunks = List(70) { "a".repeat(1024) } + "tail"
+        val reader = CharReader(ChunkedCharSource(chunks))
+        assertEquals('a'.code, reader.peek())
+
+        repeat(70 * 1024) { reader.advance() }
+
+        assertEquals("tail", drain(reader))
+    }
+
+    @Test
+    fun `advance at end of input should stay at end of input`() {
+        val reader = CharReader(StringCharSource("x"))
+
+        repeat((1 shl 16) + 1) { reader.advance() }
+
+        assertTrue(reader.eof())
+        assertEquals(-1, reader.peek())
+    }
 }

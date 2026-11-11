@@ -35,4 +35,12 @@ class CharSourceTest {
     fun `lineSequence should keep blank lines`() {
         assertEquals(listOf("a", "", "b"), StringCharSource("a\n\nb").lineSequence().toList())
     }
+
+    @Test
+    fun `lineSequence should preserve a carriage return without a following newline`() {
+        assertEquals(listOf("x\r"), StringCharSource("x\r").lineSequence().toList())
+        assertEquals(listOf("\r"), StringCharSource("\r").lineSequence().toList())
+        val source = ChunkedCharSource(listOf("a\r", "\nx", "\r"))
+        assertEquals(listOf("a", "x\r"), source.lineSequence().toList())
+    }
 }

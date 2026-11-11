@@ -37,7 +37,7 @@ fun CharSource.lineSequence(): Sequence<String> = sequence {
     while (true) {
         val chunk = next()
         if (chunk == null) {
-            if (carry.isNotEmpty()) yield(stripCr(carry.toString()))
+            if (carry.isNotEmpty()) yield(carry.toString())
             return@sequence
         }
         var start = 0
