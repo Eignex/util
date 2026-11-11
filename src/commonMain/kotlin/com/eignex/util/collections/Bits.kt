@@ -175,6 +175,10 @@ class Bits(size: Int) : BitSet {
 
         /** Clear all bits with index `> inclusiveBit`. */
         fun clearAbove(bits: LongArray, inclusiveBit: Int) {
+            if (inclusiveBit < 0) {
+                bits.fill(0L)
+                return
+            }
             val fromWord = (inclusiveBit + 1) ushr 6
             val rem = (inclusiveBit + 1) and 63
             if (fromWord < bits.size && rem > 0) {
