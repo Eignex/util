@@ -4,7 +4,8 @@ JVM benchmarks for util's primitive collections, integrated with the
 [Lab Bench SDK](https://github.com/Eignex/eignex-lab/tree/main/lab-bench).
 The bench module depends on the library; the library has no benchmark dependencies.
 Commands below run from the repository root. Gradle needs Java 21 or newer for KBuild;
-compilation, benchmark execution and JMH forks use Java 17.
+compilation and ordinary benchmark execution use Java 17. The scheduled status profile uses
+the lab's Java 25 runtime and keeps a separate measurement series.
 
 ## Build and smoke check
 
@@ -98,6 +99,7 @@ unknown workloads and out-of-range controls fail planning. Each selection must r
 | `iteration-ms` | `300` | `10..5000` |
 | `forks` | `2` | `1..5` |
 | `smoke` | `false` | `true` fixes one fork, one warmup/sample and 10ms iterations |
+| `status-sweep` | `false` | `true` selects the frozen status v1 inventory and controls below |
 
 Cases freeze all defaults, workload, size, seed and resources. The adapter uses one JMH thread,
 Serial GC and a fixed 512MiB heap, clears inherited JVM instrumentation for the child process,
@@ -118,6 +120,35 @@ lab run /absolute/path/comparison.json
 Both revisions must contain the adapter and support the same frozen workloads. The comparison
 recipe samples sizes 65, 1024 and 65536, with three paired repetitions. Reduce `workloads` to
 focus an experiment. The recipes do not register schedules or submit jobs automatically.
+
+## Per-commit status sweep
+
+`lab/recipes/status-sweep.json` defines `util-sweep`: the frozen 77-workload
+`util-collections-status-v1` inventory at size 1024 and seed 42. It uses one JMH fork,
+three 100ms warmups and three 100ms measurements, Serial GC and a fixed 512MiB heap.
+The committed resource `util-collections-status-v1.txt` fixes membership; later catalog
+additions do not silently expand this profile. Selection and timing overrides are rejected.
+
+The manifest uses Java 25 and local Mac arm64 capacity, matching the lab's other JVM timing
+sweep. The recipe grants four vCPUs, uses priority 96 and runs three complete inventory passes
+with `repeatOrder=pass`, separating repetitions across the run. Its 600-second active-time
+ceiling includes preparation; queue waits and pauses do not consume it. Use automatic placement
+within those compatible workers. A pilot of the prepared row protocol must fit this ceiling;
+a local whole-inventory capture does not establish lab preparation and per-row startup costs.
+
+Register it through the maintained HTTP client:
+
+```sh
+lab schedule util-sweep main util-bench/lab/recipes/status-sweep.json 120
+```
+
+The lab checks `main` every 120 seconds and queues new revisions. Each case opts into `metric-v1`
+with `median_ns_per_element` and a 15% threshold. The lab reuses retained revision builds and
+confirms correctness transitions and timing changes with three complete paired blocks at
+priority 97; a majority must agree. At most 40 affected workloads are confirmed per run.
+Changed controls, skipped/missing samples and instrumentation cannot vote. Raw JMH samples,
+logs, workload themes and controls remain available alongside the benchmark trend.
+This short sweep detects changes; use longer paired captures for small performance differences.
 
 Each lab row runs all revision arms for one workload, size, seed and repetition on one compatible
 machine in one worker attempt. Keep automatic placement: preparation and other rows may use other

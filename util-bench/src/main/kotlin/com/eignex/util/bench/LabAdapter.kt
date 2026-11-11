@@ -27,8 +27,11 @@ public fun main(args: Array<String>): Unit = BenchCli.execute(UtilSuite, args)
 
 internal object UtilSuite : BenchSuite {
     private val catalog = Workloads.names()
+    private val sweepCatalog = requireNotNull(javaClass.getResourceAsStream("/util-collections-status-v1.txt"))
+        .bufferedReader().use { it.readLines().filter(String::isNotBlank) }
     private val selectionKeys = setOf("workloads", "sizes", "seeds")
-    private val controlKeys = setOf("warmups", "samples", "iteration-ms", "forks", "smoke")
+    private val baseControlKeys = setOf("warmups", "samples", "iteration-ms", "forks", "smoke")
+    private val controlKeys = baseControlKeys + "status-sweep"
 
     override fun describe(): BenchDescriptor = BenchDescriptor(
         "util-bench",
@@ -39,7 +42,11 @@ internal object UtilSuite : BenchSuite {
         val p = request.parameters
         require(p.keys.all { it in selectionKeys || it in controlKeys }) { "Unknown benchmark parameter" }
         val controls = controls(p.filterKeys { it in controlKeys })
-        val workloads = p["workloads"]?.let(::tokens) ?: catalog
+        val sweep = controls["status-sweep"] == "true"
+        require(
+            !sweep || p.keys.none { it in selectionKeys },
+        ) { "Status v1 has a frozen workload, size and seed inventory" }
+        val workloads = p["workloads"]?.let(::tokens) ?: if (sweep) sweepCatalog else catalog
         require(workloads.all { it in catalog }) { "Unknown workload; available: ${catalog.joinToString(",")}" }
         val sizes = tokens(p["sizes"] ?: "1024").map { it.toInt().also { n -> require(n in 1..65536) } }
         val seeds = tokens(p["seeds"] ?: "42").map(String::toLong)
@@ -53,6 +60,8 @@ internal object UtilSuite : BenchSuite {
     }
 
     private fun frozenCase(workload: String, size: Int, seed: Long, controls: Map<String, String>): BenchCase {
+        val sweep = controls["status-sweep"] == "true"
+        require(!sweep || (workload in sweepCatalog && size == 1024 && seed == 42L))
         val id = "$workload/n=$size/seed=$seed"
         val measuredMillis = controls.getValue("forks").toLong() *
             (controls.getValue("warmups").toLong() + controls.getValue("samples").toLong()) *
@@ -61,7 +70,17 @@ internal object UtilSuite : BenchSuite {
             id,
             controls + mapOf("workload" to workload, "size" to size.toString(), "seed" to seed.toString()),
             BenchResources(cpus = 1, memoryMiB = 1024, timeoutSeconds = 60 + 2 * ((measuredMillis + 999) / 1000)),
-            attributes = mapOf("suite" to "util-collections-v1", "comparisonKey" to id),
+            attributes = mapOf("suite" to "util-collections-v1", "comparisonKey" to id) + if (sweep) {
+                mapOf(
+                    "suite" to "util-collections-status-v1",
+                    "theme" to workload.substringBefore('.'),
+                    "regressionPolicy" to "metric-v1",
+                    "regressionMetric" to "median_ns_per_element",
+                    "regressionThreshold" to "0.15",
+                )
+            } else {
+                emptyMap()
+            },
         )
     }
 
@@ -74,7 +93,11 @@ internal object UtilSuite : BenchSuite {
     private fun controls(parameters: Map<String, String>): Map<String, String> {
         require(parameters.keys.all { it in controlKeys }) { "Unknown measurement control" }
         val smoke = parameters["smoke"]?.toBooleanStrict() ?: false
-        val defaults = if (smoke) {
+        val sweep = parameters["status-sweep"]?.toBooleanStrict() ?: false
+        require(!sweep || !smoke) { "Status sweeps require measurement rather than smoke controls" }
+        val defaults = if (sweep) {
+            mapOf("warmups" to "3", "samples" to "3", "iteration-ms" to "100", "forks" to "1")
+        } else if (smoke) {
             mapOf("warmups" to "1", "samples" to "1", "iteration-ms" to "10", "forks" to "1")
         } else {
             mapOf("warmups" to "5", "samples" to "5", "iteration-ms" to "300", "forks" to "2")
@@ -89,13 +112,17 @@ internal object UtilSuite : BenchSuite {
             val value = result.getValue(key)
             require(value.toInt() in range && value == value.toInt().toString()) { "Invalid $key" }
             require(!smoke || value == defaults.getValue(key)) { "Smoke uses fixed short measurement controls" }
+            require(!sweep || value == defaults.getValue(key)) { "Status v1 uses fixed measurement controls" }
         }
         return result
     }
 
     internal fun validateCase(case: BenchCase) {
         val p = case.parameters
-        require(p.keys == controlKeys + setOf("workload", "size", "seed")) { "Incomplete or unknown frozen parameters" }
+        val requiredKeys = baseControlKeys + setOf("workload", "size", "seed")
+        require(p.keys.containsAll(requiredKeys) && p.keys.all { it in requiredKeys || it == "status-sweep" }) {
+            "Incomplete or unknown frozen parameters"
+        }
         val workload = p.getValue("workload")
         val size = p.getValue("size").toInt()
         val seed = p.getValue("seed").toLong()
@@ -117,9 +144,8 @@ internal object UtilSuite : BenchSuite {
         val workload = p.getValue("workload")
         val size = p.getValue("size").toInt()
         val seed = p.getValue("seed").toLong()
-        require(
-            Runtime.version().feature() == 17,
-        ) { "util-bench requires Java 17; set JAVA_HOME to a JDK 17 installation" }
+        val javaVersion = if (p["status-sweep"] == "true") 25 else 17
+        require(Runtime.version().feature() == javaVersion) { "This benchmark profile requires Java $javaVersion" }
         val jsonPath = context.outputDirectory.resolve("jmh.json")
         Files.deleteIfExists(jsonPath)
         val argv = listOf(
@@ -134,7 +160,7 @@ internal object UtilSuite : BenchSuite {
             "-foe", "true", "-rf", "json", "-rff", jsonPath.toString(),
         )
         val controls = buildJsonObject {
-            put("policy", "util-collections-v1")
+            put("policy", if (p["status-sweep"] == "true") "util-collections-status-v1" else "util-collections-v1")
             put("jmh", "1.37")
             put("parameters", buildJsonObject { p.toSortedMap().forEach { (key, value) -> put(key, value) } })
             put("java", System.getProperty("java.runtime.version"))

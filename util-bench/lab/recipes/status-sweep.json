@@ -1,0 +1,15 @@
+{
+  "name": "util-sweep",
+  "description": "Per-commit primitive collection status v1: 77 workloads at size 1024 and seed 42, in three complete inventory passes. Three 100ms warmups and measurements, one fork, Java 25 on local Mac arm64 capacity. Metric changes beyond 15% and correctness transitions get three paired confirmation blocks. A 600s active-time ceiling includes preparation.",
+  "repository": "Eignex/util",
+  "tags": ["local"],
+  "priority": 96,
+  "vcpus": 4,
+  "repeats": 3,
+  "repeatOrder": "pass",
+  "bench": {
+    "manifest": "util-bench/lab/status-sweep.json",
+    "runTimeoutSec": 600,
+    "request": {"parameters": {"status-sweep": "true"}}
+  }
+}
