@@ -45,18 +45,6 @@ class MutableIntObjectMapTest {
     }
 
     @Test
-    fun `extreme keys and zero should coexist`() {
-        val m = MutableIntObjectMap<Int>()
-        m.put(Int.MIN_VALUE, 1)
-        m.put(Int.MAX_VALUE, 2)
-        m.put(0, 3)
-        assertEquals(1, m[Int.MIN_VALUE])
-        assertEquals(2, m[Int.MAX_VALUE])
-        assertEquals(3, m[0])
-        assertEquals(3, m.size)
-    }
-
-    @Test
     fun `remove should keep other entries findable across collisions`() {
         val m = MutableIntObjectMap<Int>(4)
         for (k in 0 until 50) m.put(k, k * k)

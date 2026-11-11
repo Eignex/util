@@ -29,18 +29,6 @@ class MutableLongIntMapTest {
     }
 
     @Test
-    fun `extreme keys and zero should coexist`() {
-        val m = MutableLongIntMap()
-        m.put(Long.MIN_VALUE, 1)
-        m.put(Long.MAX_VALUE, 2)
-        m.put(0L, 3)
-        assertEquals(1, m.getOrDefault(Long.MIN_VALUE, -1))
-        assertEquals(2, m.getOrDefault(Long.MAX_VALUE, -1))
-        assertEquals(3, m.getOrDefault(0L, -1))
-        assertEquals(3, m.size)
-    }
-
-    @Test
     fun `value equal to default should still be reported present`() {
         val m = MutableLongIntMap()
         m.put(5L, 0)

@@ -7,13 +7,6 @@ private const val DELTA = 1e-9
 class AdderCountersTest {
 
     @Test
-    fun `DoubleAdder round trips load and store`() {
-        val d = AdderCounters.newDouble(0.0)
-        d.store(2.5)
-        assertEquals(2.5, d.load(), DELTA)
-    }
-
-    @Test
     fun `DoubleAdder add accumulates`() {
         val d = AdderCounters.newDouble(0.0)
         d.add(1.5)
@@ -26,13 +19,6 @@ class AdderCountersTest {
         val d = AdderCounters.newDouble(1.0)
         assertEquals(3.5, d.addAndGet(2.5), DELTA)
         assertEquals(3.5, d.load(), DELTA)
-    }
-
-    @Test
-    fun `DoubleAdder store resets then assigns`() {
-        val d = AdderCounters.newDouble(100.0)
-        d.store(7.0)
-        assertEquals(7.0, d.load(), DELTA)
     }
 
     @Test

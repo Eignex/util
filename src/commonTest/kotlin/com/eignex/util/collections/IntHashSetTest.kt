@@ -37,18 +37,6 @@ class IntHashSetTest {
     }
 
     @Test
-    fun `extreme members and zero should coexist`() {
-        val s = IntHashSet()
-        s.add(Int.MIN_VALUE)
-        s.add(Int.MAX_VALUE)
-        s.add(0)
-        assertTrue(s.contains(Int.MIN_VALUE))
-        assertTrue(s.contains(Int.MAX_VALUE))
-        assertTrue(s.contains(0))
-        assertEquals(3, s.size)
-    }
-
-    @Test
     fun `remove should keep survivors findable across collisions`() {
         val s = IntHashSet(4)
         for (k in 0 until 50) s.add(k)

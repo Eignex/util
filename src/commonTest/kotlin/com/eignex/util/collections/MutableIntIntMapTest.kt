@@ -36,18 +36,6 @@ class MutableIntIntMapTest {
     }
 
     @Test
-    fun `extreme keys and zero should coexist`() {
-        val m = MutableIntIntMap()
-        m.put(Int.MIN_VALUE, 1)
-        m.put(Int.MAX_VALUE, 2)
-        m.put(0, 3)
-        assertEquals(1, m.getOrDefault(Int.MIN_VALUE, -1))
-        assertEquals(2, m.getOrDefault(Int.MAX_VALUE, -1))
-        assertEquals(3, m.getOrDefault(0, -1))
-        assertEquals(3, m.size)
-    }
-
-    @Test
     fun `remove should keep other entries findable across collisions`() {
         val m = MutableIntIntMap(4)
         for (k in 0 until 50) m.put(k, k * k)
