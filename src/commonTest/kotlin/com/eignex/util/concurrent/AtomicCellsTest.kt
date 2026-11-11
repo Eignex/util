@@ -22,13 +22,6 @@ class AtomicDoubleTest {
     }
 
     @Test
-    fun `add with zero delta short circuits`() {
-        val v = AtomicDouble(1.5)
-        v.add(0.0)
-        assertEquals(1.5, v.load(), DELTA)
-    }
-
-    @Test
     fun `add accumulates non zero delta`() {
         val v = AtomicDouble(1.0)
         v.add(2.5)

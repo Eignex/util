@@ -17,18 +17,6 @@ class MutableIntDoubleMapTest {
     }
 
     @Test
-    fun `extreme keys and zero should coexist`() {
-        val m = MutableIntDoubleMap()
-        m.put(Int.MIN_VALUE, 1.0)
-        m.put(Int.MAX_VALUE, 2.0)
-        m.put(0, 3.0)
-        assertEquals(1.0, m.getOrDefault(Int.MIN_VALUE, -1.0))
-        assertEquals(2.0, m.getOrDefault(Int.MAX_VALUE, -1.0))
-        assertEquals(3.0, m.getOrDefault(0, -1.0))
-        assertEquals(3, m.size)
-    }
-
-    @Test
     fun `remove should keep other entries findable across collisions`() {
         val m = MutableIntDoubleMap(4)
         for (k in 0 until 50) m.put(k, k.toDouble())

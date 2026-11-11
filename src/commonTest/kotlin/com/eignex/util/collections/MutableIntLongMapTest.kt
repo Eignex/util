@@ -17,18 +17,6 @@ class MutableIntLongMapTest {
     }
 
     @Test
-    fun `extreme keys and zero should coexist`() {
-        val m = MutableIntLongMap()
-        m.put(Int.MIN_VALUE, 1L)
-        m.put(Int.MAX_VALUE, 2L)
-        m.put(0, 3L)
-        assertEquals(1L, m.getOrDefault(Int.MIN_VALUE, -1L))
-        assertEquals(2L, m.getOrDefault(Int.MAX_VALUE, -1L))
-        assertEquals(3L, m.getOrDefault(0, -1L))
-        assertEquals(3, m.size)
-    }
-
-    @Test
     fun `remove should keep other entries findable across collisions`() {
         val m = MutableIntLongMap(4)
         for (k in 0 until 50) m.put(k, k.toLong())

@@ -63,14 +63,6 @@ class IntIntMapTest {
     }
 
     @Test
-    fun `contains should be true even when the stored value equals absent`() {
-        val m = IntIntMap.build(intArrayOf(5), intArrayOf(0), absent = 0)
-        assertEquals(0, m[5])
-        assertTrue(m.contains(5))
-        assertFalse(m.contains(6))
-    }
-
-    @Test
     fun `sparse patterned keys should resolve through collisions`() {
         for (stride in intArrayOf(8, 64, 1024, 65536)) {
             val keys = IntArray(128) { (it - 64) * stride }

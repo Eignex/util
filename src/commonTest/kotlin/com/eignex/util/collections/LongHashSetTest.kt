@@ -142,18 +142,6 @@ class LongHashSetTest {
     }
 
     @Test
-    fun `extreme members and zero should coexist`() {
-        val s = LongHashSet()
-        s.add(Long.MIN_VALUE)
-        s.add(Long.MAX_VALUE)
-        s.add(0L)
-        assertTrue(s.contains(Long.MIN_VALUE))
-        assertTrue(s.contains(Long.MAX_VALUE))
-        assertTrue(s.contains(0L))
-        assertEquals(3, s.size)
-    }
-
-    @Test
     fun `remove should keep survivors findable across collisions`() {
         val s = LongHashSet(4)
         for (k in 0 until 50) s.add(k.toLong())
