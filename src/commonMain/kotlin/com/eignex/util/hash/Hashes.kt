@@ -42,7 +42,7 @@ fun hash64(bytes: ByteArray): Long {
 /** UTF-8 byte hash convenience over [hash64]. */
 fun hash64(value: String): Long = hash64(value.encodeToByteArray())
 
-/** Fibonacci multiplicative mixing of an Int key for power-of-two hash tables. */
+/** Fibonacci multiplication with additional mixing of an Int key for power-of-two hash tables. */
 fun fibonacciHash(value: Int): Int = mixIntKey(value)
 
 /** Folded Fibonacci multiplicative mixing of a Long key into a 32-bit table hash. */

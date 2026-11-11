@@ -2,6 +2,7 @@ package com.eignex.util.io
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -31,6 +32,31 @@ class CharReaderTest {
         val reader = CharReader(StringCharSource("x"))
         assertEquals('x'.code, reader.peek())
         assertEquals(-1, reader.peek(1))
+    }
+
+    @Test
+    fun `large lookahead after advancing should return eof without moving the cursor`() {
+        val reader = CharReader(ChunkedCharSource(listOf("ab", "cd", "ef")))
+        assertEquals('a'.code, reader.peek())
+        reader.advance()
+        reader.advance()
+
+        assertEquals(-1, reader.peek(Int.MAX_VALUE))
+        assertEquals(-1, reader.peek(Int.MAX_VALUE - 1))
+        assertEquals("cdef", drain(reader))
+    }
+
+    @Test
+    fun `negative lookahead should be rejected before and after advancing`() {
+        val reader = CharReader(StringCharSource("ab"))
+        assertEquals('a'.code, reader.peek())
+
+        for (position in 0..1) {
+            assertFailsWith<IllegalArgumentException> { reader.peek(-1) }
+            assertFailsWith<IllegalArgumentException> { reader.peek(Int.MIN_VALUE) }
+            assertEquals("ab"[position].code, reader.peek())
+            reader.advance()
+        }
     }
 
     @Test
