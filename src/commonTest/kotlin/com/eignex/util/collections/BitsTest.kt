@@ -121,6 +121,28 @@ class BitsTest {
     }
 
     @Test
+    fun `clearAbove should clear all bits for every negative boundary`() {
+        for (boundary in intArrayOf(Int.MIN_VALUE, -65, -64, -2, -1)) {
+            val bits = longArrayOf(1L, Long.MIN_VALUE, 0x55L, -1L)
+
+            Bits.clearAbove(bits, boundary)
+
+            assertContentEquals(LongArray(bits.size), bits, "boundary $boundary")
+            Bits.clearAbove(LongArray(0), boundary)
+        }
+    }
+
+    @Test
+    fun `clearAbove should preserve all bits when the boundary is Int MAX_VALUE`() {
+        val bits = longArrayOf(1L, Long.MIN_VALUE, 0x55L, -1L)
+        val expected = bits.copyOf()
+
+        Bits.clearAbove(bits, Int.MAX_VALUE)
+
+        assertContentEquals(expected, bits)
+    }
+
+    @Test
     fun `firstSet and lastSet should return a sentinel when empty and the extremes otherwise`() {
         val empty = LongArray(2)
         assertEquals(-1, Bits.firstSet(empty))
