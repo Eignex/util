@@ -85,6 +85,7 @@ class IntArrayDeque(initialCapacity: Int = 8) : IntIndexedCollection {
     }
 
     private fun grow() {
+        check(buf.size < MAX_CAPACITY) { "Deque capacity exceeds the supported range" }
         val newCap = buf.size * 2
         val newBuf = IntArray(newCap)
         val mask = buf.size - 1
@@ -94,7 +95,10 @@ class IntArrayDeque(initialCapacity: Int = 8) : IntIndexedCollection {
     }
 
     private companion object {
+        const val MAX_CAPACITY = 1 shl 30
+
         fun nextPow2(n: Int): Int {
+            require(n <= MAX_CAPACITY) { "Initial capacity exceeds the supported deque range" }
             var p = 1
             while (p < n) p = p shl 1
             return p
