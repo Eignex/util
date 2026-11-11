@@ -45,6 +45,45 @@ internal class UtilSuiteTest {
     }
 
     @Test
+    fun statusSweepFreezesInventoryAndConfirmationControls() {
+        val plan = UtilSuite.plan(BenchRequest(mapOf("status-sweep" to "true")))
+        assertEquals(77, plan.size)
+        assertEquals(Workloads.names().toSet(), plan.map { it.parameters.getValue("workload") }.toSet())
+        for (case in plan) {
+            assertEquals("1024", case.parameters["size"])
+            assertEquals("42", case.parameters["seed"])
+            assertEquals("3", case.parameters["warmups"])
+            assertEquals("3", case.parameters["samples"])
+            assertEquals("100", case.parameters["iteration-ms"])
+            assertEquals("1", case.parameters["forks"])
+            assertEquals("false", case.parameters["smoke"])
+            assertEquals("metric-v1", case.attributes["regressionPolicy"])
+            assertEquals("median_ns_per_element", case.attributes["regressionMetric"])
+            assertEquals("0.15", case.attributes["regressionThreshold"])
+            assertEquals(case.parameters.getValue("workload").substringBefore('.'), case.attributes["theme"])
+            UtilSuite.validateCase(case)
+            assertFailsWith<IllegalArgumentException> {
+                UtilSuite.validateCase(case.copy(attributes = case.attributes - "regressionPolicy"))
+            }
+        }
+        assertTrue(UtilSuite.plan(BenchRequest()).all { "regressionPolicy" !in it.attributes })
+        for (override in listOf(
+            "smoke" to "true",
+            "forks" to "2",
+            "warmups" to "5",
+            "samples" to "5",
+            "iteration-ms" to "300",
+            "sizes" to "65",
+            "seeds" to "0",
+            "workloads" to "int-list.read",
+        )) {
+            assertFailsWith<IllegalArgumentException> {
+                UtilSuite.plan(BenchRequest(mapOf("status-sweep" to "true", override)))
+            }
+        }
+    }
+
+    @Test
     fun rejectsInvalidSelectionsAndControls() {
         for (p in listOf(
             mapOf("unknown" to "true"), mapOf("workloads" to "missing"), mapOf("workloads" to ""),
