@@ -13,8 +13,7 @@ import com.eignex.util.collections.internals.openAddressingCapacity
 /**
  * Primitive-key Long-to-Int map with linear probing, power-of-two capacity and load
  * factor at most 0.5. A separate occupancy bitmap permits every key value;
- * backward-shift deletion avoids tombstones. See [MutableIntIntMap] for related lookup
- * storage. Not thread-safe; iteration order is unspecified.
+ * backward-shift deletion avoids tombstones. Not thread-safe; iteration order is unspecified.
  */
 class MutableLongIntMap(initialCapacity: Int = 8) : LongKeyed {
     private var keys: LongArray
@@ -25,7 +24,6 @@ class MutableLongIntMap(initialCapacity: Int = 8) : LongKeyed {
     /** Bytes in the primitive backing arrays, excluding object headers. */
     val primitiveCapacityBytes: Long get() = keys.size.toLong() * 13L
 
-    /** Number of entries currently stored. */
     override var size: Int = 0
         private set
 
@@ -43,7 +41,6 @@ class MutableLongIntMap(initialCapacity: Int = 8) : LongKeyed {
         return default
     }
 
-    /** Whether [key] has an entry, independently of its stored value. */
     override fun containsKey(key: Long): Boolean {
         findLongKey(keys, used, mask, key) { return true }
         return false
@@ -64,7 +61,6 @@ class MutableLongIntMap(initialCapacity: Int = 8) : LongKeyed {
 
     /**
      * Add [delta] to the value at [key] (treating an absent key as `0`) and return the new value.
-     * The count-map idiom `m[k] = (m[k] ?: 0) + delta` in one probe instead of two.
      */
     fun addTo(key: Long, delta: Int): Int {
         val slot = longKeySlot(keys, used, mask, key) {
@@ -91,7 +87,7 @@ class MutableLongIntMap(initialCapacity: Int = 8) : LongKeyed {
         return default
     }
 
-    /** Remove [key]; returns true if it was present. Backward-shift keeps the table tombstone-free. */
+    /** Remove [key], returning whether it was present. */
     fun remove(key: Long): Boolean {
         findLongKey(keys, used, mask, key) {
             deleteSlot(it)
@@ -174,7 +170,6 @@ class MutableLongIntMap(initialCapacity: Int = 8) : LongKeyed {
         for (i in u.indices) if (u[i]) action(k[i], v[i])
     }
 
-    /** Visit each key without exposing its associated value. */
     override fun forEachKey(action: LongConsumer) = forEachLongKey(keys, used, action)
 
     override fun keysToLongArray(): LongArray = longKeysToArray(keys, used, size)

@@ -1,10 +1,8 @@
 package com.eignex.util.numbers
 
 /**
- * Mutable signed 128-bit accumulator represented as
- * `hi * 2^64 + unsigned(lo)` in two's complement. Carry detection and 32-bit schoolbook
- * products work on JVM and Native. [overflow] latches on overflow; callers must discard
- * a result whose overflow flag is set.
+ * Mutable signed 128-bit accumulator represented as `hi * 2^64 + unsigned(lo)`.
+ * [overflow] latches on overflow; a result with that flag set is unusable.
  */
 class Int128 {
     /** High 64 bits (signed). */
@@ -15,11 +13,11 @@ class Int128 {
     var lo: Long = 0L
         private set
 
-    /** Latched true once an add carried out of the 128-bit range; the value is then unusable. */
+    /** Latched true when an operation overflows the signed 128-bit range. */
     var overflow: Boolean = false
         private set
 
-    /** Reset to zero (reuse across bound computations). */
+    /** Reset to zero and clear [overflow]. */
     fun clear() {
         hi = 0L
         lo = 0L
@@ -34,8 +32,7 @@ class Int128 {
     /** Add the exact 128-bit product `a · b` of two signed 64-bit integers. */
     fun addProduct(a: Long, b: Long) {
         if (a == 0L || b == 0L) return
-        // Unsigned magnitudes of |a|, |b| (0UL - x.toULong() is the two's-complement magnitude and is
-        // correct even for Long.MIN_VALUE, where the magnitude is exactly 2⁶³).
+        // Unsigned magnitudes also represent |Long.MIN_VALUE|.
         val ua = if (a < 0L) 0uL - a.toULong() else a.toULong()
         val ub = if (b < 0L) 0uL - b.toULong() else b.toULong()
         // Unsigned 64×64 → 128 schoolbook over 32-bit halves.
@@ -50,9 +47,7 @@ class Int128 {
         val cross = (ll shr 32) + (lh and 0xFFFFFFFFuL) + (hl and 0xFFFFFFFFuL)
         val prodLo = (cross shl 32) or (ll and 0xFFFFFFFFuL)
         val prodHi = hh + (lh shr 32) + (hl shr 32) + (cross shr 32)
-        // Apply the product's sign, then add the 128-bit value.
         if ((a < 0L) != (b < 0L)) {
-            // Negate (prodHi, prodLo): two's complement of the 128-bit magnitude.
             val negLo = (0uL - prodLo)
             val borrow = if (prodLo != 0uL) 1uL else 0uL
             val negHi = (prodHi.inv() + (1uL - borrow))
@@ -62,14 +57,11 @@ class Int128 {
         }
     }
 
-    /** Add the 128-bit value `bHi · 2⁶⁴ + (bLo as unsigned)`, latching [overflow] on signed-128 wrap. */
     private fun add128(bHi: Long, bLo: Long) {
         val newLo = lo + bLo
-        // Unsigned carry out of the low word: the sum wrapped below either addend.
         val carry = if (newLo.toULong() < lo.toULong()) 1L else 0L
         val oldHi = hi
         val newHi = oldHi + bHi + carry
-        // Signed overflow of the high word (with carry folded in) ⇒ the 128-bit add overflowed.
         if (((oldHi xor newHi) and (bHi xor newHi)) < 0L) overflow = true
         lo = newLo
         hi = newHi
@@ -101,12 +93,10 @@ class Int128 {
         it.overflow = overflow
     }
 
-    /** True when the value is `≥ 0` (and [overflow] never latched). The signed-128 sign is the top bit
-     *  of [hi], so non-negativity is simply `hi ≥ 0`. */
+    /** True when the value is non-negative and [overflow] is false. */
     fun isNonNegative(): Boolean = !overflow && hi >= 0L
 
-    /** Multiply by `2ᵏ` in place ([bits] in `0..62`), latching [overflow] if the result escapes the
-     *  signed 128-bit range. Used to bring power-of-two-scaled rationals to a common denominator. */
+    /** Multiply by `2^bits` in place ([bits] in `0..62`), latching [overflow] on signed-128 overflow. */
     fun shiftLeft(bits: Int) {
         require(bits in 0..62) { "shift out of range: $bits" }
         if (bits == 0 || overflow) return
@@ -126,9 +116,8 @@ class Int128 {
     fun toLong(): Long = lo
 
     /**
-     * `⌈ value / 2ᵏ ⌉` as a `Long`, or null when [overflow] latched or the quotient does not fit a
-     * `Long`. Uses `ceil(x) = −⌊−x⌋` and an arithmetic right shift for the floored division by a power
-     * of two — exact and division-free. [k] must be in `0..62`.
+     * `⌈ value / 2^k ⌉` as a `Long`, or null when [overflow] is true or the quotient does not fit.
+     * [k] must be in `0..62`.
      */
     fun ceilDivPow2(k: Int): Long? {
         if (overflow) return null
@@ -138,31 +127,22 @@ class Int128 {
         val nLo = 0uL - lo.toULong()
         val borrow = if (lo != 0L) 1uL else 0uL
         val nHi = hi.toULong().inv() + (1uL - borrow)
-        // Arithmetic shift right of the 128-bit (nHi signed, nLo unsigned) by k < 64.
         val shLo = ((nLo shr k) or (nHi shl (64 - k))).toLong()
-        val shHi = nHi.toLong() shr k // arithmetic (sign-propagating)
+        val shHi = nHi.toLong() shr k
         // The negated quotient may be 2^63 even though the result fits Long.MIN_VALUE.
         if (shHi == 0L && shLo == Long.MIN_VALUE) return Long.MIN_VALUE
-        // floor(−value / 2ᵏ) = (shHi, shLo); ceil(value / 2ᵏ) = −that. Require it fit a Long first.
         if (shHi != (shLo shr 63)) return null
-        // Negate the Long result (safe unless it is Long.MIN_VALUE, which then cannot be a Long anyway).
         if (shLo == Long.MIN_VALUE) return null
         return -shLo
     }
 
     /**
-     * The **exact** quotient `value / d` as a `Long`, or null when [overflow] latched, [d] is zero, the
-     * division is not exact (nonzero remainder), or the quotient does not fit a `Long`. Unlike
-     * [floorDivPositive] this never rounds. It serves fraction-free elimination, where each step's
-     * division is exact; a nonzero remainder or an out-of-range quotient means the exact solve cannot
-     * continue in 128 bits and the caller declines. Bareiss, "Sylvester's identity and multistep
-     * integer-preserving Gaussian elimination", Math. Comp. 22(103), 1968.
-     * https://doi.org/10.1090/S0025-5718-1968-0226829-0
+     * The exact quotient `value / d` as a `Long`, or null when [overflow] is true, [d] is zero,
+     * the remainder is nonzero, or the quotient does not fit.
      */
     fun divExactByLong(d: Long): Long? {
         if (overflow || d == 0L) return null
         val negResult = (hi < 0L) != (d < 0L)
-        // Unsigned magnitude of the 128-bit dividend.
         val uLo: ULong
         val uHi: ULong
         if (hi < 0L) {
@@ -187,8 +167,8 @@ class Int128 {
                 if (bit >= 64) qHi = qHi or (1uL shl (bit - 64)) else qLo = qLo or (1uL shl bit)
             }
         }
-        if (rem != 0uL) return null // not exactly divisible
-        if (qHi != 0uL) return null // quotient exceeds 64 bits
+        if (rem != 0uL) return null
+        if (qHi != 0uL) return null
         return if (negResult) {
             when {
                 qLo <= Long.MAX_VALUE.toULong() -> -(qLo.toLong())
@@ -201,17 +181,12 @@ class Int128 {
     }
 
     /**
-     * `⌊ value / d ⌋` for a **positive** divisor [d], as a `Long`, or null when [overflow] latched or the
-     * quotient does not fit a `Long`. Exact floored (toward −∞) division, so the quotient is a sound
-     * (never-too-large) integer bound, as reduced-cost fixing and cut rounding require. The
-     * unsigned 128÷64 inner division is a restoring bit-by-bit long division; it relies on `d ≤ 2⁶³−1`
-     * (every positive `Long`) so the running remainder stays below `2⁶³` and never overflows.
+     * `⌊ value / d ⌋` for a positive divisor [d], as a `Long`, or null when [overflow] is true
+     * or the quotient does not fit.
      */
     fun floorDivPositive(d: Long): Long? {
         require(d > 0L) { "divisor must be positive: $d" }
         if (overflow) return null
-        // A dividend that fits a `Long` has a quotient no larger in magnitude, so native floored division
-        // gives the same result and skips the 128-iteration loop in the common case.
         if (fitsLong()) return lo.floorDiv(d)
         val negative = hi < 0L
         val uLo: ULong
@@ -237,7 +212,7 @@ class Int128 {
                 if (bit >= 64) qHi = qHi or (1uL shl (bit - 64)) else qLo = qLo or (1uL shl bit)
             }
         }
-        if (qHi != 0uL) return null // quotient exceeds 64 bits ⇒ does not fit a Long
+        if (qHi != 0uL) return null
         if (!negative) return if (qLo <= Long.MAX_VALUE.toULong()) qLo.toLong() else null
         if (qLo > Long.MAX_VALUE.toULong() + 1uL) return null
         // Floor of a negative dividend rounds the magnitude up when there is a remainder.

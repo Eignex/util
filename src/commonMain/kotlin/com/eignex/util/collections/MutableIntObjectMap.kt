@@ -11,8 +11,7 @@ import com.eignex.util.collections.internals.openAddressingCapacity
 /**
  * Primitive-key Int-to-object map with linear probing, power-of-two capacity and load
  * factor at most 0.5. A separate occupancy bitmap permits every key value;
- * backward-shift deletion avoids tombstones. See [MutableIntIntMap] for related lookup
- * storage. Not thread-safe; iteration order is unspecified.
+ * backward-shift deletion avoids tombstones. Not thread-safe; iteration order is unspecified.
  */
 class MutableIntObjectMap<V>(initialCapacity: Int = 8) : IntKeyed {
     private var keys: IntArray
@@ -26,7 +25,6 @@ class MutableIntObjectMap<V>(initialCapacity: Int = 8) : IntKeyed {
     /** Number of slots in the value array, including unused slots. */
     val referenceCapacity: Int get() = values.size
 
-    /** Number of entries currently stored. */
     override var size: Int = 0
         private set
 
@@ -45,7 +43,7 @@ class MutableIntObjectMap<V>(initialCapacity: Int = 8) : IntKeyed {
         return null
     }
 
-    /** Value for [key], throwing if absent. The unboxed-key analogue of `Map.getValue`. */
+    /** Value for [key], throwing if absent. */
     @Suppress("UNCHECKED_CAST")
     fun getValue(key: Int): V {
         val value = get(key)
@@ -53,7 +51,6 @@ class MutableIntObjectMap<V>(initialCapacity: Int = 8) : IntKeyed {
         throw NoSuchElementException("key $key is missing in the map")
     }
 
-    /** Whether [key] has an entry, independently of its stored value. */
     override fun containsKey(key: Int): Boolean {
         findIntKey(keys, used, mask, key) { return true }
         return false
@@ -82,7 +79,7 @@ class MutableIntObjectMap<V>(initialCapacity: Int = 8) : IntKeyed {
         return created
     }
 
-    /** Remove [key]; returns true if it was present. Backward-shift keeps the table tombstone-free. */
+    /** Remove [key], returning whether it was present. */
     fun remove(key: Int): Boolean {
         findIntKey(keys, used, mask, key) {
             deleteSlot(it)
@@ -136,7 +133,6 @@ class MutableIntObjectMap<V>(initialCapacity: Int = 8) : IntKeyed {
         for (i in u.indices) if (u[i]) action(k[i], v[i] as V)
     }
 
-    /** Visit each key without exposing its associated value. */
     override fun forEachKey(action: IntConsumer) = forEachIntKey(keys, used, action)
 
     override fun keysToIntArray(): IntArray = intKeysToArray(keys, used, size)

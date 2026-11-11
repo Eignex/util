@@ -5,7 +5,7 @@ import com.eignex.util.collections.internals.openAddressingCapacity
 
 /**
  * Read-only primitive Int-to-Long map with the dense/sparse backing choice of [IntIntMap].
- * Missing keys return [absent]; choose a sentinel outside the payload range when needed.
+ * Missing keys return [absent]; [contains] distinguishes absence from stored values.
  */
 class IntLongMap private constructor(private val backing: Backing, private val absent: Long) : IntLongLookup {
     override val size: Int get() = backing.size
@@ -25,10 +25,8 @@ class IntLongMap private constructor(private val backing: Backing, private val a
     /** Factories for immutable primitive maps. */
     companion object {
         /**
-         * Build a map from parallel key/value arrays. When the key range relative to the
-         * entry count is dense (≤ [denseThreshold]×), uses an offset LongArray; otherwise
-         * falls back to an open-addressing primitive hash table. [absent] is returned by
-         * [get] for keys that aren't present.
+         * Build from parallel key/value arrays, using dense storage when the key range is at most
+         * [denseThreshold] times the entry count. Missing keys return [absent].
          */
         fun build(keys: IntArray, values: LongArray, absent: Long = 0, denseThreshold: Int = 4): IntLongMap {
             require(keys.size == values.size) { "keys/values length mismatch" }
@@ -39,8 +37,7 @@ class IntLongMap private constructor(private val backing: Backing, private val a
                 if (k < lo) lo = k
                 if (k > hi) hi = k
             }
-            // Widen before subtracting: `hi - lo` in Int overflows for spans ≥ 2^31 (keys straddling
-            // Int.MIN_VALUE / Int.MAX_VALUE), yielding a bogus tiny range and a dense backing sized to garbage.
+            // Widen before subtracting to avoid Int overflow across the full key range.
             val range = hi.toLong() - lo.toLong() + 1
             return if (range <= Int.MAX_VALUE && range <= denseThreshold.toLong() * keys.size) {
                 val arr = LongArray(range.toInt()) { absent }
@@ -88,12 +85,6 @@ class IntLongMap private constructor(private val backing: Backing, private val a
         }
     }
 
-    /**
-     * Open-addressing linear-probe hash table specialised for `Int → Long`, the sparse-key fallback
-     * for [IntLongMap.build]. Capacity is a power of two with load factor ≤ 0.5 so probe chains stay
-     * short; the parallel `present` bit distinguishes an empty slot from an entry whose value equals
-     * the [absent] sentinel.
-     */
     private class HashBacking private constructor(
         private val keys: IntArray,
         private val values: LongArray,

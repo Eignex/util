@@ -1,9 +1,8 @@
 package com.eignex.util.arrays
 
 /**
- * Search [element] in ascending `[fromIndex, toIndex)`. Returns its index or
- * `-(insertion point) - 1` when absent. A single-comparison lower-bound loop narrows
- * the window, then a linear scan finishes below [LINEAR_SCAN_THRESHOLD].
+ * Search [element] in ascending `[fromIndex, toIndex)`. Returns the first matching index or
+ * `-(insertion point) - 1` when absent.
  */
 fun IntArray.binarySearchInt(element: Int, fromIndex: Int = 0, toIndex: Int = size): Int {
     var lo = fromIndex
@@ -44,5 +43,4 @@ fun LongArray.binarySearchLong(element: Long, fromIndex: Int = 0, toIndex: Int =
     return if (lo < toIndex && this[lo] == element) lo else -(lo + 1)
 }
 
-/** Window width at which linear scanning replaces binary narrowing. */
 private const val LINEAR_SCAN_THRESHOLD = 16

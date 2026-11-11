@@ -1,4 +1,3 @@
-// The shared host test source set is outside the conventions' standard test-path exclusions.
 @file:Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction", "FunctionNaming")
 
 package com.eignex.util.platform

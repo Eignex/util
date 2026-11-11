@@ -6,8 +6,7 @@ package com.eignex.util.io
  * File-backed sources can also implement [AutoCloseable]; [useSource] releases those resources.
  */
 interface CharSource {
-    /** The next slice of characters, or `null` once the input is exhausted. Never returns an empty
-     *  non-null slice — an empty result always means end of input. */
+    /** The next nonempty slice of characters, or `null` once the input is exhausted. */
     fun next(): String?
 }
 
@@ -18,19 +17,17 @@ class StringCharSource(text: String) : CharSource {
     override fun next(): String? = remaining.also { remaining = null }
 }
 
-/** Materialize the whole [CharSource] into a [String], for consumers that need the full text at once. */
+/** Consume the remaining source into a [String]. */
 fun CharSource.readText(): String {
     val first = next() ?: return ""
-    val second = next() ?: return first // the common single-chunk (in-memory) case allocates nothing extra
+    val second = next() ?: return first
     val sb = StringBuilder(first).append(second)
     while (true) sb.append(next() ?: return sb.toString())
 }
 
 /**
- * A forward-only view of the source as lines (terminators stripped), splitting across chunk boundaries.
- * Both `\n` and `\r\n`
- * terminate a line; a final unterminated line is yielded. Lazy: only as much of the source as the
- * consumer pulls is read.
+ * Lazily consume lines across chunk boundaries, stripping `\n` and `\r\n` terminators.
+ * A final unterminated line is yielded.
  */
 fun CharSource.lineSequence(): Sequence<String> = sequence {
     val carry = StringBuilder()

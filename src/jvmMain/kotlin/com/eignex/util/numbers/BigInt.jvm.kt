@@ -1,4 +1,3 @@
-// The contracts are documented once, on the expect declarations.
 @file:Suppress(
     "NOTHING_TO_INLINE",
     "EXTENSION_SHADOWED_BY_MEMBER",

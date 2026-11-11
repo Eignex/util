@@ -9,7 +9,6 @@ import com.eignex.util.arrays.binarySearchLong
 class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
     private var data: LongArray = LongArray(initialCapacity.coerceAtLeast(1))
 
-    /** Number of live elements. */
     override var size: Int = 0
         private set
 
@@ -97,7 +96,7 @@ class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
     /** Copy the live elements into a new array. */
     override fun toLongArray(): LongArray = data.copyOf(size)
 
-    /** Snapshot the current contents as a `Set<Long>`. Boxes, so not for hot loops. */
+    /** Snapshot the current contents as a boxed `Set<Long>`. */
     fun toSet(): Set<Long> {
         val s = HashSet<Long>(size)
         for (i in 0 until size) s.add(data[i])
@@ -110,17 +109,14 @@ class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
         return -1
     }
 
-    /** Whether [value] is present, independently of the stored payload. */
     override fun contains(value: Long): Boolean = indexOf(value) >= 0
 
-    /** Whether there are no live elements. */
     override fun isEmpty(): Boolean = size == 0
 
     /** Return the last live element; requires a nonempty collection. */
     fun last(): Long = data[size - 1]
 
-    /** Sort the live elements in place; [descending] reverses the result. A 64-bit element leaves
-     *  no room to pack a key, so there is no counterpart to [IntArrayList.sortByIntKey]. */
+    /** Sort the live elements in place; [descending] reverses the result. */
     fun sort(descending: Boolean = false) {
         data.sort(0, size)
         if (descending) {
@@ -137,9 +133,7 @@ class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
     }
 
     /**
-     * Index of the first element `>= element` in `[0, size)`, assuming the list is sorted
-     * **strictly ascending** (no duplicates) — the lower-bound / insertion point. Returns
-     * [size] when every element is strictly below [element]. O(log size) via [binarySearchLong].
+     * Index of the first element `>= element` in an ascending list, or [size] when none exists.
      */
     fun lowerBound(element: Long): Int {
         val idx = data.binarySearchLong(element, 0, size)

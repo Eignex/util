@@ -1,14 +1,9 @@
 package com.eignex.util.numbers
 
 /**
- * Arbitrary-precision signed integer. Each platform maps it onto its fastest native representation,
- * so the whole API lives in top-level functions whose contracts hold identically on every platform.
- *
+ * Arbitrary-precision signed integer backed by the platform's BigInteger type.
  * Equality is by value and [toString] renders the plain decimal form (`-` sign, no leading zeros).
- *
- * Code compiled against a platform artifact sees the platform type, whose own members win over these
- * functions. They agree everywhere except `%` on native, where the member signs the remainder like the
- * quotient; use [remainderOf] to get the dividend's sign in consuming modules.
+ * Use [remainderOf] for a truncating remainder; the Native type's `%` member has different sign rules.
  */
 expect class BigInt
 
@@ -132,5 +127,5 @@ internal fun requireDecimalInteger(text: String) {
     }
 }
 
-/** The truncating remainder with the dividend's sign, including across module boundaries. */
+/** The truncating remainder with the dividend's sign. */
 fun BigInt.remainderOf(other: BigInt): BigInt = rem(other)

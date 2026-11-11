@@ -66,7 +66,7 @@ class Hash64Test {
 
     @Test
     fun `hash64 does not collide across the chunk boundary`() {
-        // These inputs reach the same mixer state before finalisation, exposing a missing finalisation step.
+        // These inputs reach the same mixer state before finalization.
         val unaligned = byteArrayOf(0x01)
         val aligned = byteArrayOf(8, 0, 0, 0, 0, 0, 0, 0)
         assertNotEquals(hash64(unaligned), hash64(aligned))

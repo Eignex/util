@@ -34,16 +34,12 @@ class IntSwapSet private constructor(private val elements: IntArrayList, private
         }
     }
 
-    /** Number of elements currently in the set. */
     override val size: Int get() = elements.size
 
-    /** Whether the set is empty. */
     override fun isEmpty(): Boolean = elements.size == 0
 
-    /** Whether [value] is a member. */
     override operator fun contains(value: Int): Boolean = value in position.indices && position[value] >= 0
 
-    /** Add [value]; returns false if it was already present. */
     override fun add(value: Int): Boolean {
         require(value in position.indices) { "Value is outside the supported id range" }
         if (position[value] >= 0) return false
@@ -52,7 +48,6 @@ class IntSwapSet private constructor(private val elements: IntArrayList, private
         return true
     }
 
-    /** Remove [value]; returns false if it was absent. */
     override fun remove(value: Int): Boolean {
         if (value !in position.indices) return false
         val pos = position[value]
@@ -71,7 +66,6 @@ class IntSwapSet private constructor(private val elements: IntArrayList, private
     /** A uniformly-random member. */
     fun random(rng: Random): Int = elements[rng.nextInt(elements.size)]
 
-    /** Snapshot the members as a new array. */
     override fun toIntArray(): IntArray = elements.toIntArray()
 
     /** Remove all elements. */

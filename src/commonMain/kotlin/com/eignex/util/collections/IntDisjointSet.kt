@@ -2,12 +2,12 @@ package com.eignex.util.collections
 
 /**
  * Dense union-find over `0 until size`, with path compression and arbitrary-root union.
- * [groups] returns member indices; callers map them to payloads. Not thread-safe.
+ * Not thread-safe.
  */
 class IntDisjointSet(size: Int) {
     private val parent = IntArray(size) { it }
 
-    /** Representative root of [x]'s set, flattening the path so repeat lookups are O(1). */
+    /** Representative root of [x]'s set, compressing the path during lookup. */
     fun find(x: Int): Int {
         var root = x
         while (parent[root] != root) root = parent[root]

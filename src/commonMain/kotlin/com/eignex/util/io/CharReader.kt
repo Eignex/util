@@ -36,8 +36,6 @@ class CharReader(private val source: CharSource) {
     }
 
     private companion object {
-        // Drop the consumed prefix once it reaches this many characters. Large enough that compaction is
-        // rare relative to token scanning, small enough that the buffer stays bounded on huge inputs.
         private const val COMPACT_THRESHOLD = 1 shl 16
     }
 }

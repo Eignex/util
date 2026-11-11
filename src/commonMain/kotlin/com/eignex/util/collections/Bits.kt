@@ -6,7 +6,6 @@ import com.eignex.util.collections.internals.forEachSetBit
 
 /** Multiplatform mutable bitset over `[0, size)`, packed into a [LongArray]. */
 class Bits(size: Int) : BitSet {
-    /** Number of addressable bits. */
     override val size: Int = size
 
     @PublishedApi internal val words: LongArray = LongArray(bitWordCount(size))
@@ -30,15 +29,12 @@ class Bits(size: Int) : BitSet {
         other.words.copyInto(words, fromIndex, fromIndex, toIndex)
     }
 
-    /** Whether bit [i] is set. */
     override operator fun get(i: Int): Boolean = (words[i ushr 6] ushr (i and 63)) and 1L == 1L
 
-    /** Set bit [i]. */
     override fun set(i: Int) {
         words[i ushr 6] = words[i ushr 6] or (1L shl (i and 63))
     }
 
-    /** Clear bit [i]. */
     override fun clear(i: Int) {
         words[i ushr 6] = words[i ushr 6] and (1L shl (i and 63)).inv()
     }
@@ -66,14 +62,12 @@ class Bits(size: Int) : BitSet {
         forEachSetBit(words, words.size, block)
     }
 
-    /** Return the number of set bits. */
     override fun cardinality(): Int {
         var c = 0
         for (w in words) c += w.countOneBits()
         return c
     }
 
-    /** Return the set-bit indices in ascending order. */
     override fun toIntArray(): IntArray {
         val out = IntArray(cardinality())
         var k = 0
