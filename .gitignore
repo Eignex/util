@@ -5,6 +5,10 @@ build/
 **/build
 **/*.db
 
+### Benchmark output ###
+/benchmarks/**/results/
+/util-bench/results/
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

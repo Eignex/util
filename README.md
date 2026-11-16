@@ -27,5 +27,11 @@ Shared Kotlin Multiplatform primitives for Eignex libraries and applications.
 
 Primitive collection benchmarks and the eignex-lab adapter are in [util-bench](util-bench/README.md).
 
-Package ownership, target availability, behavioral contracts and API migrations are documented in
-[Package contracts](docs/packages.md).
+## API notes
+
+- Packages follow responsibility; source sets determine availability. Host-only APIs include big numbers, runtime/process helpers and parallel execution; file input requires JVM or POSIX Native.
+- Collections are mutable and not thread-safe. Read-only views are not snapshots; swap removals reorder elements; map presence requires `containsKey`.
+- Storage access lives in `collections.storage`; budgeted/yielding operations live in `collections.cooperative`. Borrowed arrays remain container-owned; capacity accounting is not heap measurement.
+- Counters provide `add`/`load`; cells provide replacement and exact updates. Separate operations are not atomic.
+- Callers close `CharSource` resources. Hashes and random generators are noncryptographic; `hash64` output is stable.
+- Reference identity lives in `runtime`; heap and compiler diagnostics live in `runtime.diagnostics`. Detailed contracts live in KDoc.

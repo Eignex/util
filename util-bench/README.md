@@ -156,6 +156,6 @@ machines. Worker loss replaces the entire unfinished row; retain failed-attempt 
 separately. Inspect variation across forks and complete paired repetitions before drawing conclusions.
 Lab SSH, host discovery and server administration belong to the eignex-lab operations owner.
 
-The earlier standalone JMH harness and retained captures remain under
+The standalone JMH harness is in
 [`benchmarks/collections`](../benchmarks/collections/README.md). Its protocol and scores differ;
-start a fresh baseline for util-bench.
+use a separate baseline for util-bench. Keep measurement output outside the repository.

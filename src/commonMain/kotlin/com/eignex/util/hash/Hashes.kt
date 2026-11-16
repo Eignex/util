@@ -11,7 +11,7 @@ fun splitmix64(value: Long): Long {
 }
 
 /**
- * Deterministic 64-bit hash of [bytes], stable across platforms and library versions.
+ * Deterministic 64-bit hash of [bytes], consistent across platforms.
  * Mixes the input length, little-endian 8-byte chunks and a final tail. Not a cryptographic hash.
  */
 fun hash64(bytes: ByteArray): Long {

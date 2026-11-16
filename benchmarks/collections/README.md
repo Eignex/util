@@ -4,8 +4,7 @@ Standalone JMH harness for the JVM primitive collections. It is separate from th
 library build and publication.
 
 Build the revisions to compare with `./gradlew :jvmJar -PciVersion=0.0.0-ci`, saving
-each `build/libs/util-jvm-0.0.0-ci.jar` outside its checkout. The retained baseline
-is commit `0160741ae181d9327579ce1a8a49896b7d2fb5c7`.
+each `build/libs/util-jvm-0.0.0-ci.jar` outside its checkout.
 
 Run a complete comparison on Java 17:
 
@@ -41,9 +40,9 @@ entries; insertion includes clearing the preallocated map, growth includes creat
 a map, and removal includes restoring each removed entry. Scores are nanoseconds
 per key processed. This is a cache-resident workload on one JVM and host.
 
-The retained comparison is in `results/2026-11-05/`. Its environment file records
-the artifact hashes and protocol. CPU contention varied during measurement; the raw
-samples and agreement between repetitions are needed to assess the results.
+Keep measurement output outside the repository. Record artifact hashes and runtime
+controls alongside raw samples, and compare complete paired repetitions to assess
+variation from host contention.
 
 ## Deque and disjoint-set comparison
 
@@ -65,10 +64,6 @@ Serial GC and JMH's GC profiler. Scores are per invocation. Grouping returns a
 complete partition snapshot from compressed paths. Removal includes appending
 the removed value. Growth includes allocating, filling and wrapping a deque,
 then growing its full buffer once. Fixture checks run outside measurement.
-
-The [2026-11-16 report](results/2026-11-16-deque-disjoint/README.md) includes
-per-repetition results, allocation measurements, caveats and raw captures. The
-default suite and its earlier retained comparison remain unchanged.
 
 ## Primitive-map comparisons
 
@@ -98,10 +93,6 @@ and five 300 ms measurements. Scores are per complete batch, not per element.
 Build batches allocate and return a whole map; removal batches remove and restore
 every fixture key. Complete reference checks run outside timing.
 
-The [2026-11-16 primitive-map report](results/2026-11-16-primitive-maps/README.md)
-retains final build measurements, uncertainty, raw samples, and the separate
-exploratory comparison that led to reverting the deletion candidate.
-
 ## Hashmap comparisons
 
 The `hashmaps` suite measures nullable required lookups, repeated clears of empty
@@ -128,9 +119,5 @@ python3 benchmarks/collections/run-paired.py --suite long-hash \
 ```
 
 Both suites use the same alternating paired protocol, fixed 512 MiB heap, Serial
-GC and GC profiling as the other focused suites. They retain the original default
-suite and the maintained `util-bench` workload catalog unchanged. The
-[hashmap report](results/2026-11-16-hashmaps/README.md) retains final object-map
-measurements separately from rejected numeric-clear
-and long-key mixer experiments. Select generated case names with `--cases`, for
+GC and GC profiling as the other focused suites. Select generated case names with `--cases`, for
 example `--cases required-int-null-1024,empty-clear-int-object-1024`.
