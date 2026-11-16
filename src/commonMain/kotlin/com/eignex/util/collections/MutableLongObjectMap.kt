@@ -40,8 +40,7 @@ class MutableLongObjectMap<V>(initialCapacity: Int = 8) : LongKeyed {
     /** Value for [key], throwing if absent. */
     @Suppress("UNCHECKED_CAST")
     fun getValue(key: Long): V {
-        val value = get(key)
-        if (value != null || containsKey(key)) return value as V
+        findLongKey(keys, used, mask, key) { return values[it] as V }
         throw NoSuchElementException("key $key is missing in the map")
     }
 
@@ -88,6 +87,7 @@ class MutableLongObjectMap<V>(initialCapacity: Int = 8) : LongKeyed {
 
     /** Remove all live elements while retaining the allocated storage. */
     fun clear() {
+        if (size == 0) return
         used.fill(false)
         size = 0
         values.fill(null)

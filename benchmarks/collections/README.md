@@ -89,7 +89,7 @@ python3 benchmarks/collections/run-paired.py --suite primitive-maps \
 ```
 
 Omit `--workloads` to run all 12 cases, or use `--sizes 65,1024,65536` to change the
-sizes. Both focused suites support `--sizes`; deque sizes must be powers of two so
+sizes. All focused suites support `--sizes`; deque sizes must be powers of two so
 the growth fixture fills its ring. Names and sizes must be unique and valid.
 
 The paired controls match the deque suite: fixed 512 MiB heap, Serial GC, GC
@@ -101,3 +101,36 @@ every fixture key. Complete reference checks run outside timing.
 The [2026-11-16 primitive-map report](results/2026-11-16-primitive-maps/README.md)
 retains final build measurements, uncertainty, raw samples, and the separate
 exploratory comparison that led to reverting the deletion candidate.
+
+## Hashmap comparisons
+
+The `hashmaps` suite measures nullable required lookups, repeated clears of empty
+reserved maps, and put-one-entry-then-clear controls. It covers all six mutable
+map types at reserved sizes 1,024 and 65,536. Run it with the same JAR, classpath,
+Java and output arguments shown above, replacing the suite with `--suite hashmaps`.
+Lookup scores are per complete batch; clear scores are per clear invocation,
+including dispatch and, for the nonempty control, insertion.
+
+The `long-hash` suite measures `MutableLongIntMap` construction, successful lookup,
+and remove-restore batches with random, sequential, upper-32-bit and upper-48-bit
+keys. Its default sizes are 1,024 and 8,192. Sizes cannot exceed 65,536, so every
+upper-48-bit key remains unique. Build batches include allocation; lookup and
+removal use preallocated tables. Setup and teardown check all entries and sizes;
+lookup and removal checksums are checked outside timing.
+
+```sh
+python3 benchmarks/collections/run-paired.py --suite long-hash \
+  --baseline /absolute/path/baseline.jar \
+  --candidate /absolute/path/candidate.jar \
+  --classpath benchmarks/collections/build/benchmark-classpath.txt \
+  --java /absolute/path/to/java17/bin/java \
+  --output /tmp/util-long-hash-comparison
+```
+
+Both suites use the same alternating paired protocol, fixed 512 MiB heap, Serial
+GC and GC profiling as the other focused suites. They retain the original default
+suite and the maintained `util-bench` workload catalog unchanged. The
+[hashmap report](results/2026-11-16-hashmaps/README.md) retains final object-map
+measurements separately from rejected numeric-clear
+and long-key mixer experiments. Select generated case names with `--cases`, for
+example `--cases required-int-null-1024,empty-clear-int-object-1024`.

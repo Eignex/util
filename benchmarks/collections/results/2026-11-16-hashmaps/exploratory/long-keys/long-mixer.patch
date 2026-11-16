@@ -1,0 +1,117 @@
+--- a/src/commonMain/kotlin/com/eignex/util/collections/internals/OpenAddressing.kt
++++ b/src/commonMain/kotlin/com/eignex/util/collections/internals/OpenAddressing.kt
+@@ -18 +18 @@
+-/** Fibonacci multiplicative mixing of Long keys with a high-to-low xor fold. */
++/** Fold high bits before and after multiplication for power-of-two Long-key tables. */
+@@ -20 +20,2 @@
+-    var h = x * -0x61c8864680b583ebL // 2^64 / golden ratio, odd
++    // A final fold alone leaves high-bit strides with identical low table bits.
++    var h = (x xor (x ushr 32)) * -0x61c8864680b583ebL // 2^64 / golden ratio, odd
+--- a/src/commonMain/kotlin/com/eignex/util/hash/Hashes.kt
++++ b/src/commonMain/kotlin/com/eignex/util/hash/Hashes.kt
+@@ -4 +3,0 @@
+-import com.eignex.util.collections.internals.mixLongKey
+@@ -49 +48,5 @@
+-fun fibonacciHash(value: Long): Int = mixLongKey(value)
++fun fibonacciHash(value: Long): Int {
++    // Preserve the public hash independently of the collection table mixer.
++    val h = value * -0x61c8864680b583ebL
++    return (h xor (h ushr 32)).toInt()
++}
+--- a/src/commonTest/kotlin/com/eignex/util/collections/CollectionModelTest.kt
++++ b/src/commonTest/kotlin/com/eignex/util/collections/CollectionModelTest.kt
+@@ -2,0 +3 @@
++import com.eignex.util.collections.internals.mixLongKey
+@@ -14 +15 @@
+-        (1..4096).map { it.toLong() shl 32 }.filter { fibonacciHash(it) and 63 == 63 }.take(24)
++        (1..4096).map { it.toLong() shl 32 }.filter { mixLongKey(it) and 63 == 63 }.take(24)
+--- a/src/commonTest/kotlin/com/eignex/util/collections/HashMapRequiredLookupTest.kt
++++ b/src/commonTest/kotlin/com/eignex/util/collections/HashMapRequiredLookupTest.kt
+@@ -2,0 +3 @@
++import com.eignex.util.collections.internals.mixLongKey
+@@ -14 +15 @@
+-            .filter { fibonacciHash(it) and 63 == 63 }.take(25)
++            .filter { mixLongKey(it) and 63 == 63 }.take(25)
+--- /dev/null
++++ b/src/commonTest/kotlin/com/eignex/util/collections/LongKeyMixingTest.kt
+@@ -0,0 +1,70 @@
++package com.eignex.util.collections
++
++import com.eignex.util.collections.internals.mixLongKey
++import kotlin.test.Test
++import kotlin.test.assertEquals
++import kotlin.test.assertTrue
++
++class LongKeyMixingTest {
++    @Test
++    fun `long table hash should spread sequential and high bit strides`() {
++        for (shift in listOf(0, 8, 16, 24, 32, 40, 48, 56)) {
++            val samples = if (shift == 56) 256 else 4096
++            val mask = samples * 2 - 1
++            for (base in listOf(0L, -1L, Long.MIN_VALUE)) {
++                val slots = HashSet<Int>()
++                repeat(samples) { slots.add(mixLongKey(base + (it.toLong() shl shift)) and mask) }
++                assertTrue(slots.size > samples / 2, "shift=$shift base=$base occupied slots=${slots.size}")
++            }
++        }
++    }
++
++    @Test
++    fun `high bit keys should survive growth deletion and reinsertion in long tables`() {
++        for (shift in listOf(32, 40, 48, 56)) {
++            val count = if (shift == 56) 256 else 1024
++            val keys = LongArray(count) { it.toLong() shl shift }
++            val ints = MutableLongIntMap(1)
++            val objects = MutableLongObjectMap<String?>(1)
++            val set = LongHashSet(1)
++            for (i in keys.indices) {
++                ints.put(keys[i], i)
++                objects.put(keys[i], if (i % 2 == 0) null else "value-$i")
++                assertTrue(set.add(keys[i]))
++            }
++            for (i in keys.indices step 3) {
++                assertTrue(ints.remove(keys[i]))
++                assertTrue(objects.remove(keys[i]))
++                assertTrue(set.remove(keys[i]))
++            }
++            for (i in keys.indices) {
++                val present = i % 3 != 0
++                assertEquals(present, ints.containsKey(keys[i]))
++                assertEquals(present, objects.containsKey(keys[i]))
++                assertEquals(present, keys[i] in set)
++                if (present) {
++                    assertEquals(i, ints.getOrDefault(keys[i], -1))
++                    assertEquals(if (i % 2 == 0) null else "value-$i", objects.getValue(keys[i]))
++                }
++            }
++            for (i in keys.indices step 3) {
++                ints.put(keys[i], -i)
++                objects.put(keys[i], "reinserted-$i")
++                assertTrue(set.add(keys[i]))
++            }
++            assertEquals(count, ints.size)
++            assertEquals(count, objects.size)
++            assertEquals(count, set.size)
++            for (i in keys.indices) {
++                assertEquals(if (i % 3 == 0) -i else i, ints.getOrDefault(keys[i], -1))
++                val expected = if (i % 3 == 0) "reinserted-$i" else if (i % 2 == 0) {
++                    null
++                } else {
++                    "value-$i"
++                }
++                assertEquals(expected, objects.getValue(keys[i]))
++                assertTrue(keys[i] in set)
++            }
++        }
++    }
++}
+--- a/src/commonTest/kotlin/com/eignex/util/hash/HashesTest.kt
++++ b/src/commonTest/kotlin/com/eignex/util/hash/HashesTest.kt
+@@ -9,0 +10,7 @@
++    @Test
++    fun `long public hash should retain folded Fibonacci reference values`() {
++        val keys = longArrayOf(0, 1, -1, 42, Long.MAX_VALUE, Long.MIN_VALUE, 1L shl 48)
++        val expected = intArrayOf(0, -511900244, -511900243, 388080412, 1635583405, -2147483648, 2081751040)
++        for (i in keys.indices) assertEquals(expected[i], fibonacciHash(keys[i]))
++    }
++

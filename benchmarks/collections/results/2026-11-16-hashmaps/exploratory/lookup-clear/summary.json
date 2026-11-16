@@ -1,0 +1,578 @@
+[
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "null",
+      "size": "1024"
+    },
+    "baselineNs": 6555.18481129352,
+    "candidateNs": 3287.5882467784613,
+    "speedup": 1.9939190431517717
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "value",
+      "size": "1024"
+    },
+    "baselineNs": 3646.7113236274126,
+    "candidateNs": 2929.471578704036,
+    "speedup": 1.2448358776160837
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "null",
+      "size": "1024"
+    },
+    "baselineNs": 4819.759539679043,
+    "candidateNs": 2738.2188325220714,
+    "speedup": 1.7601805532977588
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "value",
+      "size": "1024"
+    },
+    "baselineNs": 2709.641951960331,
+    "candidateNs": 3055.8840704668833,
+    "speedup": 0.8866965792803609
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-int",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 48.39202569699596,
+    "candidateNs": 4.743017062574606,
+    "speedup": 10.2027939302263
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-long",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 57.43492745391262,
+    "candidateNs": 6.799866691123276,
+    "speedup": 8.4464784477157
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-double",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 50.445874955681575,
+    "candidateNs": 5.816742600089256,
+    "speedup": 8.672530043689315
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-int",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 73.67762168004022,
+    "candidateNs": 9.93526713022121,
+    "speedup": 7.415766553062955
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 784.395929085469,
+    "candidateNs": 8.251361471144655,
+    "speedup": 95.0626065563281
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-object",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 535.0461818125759,
+    "candidateNs": 5.128358979832358,
+    "speedup": 104.33087541583646
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-int",
+      "refill": "true",
+      "size": "1024"
+    },
+    "baselineNs": 31.14591139124058,
+    "candidateNs": 45.03804905859804,
+    "speedup": 0.6915466376156149
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "true",
+      "size": "1024"
+    },
+    "baselineNs": 575.2850656330365,
+    "candidateNs": 646.422377784447,
+    "speedup": 0.8899522748651941
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "null",
+      "size": "65536"
+    },
+    "baselineNs": 774946.1880794826,
+    "candidateNs": 755981.4987786849,
+    "speedup": 1.025086181780157
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "value",
+      "size": "65536"
+    },
+    "baselineNs": 843011.7053178006,
+    "candidateNs": 699005.1533954904,
+    "speedup": 1.2060164381089087
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "null",
+      "size": "65536"
+    },
+    "baselineNs": 935277.7848955899,
+    "candidateNs": 1099778.7604271069,
+    "speedup": 0.8504235747673179
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "value",
+      "size": "65536"
+    },
+    "baselineNs": 729845.1290838311,
+    "candidateNs": 998476.974847778,
+    "speedup": 0.7309583971078543
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-int",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 5342.105746561387,
+    "candidateNs": 7.94231934826041,
+    "speedup": 672.6128114870446
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-long",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 2776.9372694275703,
+    "candidateNs": 4.700747008646503,
+    "speedup": 590.7438252515402
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-double",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 3259.2400416358587,
+    "candidateNs": 3.3429111900057364,
+    "speedup": 974.9705739655817
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-int",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 1991.2521253927112,
+    "candidateNs": 3.295696548760634,
+    "speedup": 604.1976547086938
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 40214.15848188543,
+    "candidateNs": 3.3976101197765027,
+    "speedup": 11836.013275275607
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-object",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 54571.56366979162,
+    "candidateNs": 4.277441668361623,
+    "speedup": 12757.991318369986
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-int",
+      "refill": "true",
+      "size": "65536"
+    },
+    "baselineNs": 2689.279085961085,
+    "candidateNs": 1882.3100881406542,
+    "speedup": 1.4287120400111943
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "true",
+      "size": "65536"
+    },
+    "baselineNs": 38396.18432595745,
+    "candidateNs": 48374.5057486941,
+    "speedup": 0.793727682209838
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "null",
+      "size": "1024"
+    },
+    "baselineNs": 3038.3350396108094,
+    "candidateNs": 1958.6142662419813,
+    "speedup": 1.5512676957267866
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "value",
+      "size": "1024"
+    },
+    "baselineNs": 1831.72450535647,
+    "candidateNs": 1860.208334934136,
+    "speedup": 0.9846878282164698
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "null",
+      "size": "1024"
+    },
+    "baselineNs": 2456.1862827552627,
+    "candidateNs": 1730.9274718428048,
+    "speedup": 1.4190001156665002
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "value",
+      "size": "1024"
+    },
+    "baselineNs": 1550.0743571196938,
+    "candidateNs": 1719.8833759896268,
+    "speedup": 0.9012671316901215
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-int",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 40.64262076304779,
+    "candidateNs": 5.930119282679058,
+    "speedup": 6.853592453318513
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-long",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 38.915592896792084,
+    "candidateNs": 4.888995849792417,
+    "speedup": 7.959833489824788
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-double",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 72.31175709316787,
+    "candidateNs": 7.357708937502705,
+    "speedup": 9.828026320066876
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-int",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 37.485274818826824,
+    "candidateNs": 3.4194759599330524,
+    "speedup": 10.962286402376323
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 362.4843576867386,
+    "candidateNs": 3.6035883091041234,
+    "speedup": 100.58983618382719
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-object",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 402.01863002897096,
+    "candidateNs": 3.822095364488887,
+    "speedup": 105.18278370658375
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-int",
+      "refill": "true",
+      "size": "1024"
+    },
+    "baselineNs": 22.81128777001996,
+    "candidateNs": 31.190107642277987,
+    "speedup": 0.7313629062023309
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "true",
+      "size": "1024"
+    },
+    "baselineNs": 376.0383827912641,
+    "candidateNs": 360.8836803518775,
+    "speedup": 1.0419933160308332
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "null",
+      "size": "65536"
+    },
+    "baselineNs": 568245.36902965,
+    "candidateNs": 459084.8466354899,
+    "speedup": 1.2377785352624213
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "value",
+      "size": "65536"
+    },
+    "baselineNs": 460469.475501045,
+    "candidateNs": 456674.898947394,
+    "speedup": 1.0083091419353183
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "null",
+      "size": "65536"
+    },
+    "baselineNs": 575258.5768796642,
+    "candidateNs": 432269.7925966956,
+    "speedup": 1.3307859737873844
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "value",
+      "size": "65536"
+    },
+    "baselineNs": 456473.73127370543,
+    "candidateNs": 447602.7293848387,
+    "speedup": 1.0198189182203123
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-int",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 1811.0676297354978,
+    "candidateNs": 3.318938782552493,
+    "speedup": 545.676720298728
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-long",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 2451.5908644101146,
+    "candidateNs": 4.228510195539834,
+    "speedup": 579.776505445349
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-double",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 2233.298038559101,
+    "candidateNs": 4.434614415075199,
+    "speedup": 503.60591238037324
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-int",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 3561.8394623681306,
+    "candidateNs": 4.188975296189473,
+    "speedup": 850.2889634150337
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 44719.00165093345,
+    "candidateNs": 4.708497790139987,
+    "speedup": 9497.509321248705
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-object",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 51897.92470314334,
+    "candidateNs": 4.412403585999199,
+    "speedup": 11761.826336062806
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-int",
+      "refill": "true",
+      "size": "65536"
+    },
+    "baselineNs": 2894.7179628879276,
+    "candidateNs": 2550.8189441939517,
+    "speedup": 1.1348190625119599
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "true",
+      "size": "65536"
+    },
+    "baselineNs": 50719.493135391596,
+    "candidateNs": 51674.336333944484,
+    "speedup": 0.981521906882708
+  }
+]

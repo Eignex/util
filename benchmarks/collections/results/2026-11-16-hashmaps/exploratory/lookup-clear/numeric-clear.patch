@@ -1,0 +1,16 @@
+--- a/src/commonMain/kotlin/com/eignex/util/collections/MutableIntDoubleMap.kt
++++ b/src/commonMain/kotlin/com/eignex/util/collections/MutableIntDoubleMap.kt
+@@ -86,0 +87 @@
++        if (size == 0) return
+--- a/src/commonMain/kotlin/com/eignex/util/collections/MutableIntIntMap.kt
++++ b/src/commonMain/kotlin/com/eignex/util/collections/MutableIntIntMap.kt
+@@ -90,0 +91 @@
++        if (size == 0) return
+--- a/src/commonMain/kotlin/com/eignex/util/collections/MutableIntLongMap.kt
++++ b/src/commonMain/kotlin/com/eignex/util/collections/MutableIntLongMap.kt
+@@ -86,0 +87 @@
++        if (size == 0) return
+--- a/src/commonMain/kotlin/com/eignex/util/collections/MutableLongIntMap.kt
++++ b/src/commonMain/kotlin/com/eignex/util/collections/MutableLongIntMap.kt
+@@ -160,0 +161 @@
++        if (size == 0) return
