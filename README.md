@@ -27,6 +27,10 @@ Shared Kotlin Multiplatform primitives for Eignex libraries and applications.
 
 Primitive collection benchmarks and the eignex-lab adapter are in [util-bench](util-bench/README.md).
 
+Snapshot releases use a fresh `-ci.<run>.<attempt>-SNAPSHOT` version for each publication attempt.
+The release job verifies that every target has the same immutable timestamped pin and records it in
+the job summary. Consumers should use that one pin for the root module and every platform constraint.
+
 ## API notes
 
 - Packages follow responsibility; source sets determine availability. Host-only APIs include big numbers, runtime/process helpers and parallel execution; file input requires JVM or POSIX Native.

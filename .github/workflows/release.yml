@@ -103,6 +103,13 @@ jobs:
         with:
           ref: ${{ needs.prepare.outputs.revision }}
           persist-credentials: false
+      - name: Isolate the snapshot publication attempt
+        if: env.IS_SNAPSHOT == 'true'
+        shell: bash
+        run: |
+          # Maven counts uploads per artifact; a fresh version keeps every target on build one.
+          # Resolve here so rerunning only a failed publish job also gets a fresh version.
+          echo "RELEASE_VERSION=${RELEASE_VERSION%-SNAPSHOT}-ci.${GITHUB_RUN_ID}.${GITHUB_RUN_ATTEMPT}-SNAPSHOT" >> "$GITHUB_ENV"
       - uses: actions/setup-java@v6
         with:
           distribution: temurin
@@ -148,6 +155,11 @@ jobs:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
         run: ./gradlew :util:publishAllPublicationsToSonatypeSnapshotsRepository -Ptargets.full -PciVersion="$RELEASE_VERSION"
+      - name: Verify one snapshot pin for every publication
+        if: env.IS_SNAPSHOT == 'true'
+        run: |
+          pin=$(python3 .github/scripts/verify_snapshot.py "$RELEASE_VERSION" util/build/publications)
+          echo "Published util pin: \`$pin\`" >> "$GITHUB_STEP_SUMMARY"
       - name: Create GitHub release
         if: github.ref_type == 'tag' && env.IS_SNAPSHOT == 'false' && env.IS_TEST_RELEASE != 'true'
         uses: softprops/action-gh-release@v3
