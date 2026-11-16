@@ -19,6 +19,7 @@ Shared Kotlin Multiplatform primitives for Eignex libraries and applications.
 - Concurrency primitives: synchronous locks, atomic cells and additive counters.
 - Numeric primitives: checked Long arithmetic, a signed 128-bit accumulator and arbitrary-precision integers.
 - Hashing: deterministic SplitMix64 mixing and 64-bit byte/string hashes.
+- Random sampling: normal, Gamma, Beta and Poisson draws, counter-based streams and scrambled Sobol points.
 - Text input: chunked character sources, buffered character reading and compressed file input.
 - Host concurrency: ordered parallel execution on JVM threads and Native workers.
 - Process support: properties/environment, standard output flushing, error output and process exit.
