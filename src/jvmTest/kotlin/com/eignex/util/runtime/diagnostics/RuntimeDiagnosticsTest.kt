@@ -1,4 +1,4 @@
-package com.eignex.util.platform
+package com.eignex.util.runtime.diagnostics
 
 import kotlin.test.Test
 import kotlin.test.assertNotNull

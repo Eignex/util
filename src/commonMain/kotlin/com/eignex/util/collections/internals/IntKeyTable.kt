@@ -1,10 +1,11 @@
 package com.eignex.util.collections.internals
 
 import com.eignex.util.collections.IntConsumer
+import com.eignex.util.hash.fibonacciHash
 
 // Inline hooks preserve typed value storage without an additional table object.
 internal inline fun intKeySlot(keys: IntArray, used: BooleanArray, mask: Int, key: Int, existing: (Int) -> Unit): Int {
-    var index = mixIntKey(key) and mask
+    var index = fibonacciHash(key) and mask
     while (used[index]) {
         if (keys[index] == key) {
             existing(index)
@@ -16,7 +17,7 @@ internal inline fun intKeySlot(keys: IntArray, used: BooleanArray, mask: Int, ke
 }
 
 internal inline fun findIntKey(keys: IntArray, used: BooleanArray, mask: Int, key: Int, found: (Int) -> Unit) {
-    var index = mixIntKey(key) and mask
+    var index = fibonacciHash(key) and mask
     while (used[index]) {
         if (keys[index] == key) {
             found(index)
@@ -41,7 +42,7 @@ internal inline fun deleteIntKeySlot(
     while (true) {
         cursor = (cursor + 1) and mask
         if (!used[cursor]) return
-        val home = mixIntKey(keys[cursor]) and mask
+        val home = fibonacciHash(keys[cursor]) and mask
         if (mustStayDuringShift(home, hole, cursor)) continue
         keys[hole] = keys[cursor]
         move(cursor, hole)
@@ -66,7 +67,7 @@ internal inline fun growIntKeyTable(
     publish(keys, used, mask)
     for (old in oldUsed.indices) {
         if (!oldUsed[old]) continue
-        var destination = mixIntKey(oldKeys[old]) and mask
+        var destination = fibonacciHash(oldKeys[old]) and mask
         while (used[destination]) destination = (destination + 1) and mask
         keys[destination] = oldKeys[old]
         used[destination] = true

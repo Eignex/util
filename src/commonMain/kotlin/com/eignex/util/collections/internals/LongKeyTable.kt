@@ -1,6 +1,7 @@
 package com.eignex.util.collections.internals
 
 import com.eignex.util.collections.LongConsumer
+import com.eignex.util.hash.fibonacciHash
 
 // Inline hooks preserve typed value storage without an additional table object.
 internal inline fun longKeySlot(
@@ -10,7 +11,7 @@ internal inline fun longKeySlot(
     key: Long,
     existing: (Int) -> Unit,
 ): Int {
-    var index = mixLongKey(key) and mask
+    var index = fibonacciHash(key) and mask
     while (used[index]) {
         if (keys[index] == key) {
             existing(index)
@@ -22,7 +23,7 @@ internal inline fun longKeySlot(
 }
 
 internal inline fun findLongKey(keys: LongArray, used: BooleanArray, mask: Int, key: Long, found: (Int) -> Unit) {
-    var index = mixLongKey(key) and mask
+    var index = fibonacciHash(key) and mask
     while (used[index]) {
         if (keys[index] == key) {
             found(index)
@@ -47,7 +48,7 @@ internal inline fun deleteLongKeySlot(
     while (true) {
         cursor = (cursor + 1) and mask
         if (!used[cursor]) return
-        val home = mixLongKey(keys[cursor]) and mask
+        val home = fibonacciHash(keys[cursor]) and mask
         if (mustStayDuringShift(home, hole, cursor)) continue
         keys[hole] = keys[cursor]
         move(cursor, hole)
@@ -72,7 +73,7 @@ internal inline fun growLongKeyTable(
     publish(keys, used, mask)
     for (old in oldUsed.indices) {
         if (!oldUsed[old]) continue
-        var destination = mixLongKey(oldKeys[old]) and mask
+        var destination = fibonacciHash(oldKeys[old]) and mask
         while (used[destination]) destination = (destination + 1) and mask
         keys[destination] = oldKeys[old]
         used[destination] = true

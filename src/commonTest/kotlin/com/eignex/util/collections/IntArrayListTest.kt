@@ -15,7 +15,7 @@ class IntArrayListTest {
             for (index in listOf(-1, values.size, values.size + 1, Int.MAX_VALUE)) {
                 assertFailsWith<IndexOutOfBoundsException> { list[index] }
                 assertFailsWith<IndexOutOfBoundsException> { list[index] = 99 }
-                assertFailsWith<IndexOutOfBoundsException> { list.removeAt(index) }
+                assertFailsWith<IndexOutOfBoundsException> { list.removeAtSwap(index) }
                 assertEquals(values.toList(), list.toIntArray().toList())
                 assertEquals(values.size, list.size)
             }
@@ -54,22 +54,22 @@ class IntArrayListTest {
     }
 
     @Test
-    fun `removeAt should swap the tail into the gap`() {
+    fun `removeAtSwap should swap the tail into the gap`() {
         val list = IntArrayList()
         for (v in intArrayOf(10, 20, 30, 40)) list.add(v)
-        list.removeAt(1)
+        list.removeAtSwap(1)
         assertEquals(3, list.size)
         assertEquals(listOf(10, 40, 30), list.toIntArray().toList())
     }
 
     @Test
-    fun `removeValue should swap-remove the first occurrence and report presence`() {
+    fun `removeValueSwap should swap-remove the first occurrence and report presence`() {
         val list = IntArrayList()
         for (v in intArrayOf(5, 7, 5, 9)) list.add(v)
-        assertTrue(list.removeValue(5))
+        assertTrue(list.removeValueSwap(5))
         assertEquals(3, list.size)
         assertEquals(listOf(9, 7, 5), list.toIntArray().toList())
-        assertFalse(list.removeValue(42))
+        assertFalse(list.removeValueSwap(42))
         assertEquals(3, list.size)
     }
 

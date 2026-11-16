@@ -19,7 +19,11 @@ inline fun argsortBy(n: Int, compare: (Int, Int) -> Int): IntArray {
     return argsortBy(n, order, IntArray(n), compare)
 }
 
-/** Stable argsort into distinct caller-owned [order] and [scratch] buffers of at least [n] entries. */
+/**
+ * Stable argsort using distinct caller-owned [order] and [scratch] buffers of at least [n] entries.
+ * Returns whichever buffer holds the result; consume only its first [n] entries. Both buffers may
+ * be modified. No result copy is made, and entries at or beyond [n] are left unchanged.
+ */
 inline fun argsortBy(n: Int, order: IntArray, scratch: IntArray, compare: (Int, Int) -> Int): IntArray {
     require(n >= 0 && n <= order.size && n <= scratch.size)
     require(order !== scratch)

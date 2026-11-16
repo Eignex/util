@@ -7,8 +7,8 @@ import com.eignex.util.collections.internals.forEachIntKey
 import com.eignex.util.collections.internals.growIntKeyTable
 import com.eignex.util.collections.internals.intKeySlot
 import com.eignex.util.collections.internals.intKeysToArray
-import com.eignex.util.collections.internals.mixIntKey
 import com.eignex.util.collections.internals.openAddressingCapacity
+import com.eignex.util.hash.fibonacciHash
 
 /**
  * Primitive open-addressing Int set with linear probing, power-of-two capacity and
@@ -23,9 +23,11 @@ class IntHashSet(initialCapacity: Int = 8) : MutableIntSet {
     private var mask: Int = 0
     private val initialCap = openAddressingCapacity(initialCapacity)
 
-    /** Bytes in allocated primitive arrays, excluding object headers and shared empty storage. */
-    val allocatedBytes: Long
-        get() = if (used === EmptyIntKeyTable.used) 0L else keys.size.toLong() * (Int.SIZE_BYTES + 1L)
+    internal val primitiveCapacityBytesInternal: Long
+        get() {
+            if (used === EmptyIntKeyTable.used) return 0L
+            return keys.size.toLong() * (Int.SIZE_BYTES + 1L)
+        }
 
     override var size: Int = 0
         private set
@@ -79,16 +81,6 @@ class IntHashSet(initialCapacity: Int = 8) : MutableIntSet {
         for (i in u.indices) if (u[i]) action(k[i])
     }
 
-    /**
-     * Visit each allocated table slot, including unused slots, in table order.
-     * The key is meaningful only when the first argument is true. Mutation is unsupported.
-     */
-    inline fun forEachSlot(action: (occupied: Boolean, key: Int) -> Unit) {
-        val keys = keysInternal
-        val used = usedInternal
-        for (i in used.indices) action(used[i], keys[i])
-    }
-
     override fun forEach(action: IntConsumer) = forEachIntKey(keys, used, action)
 
     @PublishedApi internal val keysInternal: IntArray get() = keys
@@ -103,5 +95,5 @@ class IntHashSet(initialCapacity: Int = 8) : MutableIntSet {
         })
     }
 
-    private fun mix(x: Int): Int = mixIntKey(x)
+    private fun mix(x: Int): Int = fibonacciHash(x)
 }

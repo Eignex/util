@@ -6,8 +6,6 @@ import com.eignex.util.collections.internals.forEachLongKey
 import com.eignex.util.collections.internals.growLongKeyTable
 import com.eignex.util.collections.internals.longKeySlot
 import com.eignex.util.collections.internals.longKeysToArray
-import com.eignex.util.collections.internals.mixLongKey
-import com.eignex.util.collections.internals.mustStayDuringShift
 import com.eignex.util.collections.internals.openAddressingCapacity
 
 /**
@@ -21,8 +19,7 @@ class MutableLongIntMap(initialCapacity: Int = 8) : LongKeyed {
     private var used: BooleanArray
     private var mask: Int
 
-    /** Bytes in the primitive backing arrays, excluding object headers. */
-    val primitiveCapacityBytes: Long get() = keys.size.toLong() * 13L
+    internal val primitiveCapacityBytesInternal: Long get() = keys.size.toLong() * 13L
 
     override var size: Int = 0
         private set
@@ -97,62 +94,6 @@ class MutableLongIntMap(initialCapacity: Int = 8) : LongKeyed {
         return false
     }
 
-    /**
-     * Remove [key] and update an existing [updateKey] as one funded mutation.
-     * [fund] charges preparation before [ready] runs; neither callback may mutate this map.
-     * A missing non-null [updateKey] returns false without mutation or calling [ready].
-     * [key] and [updateKey] must differ. A null [updateKey] performs removal only.
-     */
-    fun removeAndUpdate(
-        key: Long,
-        updateKey: Long?,
-        updateValue: Int,
-        fund: (Long) -> Unit,
-        ready: () -> Unit,
-    ): Boolean {
-        require(key != updateKey)
-        val removed = fundedSlot(key, fund)
-        val updated = updateKey?.let { fundedSlot(it, fund) } ?: -1
-        if (updateKey != null && updated < 0) return false
-        val destination = if (removed >= 0) removalDestination(removed, updated, fund) else updated
-        fund(4L)
-        ready()
-        if (removed >= 0) {
-            deleteSlot(removed)
-            size--
-        }
-        if (updateKey != null) values[destination] = updateValue
-        return true
-    }
-
-    private fun fundedSlot(key: Long, fund: (Long) -> Unit): Int {
-        fund(1L)
-        var index = mixLongKey(key) and mask
-        while (true) {
-            fund(4L)
-            if (!used[index]) return -1
-            if (keys[index] == key) return index
-            index = (index + 1) and mask
-        }
-    }
-
-    private fun removalDestination(start: Int, updated: Int, fund: (Long) -> Unit): Int {
-        var hole = start
-        var cursor = start
-        var destination = updated
-        while (true) {
-            // Fund the probe and its matching backward-shift publication before either mapping changes.
-            fund(16L)
-            cursor = (cursor + 1) and mask
-            if (!used[cursor]) return destination
-            val home = mixLongKey(keys[cursor]) and mask
-            if (!mustStayDuringShift(home, hole, cursor)) {
-                if (cursor == updated) destination = hole
-                hole = cursor
-            }
-        }
-    }
-
     /** Whether there are no live elements. */
     fun isEmpty(): Boolean = size == 0
 
@@ -179,6 +120,14 @@ class MutableLongIntMap(initialCapacity: Int = 8) : LongKeyed {
     @PublishedApi internal val valuesInternal: IntArray get() = values
 
     @PublishedApi internal val usedInternal: BooleanArray get() = used
+
+    internal fun commitRemovalAndUpdate(removed: Int, destination: Int, value: Int) {
+        if (removed >= 0) {
+            deleteSlot(removed)
+            size--
+        }
+        if (destination >= 0) values[destination] = value
+    }
 
     private fun deleteSlot(start: Int) {
         deleteLongKeySlot(keys, used, mask, start, { from, to -> values[to] = values[from] }, {})

@@ -7,32 +7,11 @@ import kotlin.random.Random
  * Backed by a list of present elements and a parallel index map keyed by element id.
  * Element ids must be in `0 until capacity`.
  */
-class IntSwapSet private constructor(private val elements: IntArrayList, private val position: IntArray) :
+class IntSwapSet internal constructor(private val elements: IntArrayList, private val position: IntArray) :
     MutableIntSet,
     IntIndexedCollection {
     /** Create an empty set for ids in `0 until capacity`. */
     constructor(capacity: Int) : this(IntArrayList(capacity.coerceAtLeast(8)), IntArray(capacity) { -1 })
-
-    /** Cooperative construction of a dense membership index. */
-    companion object {
-        /**
-         * Allocate an empty set, yielding null between allocation and initialization steps.
-         * Initialization visits at most [batch] positions per step; the final value is the set.
-         * [capacity] must be non-negative and [batch] positive.
-         */
-        fun preparation(capacity: Int, batch: Int): Sequence<IntSwapSet?> = sequence {
-            require(capacity >= 0 && batch > 0)
-            val elements = IntArrayList(capacity.coerceAtLeast(8))
-            yield(null)
-            val position = IntArray(capacity)
-            yield(null)
-            for (from in 0 until capacity step batch) {
-                position.fill(-1, from, minOf(from + batch, capacity))
-                yield(null)
-            }
-            yield(IntSwapSet(elements, position))
-        }
-    }
 
     override val size: Int get() = elements.size
 
@@ -55,7 +34,7 @@ class IntSwapSet private constructor(private val elements: IntArrayList, private
         val last = elements[elements.size - 1]
         elements[pos] = last
         position[last] = pos
-        elements.removeAt(elements.size - 1)
+        elements.removeAtSwap(elements.size - 1)
         position[value] = -1
         return true
     }

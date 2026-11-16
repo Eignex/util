@@ -1,4 +1,4 @@
-package com.eignex.util.platform
+package com.eignex.util.runtime
 
 import kotlin.experimental.ExperimentalNativeApi
 import kotlin.native.identityHashCode

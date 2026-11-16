@@ -1,6 +1,6 @@
 @file:Suppress("UndocumentedPublicFunction")
 
-package com.eignex.util.platform
+package com.eignex.util.runtime.diagnostics
 
 import java.lang.management.ManagementFactory
 import java.util.concurrent.atomic.AtomicBoolean

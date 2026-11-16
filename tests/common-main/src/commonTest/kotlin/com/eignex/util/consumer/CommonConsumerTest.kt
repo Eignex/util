@@ -8,6 +8,13 @@ import kotlin.test.assertTrue
 
 class CommonConsumerTest {
     @Test
+    fun `storage and cooperative extensions are usable across modules`() {
+        val consumer = CommonConsumer()
+        assertEquals(42, consumer.firstStoredKey())
+        assertEquals(44L, consumer.inspectStorage())
+    }
+
+    @Test
     fun `fixed and dynamic bitsets share contracts across modules`() {
         assertContentEquals(BooleanArray(130) { it == 129 }, CommonConsumer().dynamicHeader())
     }

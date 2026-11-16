@@ -19,11 +19,7 @@ class MutableIntObjectMap<V>(initialCapacity: Int = 8) : IntKeyed {
     private var used: BooleanArray
     private var mask: Int
 
-    /** Bytes in the key and occupancy arrays, excluding object headers. */
-    val primitiveCapacityBytes: Long get() = keys.size.toLong() * 5L
-
-    /** Number of slots in the value array, including unused slots. */
-    val referenceCapacity: Int get() = values.size
+    internal val primitiveCapacityBytesInternal: Long get() = keys.size.toLong() * 5L
 
     override var size: Int = 0
         private set
@@ -91,31 +87,6 @@ class MutableIntObjectMap<V>(initialCapacity: Int = 8) : IntKeyed {
     /** Whether there are no live elements. */
     fun isEmpty(): Boolean = size == 0
 
-    /**
-     * Remove every entry whose key exceeds [threshold]. Keys are collected before any removal, since
-     * backward-shift deletion moves entries that an in-place iteration would then skip.
-     */
-    fun removeKeysAbove(threshold: Int) {
-        val doomed = IntArrayList()
-        forEach { key, _ -> if (key > threshold) doomed.add(key) }
-        doomed.forEach { remove(it) }
-    }
-
-    /** Value stored under the greatest key, or null when the map is empty. */
-    fun valueAtMaxKey(): V? {
-        var bestKey = Int.MIN_VALUE
-        var best: V? = null
-        var found = false
-        forEach { key, value ->
-            if (!found || key >= bestKey) {
-                found = true
-                bestKey = key
-                best = value
-            }
-        }
-        return best
-    }
-
     /** Remove all live elements while retaining the allocated storage. */
     fun clear() {
         if (size == 0) return
@@ -136,15 +107,6 @@ class MutableIntObjectMap<V>(initialCapacity: Int = 8) : IntKeyed {
     override fun forEachKey(action: IntConsumer) = forEachIntKey(keys, used, action)
 
     override fun keysToIntArray(): IntArray = intKeysToArray(keys, used, size)
-
-    /** Identity of the current value array for ownership accounting; growth replaces it. */
-    val valueStorageIdentity: Any get() = values
-
-    /** Visit every value slot, including nulls in unused slots. Mutation is unsupported. */
-    @Suppress("UNCHECKED_CAST")
-    inline fun forEachValueSlot(action: (V?) -> Unit) {
-        for (value in valuesInternal) action(value as V?)
-    }
 
     @PublishedApi internal val keysInternal: IntArray get() = keys
 

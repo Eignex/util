@@ -1,5 +1,16 @@
 package com.eignex.util.collections.internals
 
+internal fun getPackedBit(words: LongArray, bit: Int): Boolean = ((words[bit ushr 6] ushr (bit and 63)) and 1L) != 0L
+
+internal fun setPackedBit(words: LongArray, bit: Int) {
+    words[bit ushr 6] = words[bit ushr 6] or (1L shl (bit and 63))
+}
+
+internal fun clearPackedBit(words: LongArray, bit: Int) {
+    val word = bit ushr 6
+    words[word] = words[word] and (1L shl (bit and 63)).inv()
+}
+
 internal fun bitWordCount(size: Int): Int {
     require(size >= 0) { "Bit size must be non-negative" }
     return (size ushr 6) + if (size and 63 == 0) 0 else 1

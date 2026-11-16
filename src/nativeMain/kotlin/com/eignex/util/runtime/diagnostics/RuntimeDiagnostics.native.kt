@@ -1,4 +1,4 @@
-package com.eignex.util.platform
+package com.eignex.util.runtime.diagnostics
 
 /** Native runtimes have no comparable heap accounting; sampling is unavailable. */
 actual fun startHeapPeakSampler() = Unit

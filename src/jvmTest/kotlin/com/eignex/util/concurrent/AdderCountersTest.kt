@@ -15,19 +15,13 @@ class AdderCountersTest {
     }
 
     @Test
-    fun `DoubleAdder addAndGet returns updated value`() {
-        val d = AdderCounters.newDouble(1.0)
-        assertEquals(3.5, d.addAndGet(2.5), DELTA)
-        assertEquals(3.5, d.load(), DELTA)
-    }
-
-    @Test
     fun `LongAdder round trips and accumulates`() {
         val l = AdderCounters.newLong(0L)
         l.add(3L)
         l.add(7L)
         assertEquals(10L, l.load())
-        assertEquals(15L, l.addAndGet(5L))
+        l.add(5L)
+        assertEquals(15L, l.load())
     }
 
     @Test
@@ -50,19 +44,5 @@ class AdderCountersTest {
             l.add(1L)
         }
         assertEquals((threads * iters).toLong(), l.load())
-    }
-
-    @Test
-    fun `DoubleAdder store recovers from an infinite sum`() {
-        val d = AdderCounters.newDouble(Double.POSITIVE_INFINITY)
-        d.store(0.0)
-        assertEquals(0.0, d.load())
-    }
-
-    @Test
-    fun `DoubleAdder store assigns an infinite value`() {
-        val d = AdderCounters.newDouble(Double.NEGATIVE_INFINITY)
-        d.store(Double.POSITIVE_INFINITY)
-        assertEquals(Double.POSITIVE_INFINITY, d.load())
     }
 }

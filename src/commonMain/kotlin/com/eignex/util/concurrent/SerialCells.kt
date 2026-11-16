@@ -55,7 +55,7 @@ internal class SerialDouble(var ref: Double) : DoubleCell {
     }
 
     override fun addAndGet(delta: Double): Double {
-        ref += delta
+        add(delta)
         return ref
     }
 

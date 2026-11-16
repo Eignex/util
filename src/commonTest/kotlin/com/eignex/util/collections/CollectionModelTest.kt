@@ -236,8 +236,8 @@ class CollectionModelTest {
                         val index = random.nextInt(expected.size)
                         expected[index] = expected.last()
                         expected.removeAt(expected.lastIndex)
-                        ints.removeAt(index)
-                        longs.removeAt(index)
+                        ints.removeAtSwap(index)
+                        longs.removeAtSwap(index)
                     }
 
                     4 -> {

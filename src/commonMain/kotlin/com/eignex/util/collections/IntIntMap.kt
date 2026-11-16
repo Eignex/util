@@ -1,9 +1,9 @@
 package com.eignex.util.collections
 
-import com.eignex.util.collections.internals.EmptyBooleanArray
-import com.eignex.util.collections.internals.EmptyIntArray
-import com.eignex.util.collections.internals.mixIntKey
+import com.eignex.util.arrays.emptyBooleanArray
+import com.eignex.util.arrays.emptyIntArray
 import com.eignex.util.collections.internals.openAddressingCapacity
+import com.eignex.util.hash.fibonacciHash
 
 /**
  * Read-only primitive Int-to-Int map. [build] selects a dense offset array or sparse
@@ -35,7 +35,7 @@ class IntIntMap private constructor(
             return index >= 0L && index < present.size && present[index.toInt()]
         }
         val mask = keys.size - 1
-        var index = mixIntKey(key) and mask
+        var index = fibonacciHash(key) and mask
         while (present[index]) {
             if (keys[index] == key) return true
             index = (index + 1) and mask
@@ -49,7 +49,7 @@ class IntIntMap private constructor(
             return if (index >= 0L && index < values.size && present[index.toInt()]) values[index.toInt()] else default
         }
         val mask = keys.size - 1
-        var index = mixIntKey(key) and mask
+        var index = fibonacciHash(key) and mask
         while (present[index]) {
             if (keys[index] == key) return values[index]
             index = (index + 1) and mask
@@ -65,7 +65,7 @@ class IntIntMap private constructor(
          */
         fun build(keys: IntArray, values: IntArray, absent: Int = 0, denseThreshold: Int = 4): IntIntMap {
             require(keys.size == values.size) { "keys/values length mismatch" }
-            if (keys.isEmpty()) return IntIntMap(0, EmptyIntArray, EmptyIntArray, EmptyBooleanArray, absent, 0)
+            if (keys.isEmpty()) return IntIntMap(0, emptyIntArray(), emptyIntArray(), emptyBooleanArray(), absent, 0)
             var lo = keys[0]
             var hi = keys[0]
             for (k in keys) {
@@ -84,7 +84,7 @@ class IntIntMap private constructor(
                     if (present[index]) size--
                     present[index] = true
                 }
-                IntIntMap(lo, EmptyIntArray, arr, present, absent, size)
+                IntIntMap(lo, emptyIntArray(), arr, present, absent, size)
             } else {
                 buildSparse(keys, values, absent)
             }
@@ -98,7 +98,7 @@ class IntIntMap private constructor(
             val mask = capacity - 1
             var size = keys.size
             for (i in keys.indices) {
-                var index = mixIntKey(keys[i]) and mask
+                var index = fibonacciHash(keys[i]) and mask
                 while (present[index]) {
                     if (storedKeys[index] == keys[i]) {
                         size--

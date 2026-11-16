@@ -4,6 +4,7 @@ package com.eignex.util.io
  * A forward-only buffered character reader over a [CharSource].
  * [peek] supports lookahead without advancing the cursor; [advance] consumes a character.
  * Chunks are pulled on demand and consumed prefixes are discarded to bound the live buffer.
+ * This reader borrows [source]; the caller remains responsible for closing it.
  */
 class CharReader(private val source: CharSource) {
     private val buf = StringBuilder()

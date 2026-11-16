@@ -3,11 +3,20 @@ package com.eignex.util.consumer
 import com.eignex.util.collections.BitSet
 import com.eignex.util.collections.Bits
 import com.eignex.util.collections.DynamicBits
+import com.eignex.util.collections.IntArrayList
+import com.eignex.util.collections.IntHashSet
 import com.eignex.util.collections.IntIndexedCollection
 import com.eignex.util.collections.IntIntLookup
 import com.eignex.util.collections.IntIntMap
 import com.eignex.util.collections.MutableIntIntMap
+import com.eignex.util.collections.MutableIntObjectMap
+import com.eignex.util.collections.cooperative.prepareIntSwapSet
 import com.eignex.util.collections.sortedKeys
+import com.eignex.util.collections.storage.borrowBackingArray
+import com.eignex.util.collections.storage.forEachSlot
+import com.eignex.util.collections.storage.forEachValueSlot
+import com.eignex.util.collections.storage.primitiveCapacityBytes
+import com.eignex.util.collections.storage.referenceCapacity
 import com.eignex.util.collections.toSortedIntArray
 import com.eignex.util.concurrent.AdderCounters
 import com.eignex.util.concurrent.AtomicCells
@@ -21,20 +30,39 @@ import com.eignex.util.io.openTextFile
 import com.eignex.util.io.readText
 import com.eignex.util.io.useSource
 import com.eignex.util.numbers.*
-import com.eignex.util.platform.HeapSample
-import com.eignex.util.platform.compilationTimeMillis
-import com.eignex.util.platform.identityHash
-import com.eignex.util.platform.sampleHeap
-import com.eignex.util.platform.startHeapPeakSampler
 import com.eignex.util.process.exitProcess
 import com.eignex.util.process.flushStandardOutput
 import com.eignex.util.process.printErrorLine
 import com.eignex.util.process.processProperty
+import com.eignex.util.runtime.diagnostics.HeapSample
+import com.eignex.util.runtime.diagnostics.compilationTimeMillis
+import com.eignex.util.runtime.diagnostics.sampleHeap
+import com.eignex.util.runtime.diagnostics.startHeapPeakSampler
+import com.eignex.util.runtime.identityHash
 
 internal class CommonConsumer {
     private val lock = Mutex()
     private val counter = AdderCounters.newLong()
     private val first = AtomicCells.newReference<Any?>(null)
+
+    fun firstStoredKey(): Int {
+        val set = IntHashSet().apply { add(42) }
+        set.forEachSlot { occupied, key -> if (occupied) return key }
+        return -1
+    }
+
+    fun inspectStorage(): Long {
+        val list = IntArrayList(1).apply { add(3) }
+        list.borrowBackingArray()[0] = 9
+        check(list[0] == 9)
+        val map = MutableIntObjectMap<Any?>(0).apply { put(1, null) }
+        var slots = 0
+        map.forEachValueSlot { slots++ }
+        check(slots == map.referenceCapacity)
+        val prepared = checkNotNull(prepareIntSwapSet(4, 2).last())
+        check(prepared.add(3))
+        return list.primitiveCapacityBytes + map.primitiveCapacityBytes
+    }
 
     fun sortedElements(): IntArray {
         val values = intArrayOf(3, 1, 3)

@@ -1,8 +1,11 @@
 package com.eignex.util.collections
 
 import com.eignex.util.collections.internals.bitWordCount
+import com.eignex.util.collections.internals.clearPackedBit
 import com.eignex.util.collections.internals.fillBitRange
 import com.eignex.util.collections.internals.forEachSetBit
+import com.eignex.util.collections.internals.getPackedBit
+import com.eignex.util.collections.internals.setPackedBit
 
 /**
  * Growable packed bits, initially empty with storage for [initialCapacity] bits.
@@ -19,26 +22,26 @@ class DynamicBits(initialCapacity: Int = 0) : BitSet {
 
     override operator fun get(i: Int): Boolean {
         if (i !in 0 until size) throw IndexOutOfBoundsException("Bit index $i outside 0 until $size")
-        return Bits.has(words, i)
+        return getPackedBit(words, i)
     }
 
     override fun set(i: Int) {
         require(i >= 0 && i < Int.MAX_VALUE) { "Bit index must be in 0 until Int.MAX_VALUE" }
         if (i >= size) resize(i + 1)
-        Bits.set(words, i)
+        setPackedBit(words, i)
     }
 
     /** Assign [value], extending [size] through [i] even when [value] is false. */
     override operator fun set(i: Int, value: Boolean) {
         require(i >= 0 && i < Int.MAX_VALUE) { "Bit index must be in 0 until Int.MAX_VALUE" }
         if (i >= size) resize(i + 1)
-        if (value) Bits.set(words, i) else Bits.clear(words, i)
+        if (value) setPackedBit(words, i) else clearPackedBit(words, i)
     }
 
     /** Clear a non-negative [i]; indices beyond [size] have no effect and do not grow storage. */
     override fun clear(i: Int) {
         require(i >= 0) { "Bit index must be non-negative" }
-        if (i < size) Bits.clear(words, i)
+        if (i < size) clearPackedBit(words, i)
     }
 
     override fun clear() {
@@ -62,7 +65,7 @@ class DynamicBits(initialCapacity: Int = 0) : BitSet {
     /** Append [value]. */
     fun add(value: Boolean) {
         val index = reserve(1)
-        if (value) Bits.set(words, index)
+        if (value) setPackedBit(words, index)
     }
 
     /** Append [count] false bits and return their first index; zero leaves [size] unchanged. */

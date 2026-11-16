@@ -1,6 +1,6 @@
 @file:Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction", "FunctionNaming")
 
-package com.eignex.util.platform
+package com.eignex.util.runtime
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

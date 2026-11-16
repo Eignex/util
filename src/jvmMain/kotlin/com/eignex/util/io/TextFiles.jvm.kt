@@ -33,8 +33,7 @@ private class ReaderCharSource(
     private val reader: Reader,
     private val onEof: () -> Unit = {},
     private val onClose: () -> Unit = {},
-) : CharSource,
-    AutoCloseable {
+) : CharSource {
     private val buffer = CharArray(64 * 1024)
     private var done = false
 
