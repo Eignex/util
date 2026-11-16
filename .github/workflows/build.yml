@@ -70,21 +70,21 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.konan
-          key: ${{ runner.os }}-${{ runner.arch }}-konan-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('*.gradle.kts', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-konan-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-${{ runner.arch }}-konan-
       - name: Cache encrypted configuration state
         if: env.HAS_CONFIGURATION_CACHE == 'true'
         uses: actions/cache@v6
         with:
           path: .gradle/configuration-cache
-          key: ${{ runner.os }}-${{ runner.arch }}-configuration-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('*.gradle.kts', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-${{ runner.arch }}-configuration-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('*.gradle.kts', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-
+          key: ${{ runner.os }}-${{ runner.arch }}-configuration-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-configuration-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-
       - name: Build and test
         run: |
           case "$RUNNER_OS" in
-            Linux) tasks=(check lintDocs koverXmlReport) ;;
-            macOS) tasks=(macosArm64Test) ;;
-            Windows) tasks=(mingwX64Test) ;;
+            Linux) tasks=(check lintDocs :util:koverXmlReport) ;;
+            macOS) tasks=(:util:macosArm64Test :common-main-consumer:macosArm64Test) ;;
+            Windows) tasks=(:util:mingwX64Test) ;;
           esac
           args=(-PciVersion="$CI_VERSION")
           if [[ "$FULL_TARGETS" == true ]]; then args+=(-Ptargets.full); fi
@@ -104,7 +104,7 @@ jobs:
           device=$(xcrun simctl list devices available --json | jq -er '
             [.devices | to_entries[] | select(.key | contains(".iOS-")) | .value[] |
              select(.name | startswith("iPhone")) | .udid][0] // error("No iPhone simulator available")')
-          ./gradlew iosSimulatorArm64Test -Ptargets.full -PciVersion="$CI_VERSION" \
+          ./gradlew :util:iosSimulatorArm64Test -Ptargets.full -PciVersion="$CI_VERSION" \
             --max-workers=2 -Pkotlin.native.parallelThreads=2 -PiosSimulatorDevice="$device"
       - name: Require committed JavaScript and Wasm lockfiles
         if: runner.os == 'Linux' && inputs.fullTargets
@@ -119,10 +119,8 @@ jobs:
         with:
           name: test-reports-${{ runner.os }}
           path: |
-            build/reports/tests/
-            build/test-results/
-            util-bench/build/reports/tests/
-            util-bench/build/test-results/
+            **/build/reports/tests/
+            **/build/test-results/
             util-bench/build/smoke/
           if-no-files-found: ignore
       - name: Upload coverage
@@ -130,5 +128,5 @@ jobs:
         uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/reports/kover/report.xml
+          files: util/build/reports/kover/report.xml
           fail_ci_if_error: false

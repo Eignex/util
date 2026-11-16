@@ -3,8 +3,8 @@
 Standalone JMH harness for the JVM primitive collections. It is separate from the
 library build and publication.
 
-Build the revisions to compare with `./gradlew :jvmJar -PciVersion=0.0.0-ci`, saving
-each `build/libs/util-jvm-0.0.0-ci.jar` outside its checkout.
+Build the revisions to compare with `./gradlew :util:jvmJar -PciVersion=0.0.0-ci`, saving
+each `util/build/libs/util-jvm-0.0.0-ci.jar` outside its checkout.
 
 Run a complete comparison on Java 17:
 

@@ -2,15 +2,6 @@ plugins {
     id("com.eignex.kmp")
 }
 
-repositories {
-    ivy {
-        url = uri("https://github.com/Eignex/kbuild/releases/download")
-        patternLayout { artifact("v[revision]/[artifact]-[revision](-[classifier]).[ext]") }
-        metadataSources { gradleMetadata() }
-        content { includeModule("com.eignex", "kbuild-platform") }
-    }
-}
-
 description = "Cross-module contracts for consumers with commonMain production sources."
 
 eignexPublish {
@@ -29,7 +20,7 @@ kotlin {
         macosArm64()
     }
     sourceSets.commonMain.dependencies {
-        implementation(project(":"))
+        implementation(project(":util"))
     }
 }
 
