@@ -718,6 +718,7 @@ final fun (com.eignex.util.concurrent/LongCounter).com.eignex.util.concurrent/ge
 final fun (com.eignex.util.io/CharSource).com.eignex.util.io/lineSequence(): kotlin.sequences/Sequence<kotlin/String> // com.eignex.util.io/lineSequence|lineSequence@com.eignex.util.io.CharSource(){}[0]
 final fun (com.eignex.util.io/CharSource).com.eignex.util.io/readText(): kotlin/String // com.eignex.util.io/readText|readText@com.eignex.util.io.CharSource(){}[0]
 final fun (kotlin/IntArray).com.eignex.util.arrays/binarySearchInt(kotlin/Int, kotlin/Int = ..., kotlin/Int = ...): kotlin/Int // com.eignex.util.arrays/binarySearchInt|binarySearchInt@kotlin.IntArray(kotlin.Int;kotlin.Int;kotlin.Int){}[0]
+final fun (kotlin/IntArray).com.eignex.util.arrays/lowerBoundInt(kotlin/Int, kotlin/Int = ..., kotlin/Int = ...): kotlin/Int // com.eignex.util.arrays/lowerBoundInt|lowerBoundInt@kotlin.IntArray(kotlin.Int;kotlin.Int;kotlin.Int){}[0]
 final fun (kotlin/LongArray).com.eignex.util.arrays/binarySearchLong(kotlin/Long, kotlin/Int = ..., kotlin/Int = ...): kotlin/Int // com.eignex.util.arrays/binarySearchLong|binarySearchLong@kotlin.LongArray(kotlin.Long;kotlin.Int;kotlin.Int){}[0]
 final fun com.eignex.util.arrays/emptyBooleanArray(): kotlin/BooleanArray // com.eignex.util.arrays/emptyBooleanArray|emptyBooleanArray(){}[0]
 final fun com.eignex.util.arrays/emptyDoubleArray(): kotlin/DoubleArray // com.eignex.util.arrays/emptyDoubleArray|emptyDoubleArray(){}[0]
