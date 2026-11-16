@@ -16,6 +16,7 @@ parser.add_argument("--classpath", type=Path, required=True)
 parser.add_argument("--java", required=True)
 parser.add_argument("--output", type=Path, required=True)
 parser.add_argument("--repetitions", type=int, default=2)
+parser.add_argument("--suite", choices=["collections", "deque-disjoint"], default="collections")
 args = parser.parse_args()
 if args.repetitions < 1:
     parser.error("--repetitions must be positive")
@@ -26,23 +27,37 @@ if not any(entry in jars.values() for entry in classpath):
     parser.error("classpath must contain the supplied baseline or candidate JAR")
 classpath = [entry for entry in classpath if entry not in jars.values()]
 args.output.mkdir(parents=True, exist_ok=True)
-cases = [
+collection_cases = [
     "intGrowth", "intInsert", "intLookup", "intRemoveRestore", "intSetContains",
     "longGrowth", "longInsert", "longLookup", "longRemoveRestore", "longSetContains",
     "objectRemoveRestore",
 ]
+cases = [(case, f"CollectionsBench.{case}$", []) for case in collection_cases]
+extra_controls = []
+if args.suite == "deque-disjoint":
+    cases = []
+    for size in (1024, 65536):
+        for group_size in (1, 32, 65536):
+            cases.append((f"groups-{size}-{group_size}", "DequeDisjointBench.groups$",
+                          ["-p", f"size={size}", "-p", f"groupSize={group_size}"]))
+        for position in ("front", "middle", "back"):
+            cases.append((f"remove-{size}-{position}", "DequeDisjointBench.removeAt$",
+                          ["-p", f"size={size}", "-p", f"position={position}"]))
+        cases.append((f"grow-{size}", "DequeDisjointBench.grow$", ["-p", f"size={size}"]))
+    extra_controls = ["-jvmArgs", "-Xms512m -Xmx512m -XX:+UseSerialGC", "-prof", "gc"]
 order = []
 for repetition in range(args.repetitions):
     results = {"baseline": [], "candidate": []}
-    for index, case in enumerate(cases):
+    for index, (case, benchmark, parameters) in enumerate(cases):
         arms = ["baseline", "candidate"] if (index + repetition) % 2 == 0 else ["candidate", "baseline"]
         for arm in arms:
             result = args.output / f"case-{repetition + 1}-{case}-{arm}.json"
             fork_classpath = os.pathsep.join(str(entry) for entry in [*classpath, jars[arm]])
             command = [
-                args.java, "-cp", fork_classpath, "org.openjdk.jmh.Main", f"CollectionsBench.{case}$",
+                args.java, "-cp", fork_classpath, "org.openjdk.jmh.Main", benchmark,
                 "-f", "1", "-wi", "3", "-w", "300ms", "-i", "5", "-r", "300ms",
                 "-rf", "json", "-rff", str(result),
+                *parameters, *extra_controls,
             ]
             started = time.time()
             with (args.output / "jmh.log").open("a") as log:

@@ -1,6 +1,6 @@
 # Collection benchmarks
 
-Standalone JMH harness for the JVM primitive maps and sets. It is separate from the
+Standalone JMH harness for the JVM primitive collections. It is separate from the
 library build and publication.
 
 Build the revisions to compare with `./gradlew :jvmJar -PciVersion=0.0.0-ci`, saving
@@ -44,3 +44,28 @@ per key processed. This is a cache-resident workload on one JVM and host.
 The retained comparison is in `results/2026-11-05/`. Its environment file records
 the artifact hashes and protocol. CPU contention varied during measurement; the raw
 samples and agreement between repetitions are needed to assess the results.
+
+## Deque and disjoint-set comparison
+
+The focused suite measures grouping, indexed removal and wrapped growth at sizes
+1,024 and 65,536. Build and save both library JARs as above, then compile the harness
+against either supplied JAR and run:
+
+```sh
+python3 benchmarks/collections/run-paired.py --suite deque-disjoint \
+  --baseline /absolute/path/baseline.jar \
+  --candidate /absolute/path/candidate.jar \
+  --classpath benchmarks/collections/build/benchmark-classpath.txt \
+  --java /absolute/path/to/java17/bin/java \
+  --output /tmp/util-deque-disjoint-comparison
+```
+
+This suite uses the same alternating paired protocol with a fixed 512 MiB heap,
+Serial GC and JMH's GC profiler. Scores are per invocation. Grouping returns a
+complete partition snapshot from compressed paths. Removal includes appending
+the removed value. Growth includes allocating, filling and wrapping a deque,
+then growing its full buffer once. Fixture checks run outside measurement.
+
+The [2026-11-16 report](results/2026-11-16-deque-disjoint/README.md) includes
+per-repetition results, allocation measurements, caveats and raw captures. The
+default suite and its earlier retained comparison remain unchanged.

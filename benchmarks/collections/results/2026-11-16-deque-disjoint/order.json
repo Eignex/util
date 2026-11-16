@@ -1,0 +1,338 @@
+[
+  {
+    "repetition": 1,
+    "case": "groups-1024-1",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:11:10Z"
+  },
+  {
+    "repetition": 1,
+    "case": "groups-1024-1",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:11:12Z"
+  },
+  {
+    "repetition": 1,
+    "case": "groups-1024-32",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:11:15Z"
+  },
+  {
+    "repetition": 1,
+    "case": "groups-1024-32",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:11:18Z"
+  },
+  {
+    "repetition": 1,
+    "case": "groups-1024-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:11:21Z"
+  },
+  {
+    "repetition": 1,
+    "case": "groups-1024-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:11:24Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-1024-front",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:11:27Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-1024-front",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:11:30Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-1024-middle",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:11:32Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-1024-middle",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:11:35Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-1024-back",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:11:38Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-1024-back",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:11:41Z"
+  },
+  {
+    "repetition": 1,
+    "case": "grow-1024",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:11:44Z"
+  },
+  {
+    "repetition": 1,
+    "case": "grow-1024",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:11:47Z"
+  },
+  {
+    "repetition": 1,
+    "case": "groups-65536-1",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:11:50Z"
+  },
+  {
+    "repetition": 1,
+    "case": "groups-65536-1",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:11:52Z"
+  },
+  {
+    "repetition": 1,
+    "case": "groups-65536-32",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:11:55Z"
+  },
+  {
+    "repetition": 1,
+    "case": "groups-65536-32",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:11:58Z"
+  },
+  {
+    "repetition": 1,
+    "case": "groups-65536-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:12:01Z"
+  },
+  {
+    "repetition": 1,
+    "case": "groups-65536-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:12:04Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-65536-front",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:12:07Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-65536-front",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:12:10Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-65536-middle",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:12:13Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-65536-middle",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:12:15Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-65536-back",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:12:18Z"
+  },
+  {
+    "repetition": 1,
+    "case": "remove-65536-back",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:12:21Z"
+  },
+  {
+    "repetition": 1,
+    "case": "grow-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:12:24Z"
+  },
+  {
+    "repetition": 1,
+    "case": "grow-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:12:27Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-1024-1",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:12:30Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-1024-1",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:12:33Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-1024-32",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:12:36Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-1024-32",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:12:40Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-1024-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:12:43Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-1024-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:12:46Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-1024-front",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:12:49Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-1024-front",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:12:52Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-1024-middle",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:12:56Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-1024-middle",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:13:00Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-1024-back",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:13:03Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-1024-back",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:13:07Z"
+  },
+  {
+    "repetition": 2,
+    "case": "grow-1024",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:13:10Z"
+  },
+  {
+    "repetition": 2,
+    "case": "grow-1024",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:13:14Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-65536-1",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:13:17Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-65536-1",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:13:20Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-65536-32",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:13:23Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-65536-32",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:13:26Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-65536-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:13:29Z"
+  },
+  {
+    "repetition": 2,
+    "case": "groups-65536-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:13:32Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-65536-front",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:13:34Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-65536-front",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:13:38Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-65536-middle",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:13:40Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-65536-middle",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:13:43Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-65536-back",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:13:46Z"
+  },
+  {
+    "repetition": 2,
+    "case": "remove-65536-back",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:13:49Z"
+  },
+  {
+    "repetition": 2,
+    "case": "grow-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:13:52Z"
+  },
+  {
+    "repetition": 2,
+    "case": "grow-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:13:55Z"
+  }
+]

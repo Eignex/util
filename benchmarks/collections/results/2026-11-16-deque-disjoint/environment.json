@@ -1,0 +1,37 @@
+{
+  "baselineRevision": "93a62baf78510ade006a83b6c7c03b593cca35f6",
+  "baselineState": "Clean tracked source exported from HEAD; original checkout edits excluded",
+  "candidateState": "Same revision with only IntArrayDeque and IntDisjointSet performance edits",
+  "baselineJarSha256": "9d99254f40a1a9d83d9e0d38008e3108a3da2910ca2eb1be521965804bcce9c7",
+  "candidateJarSha256": "e0c8c8a48f89e032c4b2f3ff4c103c34e03e4efe7709edc79a270e7c58f9c2b1",
+  "benchmarkSourceSha256": "716dba721c29087bc71b6692a8c032ed539cab46c6dcdca832b7cadafa5abfe2",
+  "runnerSha256": "f3b0f0c8a0cac24ab5faf1cc223401e22c39c3979fe800520ca81bd30b7cbb3e",
+  "java": "openjdk version \"17.0.20.1\" 2026-08-18\nOpenJDK Runtime Environment Temurin-17.0.20.1+1 (build 17.0.20.1+1)\nOpenJDK 64-Bit Server VM Temurin-17.0.20.1+1 (build 17.0.20.1+1, mixed mode, sharing)",
+  "cpu": "12th Gen Intel(R) Core(TM) i9-12900H",
+  "system": "Linux",
+  "architecture": "x86_64",
+  "repetitions": 2,
+  "forksPerArmAndRepetition": 1,
+  "warmupIterations": 3,
+  "measurementIterations": 5,
+  "iterationDuration": "300ms",
+  "jvmArgs": [
+    "-Xms512m",
+    "-Xmx512m",
+    "-XX:+UseSerialGC"
+  ],
+  "profiler": "gc",
+  "placement": "Same local machine; adjacent arms per workload/size/shape, reversed between repetitions",
+  "scope": "Local JVM microbenchmarks; shared host with varying CPU contention; no Native performance measurements",
+  "validation": {
+    "jvmTests": 319,
+    "linuxX64Tests": 294,
+    "failures": 0,
+    "lintDocs": "passed"
+  },
+  "changedJarEntries": [
+    "com/eignex/util/collections/IntArrayDeque$Companion.class",
+    "com/eignex/util/collections/IntArrayDeque.class",
+    "com/eignex/util/collections/IntDisjointSet.class"
+  ]
+}
