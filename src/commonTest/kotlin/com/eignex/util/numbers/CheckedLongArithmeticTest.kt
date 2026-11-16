@@ -12,42 +12,48 @@ class CheckedLongArithmeticTest {
 
     @Test
     fun `addition should return the exact result or null when out of range`() {
-        for (left in operands) for (right in operands) {
-            val exact = Int128()
-            exact.addProduct(left, 1L)
-            exact.addProduct(right, 1L)
-            val expected = if (exact.fitsLong()) exact.toLong() else null
+        for (left in operands) {
+            for (right in operands) {
+                val exact = Int128()
+                exact.addProduct(left, 1L)
+                exact.addProduct(right, 1L)
+                val expected = if (exact.fitsLong()) exact.toLong() else null
 
-            val actual = addExactOrNull(left, right)
+                val actual = addExactOrNull(left, right)
 
-            assertEquals(expected, actual, "$left + $right")
+                assertEquals(expected, actual, "$left + $right")
+            }
         }
     }
 
     @Test
     fun `subtraction should return the exact result or null when out of range`() {
-        for (left in operands) for (right in operands) {
-            val exact = Int128()
-            exact.addProduct(left, 1L)
-            exact.addProduct(right, -1L)
-            val expected = if (exact.fitsLong()) exact.toLong() else null
+        for (left in operands) {
+            for (right in operands) {
+                val exact = Int128()
+                exact.addProduct(left, 1L)
+                exact.addProduct(right, -1L)
+                val expected = if (exact.fitsLong()) exact.toLong() else null
 
-            val actual = subExactOrNull(left, right)
+                val actual = subExactOrNull(left, right)
 
-            assertEquals(expected, actual, "$left - $right")
+                assertEquals(expected, actual, "$left - $right")
+            }
         }
     }
 
     @Test
     fun `multiplication should return the exact result or null when out of range`() {
-        for (left in operands) for (right in operands) {
-            val exact = Int128()
-            exact.addProduct(left, right)
-            val expected = if (exact.fitsLong()) exact.toLong() else null
+        for (left in operands) {
+            for (right in operands) {
+                val exact = Int128()
+                exact.addProduct(left, right)
+                val expected = if (exact.fitsLong()) exact.toLong() else null
 
-            val actual = mulExactOrNull(left, right)
+                val actual = mulExactOrNull(left, right)
 
-            assertEquals(expected, actual, "$left * $right")
+                assertEquals(expected, actual, "$left * $right")
+            }
         }
     }
 }
