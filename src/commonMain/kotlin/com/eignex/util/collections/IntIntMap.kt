@@ -15,9 +15,8 @@ class IntIntMap private constructor(
     private val values: IntArray,
     private val present: BooleanArray,
     private val absent: Int,
+    override val size: Int,
 ) : IntIntLookup {
-    override val size: Int = present.count { it }
-
     override fun containsKey(key: Int): Boolean = contains(key)
 
     override fun forEachKey(action: IntConsumer) {
@@ -66,7 +65,7 @@ class IntIntMap private constructor(
          */
         fun build(keys: IntArray, values: IntArray, absent: Int = 0, denseThreshold: Int = 4): IntIntMap {
             require(keys.size == values.size) { "keys/values length mismatch" }
-            if (keys.isEmpty()) return IntIntMap(0, EmptyIntArray, EmptyIntArray, EmptyBooleanArray, absent)
+            if (keys.isEmpty()) return IntIntMap(0, EmptyIntArray, EmptyIntArray, EmptyBooleanArray, absent, 0)
             var lo = keys[0]
             var hi = keys[0]
             for (k in keys) {
@@ -76,14 +75,16 @@ class IntIntMap private constructor(
             // Widen before subtracting to avoid Int overflow across the full key range.
             val range = hi.toLong() - lo.toLong() + 1
             return if (range <= Int.MAX_VALUE && range <= denseThreshold.toLong() * keys.size) {
-                val arr = IntArray(range.toInt()) { absent }
+                val arr = IntArray(range.toInt())
                 val present = BooleanArray(arr.size)
+                var size = keys.size
                 for (i in keys.indices) {
                     val index = keys[i] - lo
                     arr[index] = values[i]
+                    if (present[index]) size--
                     present[index] = true
                 }
-                IntIntMap(lo, EmptyIntArray, arr, present, absent)
+                IntIntMap(lo, EmptyIntArray, arr, present, absent, size)
             } else {
                 buildSparse(keys, values, absent)
             }
@@ -95,17 +96,21 @@ class IntIntMap private constructor(
             val storedValues = IntArray(capacity)
             val present = BooleanArray(capacity)
             val mask = capacity - 1
+            var size = keys.size
             for (i in keys.indices) {
                 var index = mixIntKey(keys[i]) and mask
                 while (present[index]) {
-                    if (storedKeys[index] == keys[i]) break
+                    if (storedKeys[index] == keys[i]) {
+                        size--
+                        break
+                    }
                     index = (index + 1) and mask
                 }
                 storedKeys[index] = keys[i]
                 storedValues[index] = values[i]
                 present[index] = true
             }
-            return IntIntMap(0, storedKeys, storedValues, present, absent)
+            return IntIntMap(0, storedKeys, storedValues, present, absent, size)
         }
     }
 }

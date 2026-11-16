@@ -1,5 +1,7 @@
 plugins { java }
 java { toolchain.languageVersion.set(JavaLanguageVersion.of(17)) }
+// Reuse the maintained collection fixtures and their reference checks.
+sourceSets.main { java.srcDir("../../util-bench/src/main/java") }
 repositories { mavenCentral() }
 dependencies {
     implementation(files(providers.gradleProperty("utilJar").get()))
@@ -12,7 +14,7 @@ tasks.register<JavaExec>("benchmark") {
     classpath = sourceSets.main.get().runtimeClasspath
     javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(17)) })
     mainClass.set("org.openjdk.jmh.Main")
-    args("CollectionsBench", "-wi", "3", "-w", "500ms", "-i", "5", "-r", "500ms", "-f", "2",
+    args("^bench\\.CollectionsBench\\.", "-wi", "3", "-w", "500ms", "-i", "5", "-r", "500ms", "-f", "2",
         "-rf", "json", "-rff", providers.gradleProperty("result").get())
 }
 

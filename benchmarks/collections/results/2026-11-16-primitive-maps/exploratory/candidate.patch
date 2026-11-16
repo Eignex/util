@@ -1,0 +1,111 @@
+--- a/src/commonMain/kotlin/com/eignex/util/collections/IntIntMap.kt
++++ b/src/commonMain/kotlin/com/eignex/util/collections/IntIntMap.kt
+@@ -17,0 +18 @@
++    override val size: Int,
+@@ -19,2 +19,0 @@
+-    override val size: Int = present.count { it }
+-
+@@ -69 +68 @@
+-            if (keys.isEmpty()) return IntIntMap(0, EmptyIntArray, EmptyIntArray, EmptyBooleanArray, absent)
++            if (keys.isEmpty()) return IntIntMap(0, EmptyIntArray, EmptyIntArray, EmptyBooleanArray, absent, 0)
+@@ -79 +78 @@
+-                val arr = IntArray(range.toInt()) { absent }
++                val arr = IntArray(range.toInt())
+@@ -80,0 +80 @@
++                var size = 0
+@@ -84 +84,4 @@
+-                    present[index] = true
++                    if (!present[index]) {
++                        present[index] = true
++                        size++
++                    }
+@@ -86 +89 @@
+-                IntIntMap(lo, EmptyIntArray, arr, present, absent)
++                IntIntMap(lo, EmptyIntArray, arr, present, absent, size)
+@@ -97,0 +101 @@
++            var size = 0
+@@ -106 +110,4 @@
+-                present[index] = true
++                if (!present[index]) {
++                    present[index] = true
++                    size++
++                }
+@@ -108 +115 @@
+-            return IntIntMap(0, storedKeys, storedValues, present, absent)
++            return IntIntMap(0, storedKeys, storedValues, present, absent, size)
+--- a/src/commonMain/kotlin/com/eignex/util/collections/IntLongMap.kt
++++ b/src/commonMain/kotlin/com/eignex/util/collections/IntLongMap.kt
+@@ -43 +43 @@
+-                val arr = LongArray(range.toInt()) { absent }
++                val arr = LongArray(range.toInt())
+@@ -44,0 +45 @@
++                var size = 0
+@@ -48 +49,4 @@
+-                    present[index] = true
++                    if (!present[index]) {
++                        present[index] = true
++                        size++
++                    }
+@@ -50 +54 @@
+-                IntLongMap(ArrayBacking(lo, arr, present), absent)
++                IntLongMap(ArrayBacking(lo, arr, present, size), absent)
+@@ -71,2 +75,6 @@
+-    private class ArrayBacking(val minKey: Int, val values: LongArray, val present: BooleanArray) : Backing {
+-        override val size: Int = present.count { it }
++    private class ArrayBacking(
++        val minKey: Int,
++        val values: LongArray,
++        val present: BooleanArray,
++        override val size: Int,
++    ) : Backing {
+@@ -91,0 +100 @@
++        override val size: Int,
+@@ -93 +101,0 @@
+-        override val size: Int = present.count { it }
+@@ -124,0 +133 @@
++                var size = 0
+@@ -133 +142,4 @@
+-                    p[idx] = true
++                    if (!p[idx]) {
++                        p[idx] = true
++                        size++
++                    }
+@@ -135 +147 @@
+-                return HashBacking(k, v, p)
++                return HashBacking(k, v, p, size)
+--- a/src/commonMain/kotlin/com/eignex/util/collections/internals/IntKeyTable.kt
++++ b/src/commonMain/kotlin/com/eignex/util/collections/internals/IntKeyTable.kt
+@@ -38,2 +37,0 @@
+-    used[hole] = false
+-    clearValue(hole)
+@@ -43 +41,6 @@
+-        if (!used[cursor]) return
++        if (!used[cursor]) {
++            // All shifted slots remain occupied; only the final hole becomes empty.
++            used[hole] = false
++            clearValue(hole)
++            return
++        }
+@@ -48 +50,0 @@
+-        used[hole] = true
+@@ -50,2 +51,0 @@
+-        used[hole] = false
+-        clearValue(hole)
+--- a/src/commonMain/kotlin/com/eignex/util/collections/internals/LongKeyTable.kt
++++ b/src/commonMain/kotlin/com/eignex/util/collections/internals/LongKeyTable.kt
+@@ -44,2 +43,0 @@
+-    used[hole] = false
+-    clearValue(hole)
+@@ -49 +47,6 @@
+-        if (!used[cursor]) return
++        if (!used[cursor]) {
++            // All shifted slots remain occupied; only the final hole becomes empty.
++            used[hole] = false
++            clearValue(hole)
++            return
++        }
+@@ -54 +56,0 @@
+-        used[hole] = true
+@@ -56,2 +57,0 @@
+-        used[hole] = false
+-        clearValue(hole)

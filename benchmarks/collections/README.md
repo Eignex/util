@@ -69,3 +69,35 @@ then growing its full buffer once. Fixture checks run outside measurement.
 The [2026-11-16 report](results/2026-11-16-deque-disjoint/README.md) includes
 per-repetition results, allocation measurements, caveats and raw captures. The
 default suite and its earlier retained comparison remain unchanged.
+
+## Primitive-map comparisons
+
+The `primitive-maps` suite reuses the maintained Java fixtures from `util-bench`
+without its SDK or adapter. It supports four immutable builds and eight mutable
+map/set remove-restore workloads, at sizes 1,024 and 65,536 with seed 42 by default.
+Build both library JARs as above, then compile this harness against either supplied
+JAR. Select the immutable builders with:
+
+```sh
+python3 benchmarks/collections/run-paired.py --suite primitive-maps \
+  --workloads int-int-dense.build,int-long-dense.build,int-int-sparse.build,int-long-sparse.build \
+  --baseline /absolute/path/baseline.jar \
+  --candidate /absolute/path/candidate.jar \
+  --classpath benchmarks/collections/build/benchmark-classpath.txt \
+  --java /absolute/path/to/java17/bin/java \
+  --output /tmp/util-primitive-map-comparison
+```
+
+Omit `--workloads` to run all 12 cases, or use `--sizes 65,1024,65536` to change the
+sizes. Both focused suites support `--sizes`; deque sizes must be powers of two so
+the growth fixture fills its ring. Names and sizes must be unique and valid.
+
+The paired controls match the deque suite: fixed 512 MiB heap, Serial GC, GC
+profiling, two reversed-order repetitions, one fork per arm, three 300 ms warmups
+and five 300 ms measurements. Scores are per complete batch, not per element.
+Build batches allocate and return a whole map; removal batches remove and restore
+every fixture key. Complete reference checks run outside timing.
+
+The [2026-11-16 primitive-map report](results/2026-11-16-primitive-maps/README.md)
+retains final build measurements, uncertainty, raw samples, and the separate
+exploratory comparison that led to reverting the deletion candidate.
