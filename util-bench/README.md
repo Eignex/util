@@ -105,6 +105,8 @@ Cases freeze all defaults, workload, size, seed and resources. The adapter uses 
 Serial GC and a fixed 512MiB heap, clears inherited JVM instrumentation for the child process,
 and retains the runtime and controls. Case resources reserve one CPU and 1GiB memory, allowing
 for the adapter, JMH coordinator and fork. The timeout includes startup and checking headroom.
+A lab worker runs several cases at once on separately reserved CPUs, so the coordinator sets
+`jmh.ignoreLock`; JMH's machine-wide lock would otherwise fail all but one concurrent case.
 Failed captures retain logs and partial files and exit unsuccessfully.
 
 ## Lab runs
