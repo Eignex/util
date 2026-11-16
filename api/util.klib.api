@@ -740,6 +740,10 @@ final fun com.eignex.util.hash/hash64(kotlin/String): kotlin/Long // com.eignex.
 final fun com.eignex.util.hash/splitmix64(kotlin/Long): kotlin/Long // com.eignex.util.hash/splitmix64|splitmix64(kotlin.Long){}[0]
 final fun com.eignex.util.numbers/addExact(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/addExact|addExact(kotlin.Long;kotlin.Long){}[0]
 final fun com.eignex.util.numbers/mulExact(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/mulExact|mulExact(kotlin.Long;kotlin.Long){}[0]
+final fun com.eignex.util.numbers/saturatedAdd(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/saturatedAdd|saturatedAdd(kotlin.Long;kotlin.Long){}[0]
+final fun com.eignex.util.numbers/saturatedDistance(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/saturatedDistance|saturatedDistance(kotlin.Long;kotlin.Long){}[0]
+final fun com.eignex.util.numbers/saturatedMul(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/saturatedMul|saturatedMul(kotlin.Long;kotlin.Long){}[0]
+final fun com.eignex.util.numbers/saturatedSub(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/saturatedSub|saturatedSub(kotlin.Long;kotlin.Long){}[0]
 final fun com.eignex.util.numbers/subExact(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/subExact|subExact(kotlin.Long;kotlin.Long){}[0]
 final inline fun <#A: kotlin/Any?> (com.eignex.util.concurrent/Mutex).com.eignex.util.concurrent/guarded(kotlin/Function0<#A>): #A // com.eignex.util.concurrent/guarded|guarded@com.eignex.util.concurrent.Mutex(kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
 final inline fun <#A: kotlin/Any?> (com.eignex.util.io/CharSource).com.eignex.util.io/useSource(kotlin/Function1<com.eignex.util.io/CharSource, #A>): #A // com.eignex.util.io/useSource|useSource@com.eignex.util.io.CharSource(kotlin.Function1<com.eignex.util.io.CharSource,0:0>){0§<kotlin.Any?>}[0]
@@ -747,6 +751,42 @@ final inline fun com.eignex.util.arrays/argsortBy(kotlin/Int, kotlin/Function2<k
 final inline fun com.eignex.util.arrays/argsortBy(kotlin/Int, kotlin/IntArray, kotlin/IntArray, kotlin/Function2<kotlin/Int, kotlin/Int, kotlin/Int>): kotlin/IntArray // com.eignex.util.arrays/argsortBy|argsortBy(kotlin.Int;kotlin.IntArray;kotlin.IntArray;kotlin.Function2<kotlin.Int,kotlin.Int,kotlin.Int>){}[0]
 final inline fun com.eignex.util.arrays/argsortByIntKey(kotlin/Int, kotlin/Function1<kotlin/Int, kotlin/Int>): kotlin/IntArray // com.eignex.util.arrays/argsortByIntKey|argsortByIntKey(kotlin.Int;kotlin.Function1<kotlin.Int,kotlin.Int>){}[0]
 final inline fun com.eignex.util.collections.internals/forEachSetBit(kotlin/LongArray, kotlin/Int, kotlin/Function1<kotlin/Int, kotlin/Unit>) // com.eignex.util.collections.internals/forEachSetBit|forEachSetBit(kotlin.LongArray;kotlin.Int;kotlin.Function1<kotlin.Int,kotlin.Unit>){}[0]
+
+// Targets: [native]
+final class com.eignex.util.numbers/BigFraction { // com.eignex.util.numbers/BigFraction|null[0]
+    final val den // com.eignex.util.numbers/BigFraction.den|{}den[0]
+        final fun <get-den>(): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/BigFraction.den.<get-den>|<get-den>(){}[0]
+    final val isZero // com.eignex.util.numbers/BigFraction.isZero|{}isZero[0]
+        final fun <get-isZero>(): kotlin/Boolean // com.eignex.util.numbers/BigFraction.isZero.<get-isZero>|<get-isZero>(){}[0]
+    final val num // com.eignex.util.numbers/BigFraction.num|{}num[0]
+        final fun <get-num>(): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/BigFraction.num.<get-num>|<get-num>(){}[0]
+
+    final fun ceilInteger(): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/BigFraction.ceilInteger|ceilInteger(){}[0]
+    final fun compareTo(com.eignex.util.numbers/BigFraction): kotlin/Int // com.eignex.util.numbers/BigFraction.compareTo|compareTo(com.eignex.util.numbers.BigFraction){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.eignex.util.numbers/BigFraction.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.eignex.util.numbers/BigFraction.hashCode|hashCode(){}[0]
+    final fun minus(com.eignex.util.numbers/BigFraction): com.eignex.util.numbers/BigFraction // com.eignex.util.numbers/BigFraction.minus|minus(com.eignex.util.numbers.BigFraction){}[0]
+    final fun negated(): com.eignex.util.numbers/BigFraction // com.eignex.util.numbers/BigFraction.negated|negated(){}[0]
+    final fun plus(com.eignex.util.numbers/BigFraction): com.eignex.util.numbers/BigFraction // com.eignex.util.numbers/BigFraction.plus|plus(com.eignex.util.numbers.BigFraction){}[0]
+    final fun reciprocal(): com.eignex.util.numbers/BigFraction // com.eignex.util.numbers/BigFraction.reciprocal|reciprocal(){}[0]
+    final fun signum(): kotlin/Int // com.eignex.util.numbers/BigFraction.signum|signum(){}[0]
+    final fun times(com.eignex.util.numbers/BigFraction): com.eignex.util.numbers/BigFraction // com.eignex.util.numbers/BigFraction.times|times(com.eignex.util.numbers.BigFraction){}[0]
+    final fun toDouble(): kotlin/Double // com.eignex.util.numbers/BigFraction.toDouble|toDouble(){}[0]
+    final fun toString(): kotlin/String // com.eignex.util.numbers/BigFraction.toString|toString(){}[0]
+
+    final object Companion { // com.eignex.util.numbers/BigFraction.Companion|null[0]
+        final val MINUS_ONE // com.eignex.util.numbers/BigFraction.Companion.MINUS_ONE|{}MINUS_ONE[0]
+            final fun <get-MINUS_ONE>(): com.eignex.util.numbers/BigFraction // com.eignex.util.numbers/BigFraction.Companion.MINUS_ONE.<get-MINUS_ONE>|<get-MINUS_ONE>(){}[0]
+        final val ONE // com.eignex.util.numbers/BigFraction.Companion.ONE|{}ONE[0]
+            final fun <get-ONE>(): com.eignex.util.numbers/BigFraction // com.eignex.util.numbers/BigFraction.Companion.ONE.<get-ONE>|<get-ONE>(){}[0]
+        final val ZERO // com.eignex.util.numbers/BigFraction.Companion.ZERO|{}ZERO[0]
+            final fun <get-ZERO>(): com.eignex.util.numbers/BigFraction // com.eignex.util.numbers/BigFraction.Companion.ZERO.<get-ZERO>|<get-ZERO>(){}[0]
+
+        final fun of(com.ionspin.kotlin.bignum.integer/BigInteger, com.ionspin.kotlin.bignum.integer/BigInteger): com.eignex.util.numbers/BigFraction // com.eignex.util.numbers/BigFraction.Companion.of|of(com.ionspin.kotlin.bignum.integer.BigInteger;com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+        final fun ofDouble(kotlin/Double): com.eignex.util.numbers/BigFraction? // com.eignex.util.numbers/BigFraction.Companion.ofDouble|ofDouble(kotlin.Double){}[0]
+        final fun ofLong(kotlin/Long): com.eignex.util.numbers/BigFraction // com.eignex.util.numbers/BigFraction.Companion.ofLong|ofLong(kotlin.Long){}[0]
+    }
+}
 
 // Targets: [native]
 final class com.eignex.util.platform/HeapSample { // com.eignex.util.platform/HeapSample|null[0]
@@ -786,7 +826,13 @@ final fun (com.ionspin.kotlin.bignum.integer/BigInteger).com.eignex.util.numbers
 final fun <#A: kotlin/Any?> com.eignex.util.concurrent/parallelRun(kotlin.collections/List<kotlin/Function0<#A>>): kotlin.collections/List<#A> // com.eignex.util.concurrent/parallelRun|parallelRun(kotlin.collections.List<kotlin.Function0<0:0>>){0§<kotlin.Any?>}[0]
 
 // Targets: [native]
+final fun com.eignex.util.numbers/ceilDiv(com.ionspin.kotlin.bignum.integer/BigInteger, com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/ceilDiv|ceilDiv(com.ionspin.kotlin.bignum.integer.BigInteger;com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
+
+// Targets: [native]
 final fun com.eignex.util.numbers/floorBigInt(kotlin/Double): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/floorBigInt|floorBigInt(kotlin.Double){}[0]
+
+// Targets: [native]
+final fun com.eignex.util.numbers/floorDiv(com.ionspin.kotlin.bignum.integer/BigInteger, com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/floorDiv|floorDiv(com.ionspin.kotlin.bignum.integer.BigInteger;com.ionspin.kotlin.bignum.integer.BigInteger){}[0]
 
 // Targets: [native]
 final fun com.eignex.util.numbers/maxOf(com.ionspin.kotlin.bignum.integer/BigInteger, com.ionspin.kotlin.bignum.integer/BigInteger): com.ionspin.kotlin.bignum.integer/BigInteger // com.eignex.util.numbers/maxOf|maxOf(com.ionspin.kotlin.bignum.integer.BigInteger;com.ionspin.kotlin.bignum.integer.BigInteger){}[0]

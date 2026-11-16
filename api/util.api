@@ -791,6 +791,34 @@ public final class com/eignex/util/io/TextFiles_jvmKt {
 	public static final fun openTextFile (Ljava/lang/String;)Lcom/eignex/util/io/CharSource;
 }
 
+public final class com/eignex/util/numbers/BigFraction {
+	public static final field Companion Lcom/eignex/util/numbers/BigFraction$Companion;
+	public final fun ceilInteger ()Ljava/math/BigInteger;
+	public final fun compareTo (Lcom/eignex/util/numbers/BigFraction;)I
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDen ()Ljava/math/BigInteger;
+	public final fun getNum ()Ljava/math/BigInteger;
+	public fun hashCode ()I
+	public final fun isZero ()Z
+	public final fun minus (Lcom/eignex/util/numbers/BigFraction;)Lcom/eignex/util/numbers/BigFraction;
+	public final fun negated ()Lcom/eignex/util/numbers/BigFraction;
+	public final fun plus (Lcom/eignex/util/numbers/BigFraction;)Lcom/eignex/util/numbers/BigFraction;
+	public final fun reciprocal ()Lcom/eignex/util/numbers/BigFraction;
+	public final fun signum ()I
+	public final fun times (Lcom/eignex/util/numbers/BigFraction;)Lcom/eignex/util/numbers/BigFraction;
+	public final fun toDouble ()D
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/eignex/util/numbers/BigFraction$Companion {
+	public final fun getMINUS_ONE ()Lcom/eignex/util/numbers/BigFraction;
+	public final fun getONE ()Lcom/eignex/util/numbers/BigFraction;
+	public final fun getZERO ()Lcom/eignex/util/numbers/BigFraction;
+	public final fun of (Ljava/math/BigInteger;Ljava/math/BigInteger;)Lcom/eignex/util/numbers/BigFraction;
+	public final fun ofDouble (D)Lcom/eignex/util/numbers/BigFraction;
+	public final fun ofLong (J)Lcom/eignex/util/numbers/BigFraction;
+}
+
 public final class com/eignex/util/numbers/BigIntKt {
 	public static final fun maxOf (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
 	public static final fun minOf (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
@@ -856,6 +884,18 @@ public final class com/eignex/util/numbers/Int128 {
 	public final fun shiftLeft (I)V
 	public final fun subtract (Lcom/eignex/util/numbers/Int128;)V
 	public final fun toLong ()J
+}
+
+public final class com/eignex/util/numbers/IntegerDivisionKt {
+	public static final fun ceilDiv (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
+	public static final fun floorDiv (Ljava/math/BigInteger;Ljava/math/BigInteger;)Ljava/math/BigInteger;
+}
+
+public final class com/eignex/util/numbers/SaturatingArithmeticKt {
+	public static final fun saturatedAdd (JJ)J
+	public static final fun saturatedDistance (JJ)J
+	public static final fun saturatedMul (JJ)J
+	public static final fun saturatedSub (JJ)J
 }
 
 public final class com/eignex/util/platform/HeapSample {
