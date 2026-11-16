@@ -27,11 +27,17 @@ class IntArrayDeque(initialCapacity: Int = 8) : IntIndexedCollection {
         return buf[(head + index) and (buf.size - 1)]
     }
 
-    /** Remove the element at [index], shifting earlier elements toward the gap, and return it. */
+    /** Remove [index], shifting the shorter side toward the gap, and return the removed value. */
     fun removeAt(index: Int): Int {
         val value = get(index)
-        for (i in index downTo 1) buf[(head + i) and (buf.size - 1)] = get(i - 1)
-        removeFirst()
+        val mask = buf.size - 1
+        if (index < count / 2) {
+            for (i in index downTo 1) buf[(head + i) and mask] = buf[(head + i - 1) and mask]
+            head = (head + 1) and mask
+        } else {
+            for (i in index until count - 1) buf[(head + i) and mask] = buf[(head + i + 1) and mask]
+        }
+        count--
         return value
     }
 
@@ -85,8 +91,9 @@ class IntArrayDeque(initialCapacity: Int = 8) : IntIndexedCollection {
         check(buf.size < MAX_CAPACITY) { "Deque capacity exceeds the supported range" }
         val newCap = buf.size * 2
         val newBuf = IntArray(newCap)
-        val mask = buf.size - 1
-        for (i in 0 until count) newBuf[i] = buf[(head + i) and mask]
+        val first = minOf(count, buf.size - head)
+        buf.copyInto(newBuf, 0, head, head + first)
+        buf.copyInto(newBuf, first, 0, count - first)
         buf = newBuf
         head = 0
     }

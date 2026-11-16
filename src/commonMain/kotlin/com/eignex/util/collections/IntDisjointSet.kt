@@ -35,18 +35,24 @@ class IntDisjointSet(size: Int) {
      * member indices in ascending order. Roots appear in ascending order of their smallest member.
      */
     fun groups(): List<IntArray> {
-        val byRoot = MutableIntIntMap(parent.size) // root → index into `members`
-        val members = ArrayList<MutableList<Int>>()
+        val counts = IntArray(parent.size)
+        var groupCount = 0
         for (x in parent.indices) {
-            val r = find(x)
-            val slot = byRoot.getOrDefault(r, -1)
-            if (slot < 0) {
-                byRoot.put(r, members.size)
-                members.add(mutableListOf(x))
-            } else {
-                members[slot].add(x)
-            }
+            val root = find(x)
+            if (counts[root]++ == 0) groupCount++
         }
-        return members.map { it.toIntArray() }
+        val members = ArrayList<IntArray>(groupCount)
+        val positions = IntArray(groupCount)
+        for (x in parent.indices) {
+            // The first pass compressed every path. Reuse counts to map roots to groups.
+            val root = parent[x]
+            if (counts[root] > 0) {
+                members.add(IntArray(counts[root]))
+                counts[root] = -members.size
+            }
+            val slot = -counts[root] - 1
+            members[slot][positions[slot]++] = x
+        }
+        return members
     }
 }
