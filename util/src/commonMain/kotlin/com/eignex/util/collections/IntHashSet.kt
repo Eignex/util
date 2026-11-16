@@ -8,7 +8,6 @@ import com.eignex.util.collections.internals.growIntKeyTable
 import com.eignex.util.collections.internals.intKeySlot
 import com.eignex.util.collections.internals.intKeysToArray
 import com.eignex.util.collections.internals.openAddressingCapacity
-import com.eignex.util.hash.fibonacciHash
 
 /**
  * Primitive open-addressing Int set with linear probing, power-of-two capacity and
@@ -33,11 +32,7 @@ class IntHashSet(initialCapacity: Int = 8) : MutableIntSet {
         private set
 
     override operator fun contains(value: Int): Boolean {
-        var i = mix(value) and mask
-        while (used[i]) {
-            if (keys[i] == value) return true
-            i = (i + 1) and mask
-        }
+        findIntKey(keys, used, mask, value) { return true }
         return false
     }
 
@@ -94,6 +89,4 @@ class IntHashSet(initialCapacity: Int = 8) : MutableIntSet {
             mask = nextMask
         })
     }
-
-    private fun mix(x: Int): Int = fibonacciHash(x)
 }

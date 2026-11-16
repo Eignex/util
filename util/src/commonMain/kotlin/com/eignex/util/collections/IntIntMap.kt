@@ -2,8 +2,9 @@ package com.eignex.util.collections
 
 import com.eignex.util.arrays.emptyBooleanArray
 import com.eignex.util.arrays.emptyIntArray
+import com.eignex.util.collections.internals.findIntKey
+import com.eignex.util.collections.internals.intKeySlot
 import com.eignex.util.collections.internals.openAddressingCapacity
-import com.eignex.util.hash.fibonacciHash
 
 /**
  * Read-only primitive Int-to-Int map. [build] selects a dense offset array or sparse
@@ -34,12 +35,7 @@ class IntIntMap private constructor(
             val index = key.toLong() - minKey
             return index >= 0L && index < present.size && present[index.toInt()]
         }
-        val mask = keys.size - 1
-        var index = fibonacciHash(key) and mask
-        while (present[index]) {
-            if (keys[index] == key) return true
-            index = (index + 1) and mask
-        }
+        findIntKey(keys, present, keys.size - 1, key) { return true }
         return false
     }
 
@@ -48,12 +44,7 @@ class IntIntMap private constructor(
             val index = key.toLong() - minKey
             return if (index >= 0L && index < values.size && present[index.toInt()]) values[index.toInt()] else default
         }
-        val mask = keys.size - 1
-        var index = fibonacciHash(key) and mask
-        while (present[index]) {
-            if (keys[index] == key) return values[index]
-            index = (index + 1) and mask
-        }
+        findIntKey(keys, present, keys.size - 1, key) { return values[it] }
         return default
     }
 
@@ -98,14 +89,7 @@ class IntIntMap private constructor(
             val mask = capacity - 1
             var size = keys.size
             for (i in keys.indices) {
-                var index = fibonacciHash(keys[i]) and mask
-                while (present[index]) {
-                    if (storedKeys[index] == keys[i]) {
-                        size--
-                        break
-                    }
-                    index = (index + 1) and mask
-                }
+                val index = intKeySlot(storedKeys, present, mask, keys[i]) { size-- }
                 storedKeys[index] = keys[i]
                 storedValues[index] = values[i]
                 present[index] = true

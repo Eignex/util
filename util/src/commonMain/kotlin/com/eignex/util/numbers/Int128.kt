@@ -143,40 +143,18 @@ class Int128 {
     fun divExactByLong(d: Long): Long? {
         if (overflow || d == 0L) return null
         val negResult = (hi < 0L) != (d < 0L)
-        val uLo: ULong
-        val uHi: ULong
-        if (hi < 0L) {
-            uLo = 0uL - lo.toULong()
-            val borrow = if (lo != 0L) 1uL else 0uL
-            uHi = hi.toULong().inv() + (1uL - borrow)
-        } else {
-            uLo = lo.toULong()
-            uHi = hi.toULong()
-        }
         val dd = if (d < 0L) 0uL - d.toULong() else d.toULong()
-        var qHi = 0uL
-        var qLo = 0uL
-        var rem = 0uL
-        for (bit in 127 downTo 0) {
-            // rem < dd ≤ 2⁶³ (the magnitude of Long.MIN_VALUE), so the shift keeps rem below 2⁶⁴.
-            rem = rem shl 1
-            val nextBit = if (bit >= 64) (uHi shr (bit - 64)) and 1uL else (uLo shr bit) and 1uL
-            rem = rem or nextBit
-            if (rem >= dd) {
-                rem -= dd
-                if (bit >= 64) qHi = qHi or (1uL shl (bit - 64)) else qLo = qLo or (1uL shl bit)
+        return divideMagnitude(dd) { qLo, rem ->
+            if (rem != 0uL) return null
+            if (negResult) {
+                when {
+                    qLo <= Long.MAX_VALUE.toULong() -> -(qLo.toLong())
+                    qLo == Long.MAX_VALUE.toULong() + 1uL -> Long.MIN_VALUE
+                    else -> null
+                }
+            } else {
+                if (qLo <= Long.MAX_VALUE.toULong()) qLo.toLong() else null
             }
-        }
-        if (rem != 0uL) return null
-        if (qHi != 0uL) return null
-        return if (negResult) {
-            when {
-                qLo <= Long.MAX_VALUE.toULong() -> -(qLo.toLong())
-                qLo == Long.MAX_VALUE.toULong() + 1uL -> Long.MIN_VALUE
-                else -> null
-            }
-        } else {
-            if (qLo <= Long.MAX_VALUE.toULong()) qLo.toLong() else null
         }
     }
 
@@ -189,9 +167,25 @@ class Int128 {
         if (overflow) return null
         if (fitsLong()) return lo.floorDiv(d)
         val negative = hi < 0L
+        return divideMagnitude(d.toULong()) { qLo, rem ->
+            if (!negative) return if (qLo <= Long.MAX_VALUE.toULong()) qLo.toLong() else null
+            if (qLo > Long.MAX_VALUE.toULong() + 1uL) return null
+            // Floor of a negative dividend rounds the magnitude up when there is a remainder.
+            val mag = if (rem == 0uL) qLo else qLo + 1uL
+            when {
+                mag <= Long.MAX_VALUE.toULong() -> -(mag.toLong())
+                mag == Long.MAX_VALUE.toULong() + 1uL -> Long.MIN_VALUE
+                else -> null
+            }
+        }
+    }
+
+    // Divide the unsigned magnitude by a divisor in 1..2^63. Inline the rounding policy
+    // so quotient and remainder stay primitive and no intermediate result object is needed.
+    private inline fun divideMagnitude(d: ULong, result: (quotient: ULong, remainder: ULong) -> Long?): Long? {
         val uLo: ULong
         val uHi: ULong
-        if (negative) {
+        if (hi < 0L) {
             uLo = 0uL - lo.toULong()
             val borrow = if (lo != 0L) 1uL else 0uL
             uHi = hi.toULong().inv() + (1uL - borrow)
@@ -199,28 +193,20 @@ class Int128 {
             uLo = lo.toULong()
             uHi = hi.toULong()
         }
-        val dd = d.toULong()
         var qHi = 0uL
         var qLo = 0uL
         var rem = 0uL
         for (bit in 127 downTo 0) {
+            // rem < d ≤ 2⁶³ (the magnitude of Long.MIN_VALUE), so the shift keeps rem below 2⁶⁴.
             rem = rem shl 1
             val nextBit = if (bit >= 64) (uHi shr (bit - 64)) and 1uL else (uLo shr bit) and 1uL
             rem = rem or nextBit
-            if (rem >= dd) {
-                rem -= dd
+            if (rem >= d) {
+                rem -= d
                 if (bit >= 64) qHi = qHi or (1uL shl (bit - 64)) else qLo = qLo or (1uL shl bit)
             }
         }
         if (qHi != 0uL) return null
-        if (!negative) return if (qLo <= Long.MAX_VALUE.toULong()) qLo.toLong() else null
-        if (qLo > Long.MAX_VALUE.toULong() + 1uL) return null
-        // Floor of a negative dividend rounds the magnitude up when there is a remainder.
-        val mag = if (rem == 0uL) qLo else qLo + 1uL
-        return when {
-            mag <= Long.MAX_VALUE.toULong() -> -(mag.toLong())
-            mag == Long.MAX_VALUE.toULong() + 1uL -> Long.MIN_VALUE
-            else -> null
-        }
+        return result(qLo, rem)
     }
 }

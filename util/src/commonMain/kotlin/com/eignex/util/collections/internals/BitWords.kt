@@ -11,6 +11,12 @@ internal fun clearPackedBit(words: LongArray, bit: Int) {
     words[word] = words[word] and (1L shl (bit and 63)).inv()
 }
 
+internal fun countSetBits(words: LongArray, wordCount: Int = words.size): Int {
+    var count = 0
+    for (i in 0 until wordCount) count += words[i].countOneBits()
+    return count
+}
+
 internal fun bitWordCount(size: Int): Int {
     require(size >= 0) { "Bit size must be non-negative" }
     return (size ushr 6) + if (size and 63 == 0) 0 else 1

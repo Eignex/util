@@ -23,14 +23,7 @@ internal inline fun longKeySlot(
 }
 
 internal inline fun findLongKey(keys: LongArray, used: BooleanArray, mask: Int, key: Long, found: (Int) -> Unit) {
-    var index = fibonacciHash(key) and mask
-    while (used[index]) {
-        if (keys[index] == key) {
-            found(index)
-            return
-        }
-        index = (index + 1) and mask
-    }
+    longKeySlot(keys, used, mask, key, found)
 }
 
 internal inline fun deleteLongKeySlot(
