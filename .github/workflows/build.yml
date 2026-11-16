@@ -79,6 +79,9 @@ jobs:
           path: .gradle/configuration-cache
           key: ${{ runner.os }}-${{ runner.arch }}-configuration-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-${{ github.sha }}
           restore-keys: ${{ runner.os }}-${{ runner.arch }}-configuration-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-
+      - name: Test snapshot publication verification
+        if: runner.os == 'Linux'
+        run: python3 -m unittest discover -s .github/scripts -p 'test_*.py'
       - name: Build and test
         run: |
           case "$RUNNER_OS" in
