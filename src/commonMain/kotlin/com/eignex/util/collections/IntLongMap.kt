@@ -40,14 +40,16 @@ class IntLongMap private constructor(private val backing: Backing, private val a
             // Widen before subtracting to avoid Int overflow across the full key range.
             val range = hi.toLong() - lo.toLong() + 1
             return if (range <= Int.MAX_VALUE && range <= denseThreshold.toLong() * keys.size) {
-                val arr = LongArray(range.toInt()) { absent }
+                val arr = LongArray(range.toInt())
                 val present = BooleanArray(arr.size)
+                var size = keys.size
                 for (i in keys.indices) {
                     val index = keys[i] - lo
                     arr[index] = values[i]
+                    if (present[index]) size--
                     present[index] = true
                 }
-                IntLongMap(ArrayBacking(lo, arr, present), absent)
+                IntLongMap(ArrayBacking(lo, arr, present, size), absent)
             } else {
                 IntLongMap(HashBacking.build(keys, values), absent)
             }
@@ -68,8 +70,12 @@ class IntLongMap private constructor(private val backing: Backing, private val a
         override fun contains(key: Int): Boolean = false
     }
 
-    private class ArrayBacking(val minKey: Int, val values: LongArray, val present: BooleanArray) : Backing {
-        override val size: Int = present.count { it }
+    private class ArrayBacking(
+        val minKey: Int,
+        val values: LongArray,
+        val present: BooleanArray,
+        override val size: Int,
+    ) : Backing {
         override fun forEachKey(action: IntConsumer) {
             for (slot in present.indices) if (present[slot]) action.accept(minKey + slot)
         }
@@ -89,8 +95,8 @@ class IntLongMap private constructor(private val backing: Backing, private val a
         private val keys: IntArray,
         private val values: LongArray,
         private val present: BooleanArray,
+        override val size: Int,
     ) : Backing {
-        override val size: Int = present.count { it }
         override fun forEachKey(action: IntConsumer) {
             for (slot in present.indices) if (present[slot]) action.accept(keys[slot])
         }
@@ -122,17 +128,21 @@ class IntLongMap private constructor(private val backing: Backing, private val a
                 val v = LongArray(cap)
                 val p = BooleanArray(cap)
                 val mask = cap - 1
+                var size = keys.size
                 for (i in keys.indices) {
                     var idx = mixIntKey(keys[i]) and mask
                     while (p[idx]) {
-                        if (k[idx] == keys[i]) break
+                        if (k[idx] == keys[i]) {
+                            size--
+                            break
+                        }
                         idx = (idx + 1) and mask
                     }
                     k[idx] = keys[i]
                     v[idx] = values[i]
                     p[idx] = true
                 }
-                return HashBacking(k, v, p)
+                return HashBacking(k, v, p, size)
             }
         }
     }

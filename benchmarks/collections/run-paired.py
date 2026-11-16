@@ -16,8 +16,22 @@ parser.add_argument("--classpath", type=Path, required=True)
 parser.add_argument("--java", required=True)
 parser.add_argument("--output", type=Path, required=True)
 parser.add_argument("--repetitions", type=int, default=2)
-parser.add_argument("--suite", choices=["collections", "deque-disjoint"], default="collections")
+parser.add_argument("--suite", choices=["collections", "deque-disjoint", "primitive-maps"], default="collections")
+parser.add_argument("--workloads", help="Comma-separated primitive-maps workload names (default: all 12)")
+parser.add_argument("--sizes", help="Comma-separated sizes for deque-disjoint or primitive-maps (default: 1024,65536)")
 args = parser.parse_args()
+try:
+    sizes = [int(size) for size in (args.sizes or "1024,65536").split(",")]
+except ValueError:
+    parser.error("--sizes must be comma-separated integers")
+if not sizes or len(set(sizes)) != len(sizes) or any(size < 1 or size > 65536 for size in sizes):
+    parser.error("--sizes must be unique integers in 1..65536")
+if args.workloads is not None and args.suite != "primitive-maps":
+    parser.error("--workloads is only supported for primitive-maps")
+if args.suite == "deque-disjoint" and any(size & (size - 1) for size in sizes):
+    parser.error("deque-disjoint sizes must be powers of two")
+if args.sizes is not None and args.suite == "collections":
+    parser.error("--sizes is only supported for focused suites")
 if args.repetitions < 1:
     parser.error("--repetitions must be positive")
 
@@ -36,7 +50,7 @@ cases = [(case, f"CollectionsBench.{case}$", []) for case in collection_cases]
 extra_controls = []
 if args.suite == "deque-disjoint":
     cases = []
-    for size in (1024, 65536):
+    for size in sizes:
         for group_size in (1, 32, 65536):
             cases.append((f"groups-{size}-{group_size}", "DequeDisjointBench.groups$",
                           ["-p", f"size={size}", "-p", f"groupSize={group_size}"]))
@@ -44,6 +58,20 @@ if args.suite == "deque-disjoint":
             cases.append((f"remove-{size}-{position}", "DequeDisjointBench.removeAt$",
                           ["-p", f"size={size}", "-p", f"position={position}"]))
         cases.append((f"grow-{size}", "DequeDisjointBench.grow$", ["-p", f"size={size}"]))
+    extra_controls = ["-jvmArgs", "-Xms512m -Xmx512m -XX:+UseSerialGC", "-prof", "gc"]
+if args.suite == "primitive-maps":
+    workloads = [f"{kind}.build" for kind in ("int-int-dense", "int-long-dense", "int-int-sparse", "int-long-sparse")]
+    workloads += [f"{kind}.remove-restore" for kind in (
+        "int-int-map", "int-long-map", "int-double-map", "int-object-map",
+        "long-int-map", "long-object-map", "int-set", "long-set")]
+    if args.workloads is not None:
+        selected = args.workloads.split(",")
+        if len(selected) != len(set(selected)) or any(w not in workloads for w in selected):
+            parser.error("--workloads must select unique primitive-maps workload names")
+        workloads = selected
+    cases = [(f"{workload}-{size}", "com.eignex.util.bench.CollectionsBenchmark.batch$",
+              ["-p", f"workload={workload}", "-p", f"size={size}", "-p", "seed=42"])
+             for size in sizes for workload in workloads]
     extra_controls = ["-jvmArgs", "-Xms512m -Xmx512m -XX:+UseSerialGC", "-prof", "gc"]
 order = []
 for repetition in range(args.repetitions):

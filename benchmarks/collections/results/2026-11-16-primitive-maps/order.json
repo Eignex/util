@@ -1,0 +1,194 @@
+[
+  {
+    "repetition": 1,
+    "case": "int-int-dense.build-1024",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:56:28Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-int-dense.build-1024",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:56:31Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-long-dense.build-1024",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:56:34Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-long-dense.build-1024",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:56:37Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-int-sparse.build-1024",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:56:40Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-int-sparse.build-1024",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:56:43Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-long-sparse.build-1024",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:56:46Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-long-sparse.build-1024",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:56:49Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-int-dense.build-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:56:51Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-int-dense.build-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:56:55Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-long-dense.build-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:56:58Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-long-dense.build-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:57:01Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-int-sparse.build-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:57:04Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-int-sparse.build-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:57:07Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-long-sparse.build-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:57:10Z"
+  },
+  {
+    "repetition": 1,
+    "case": "int-long-sparse.build-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:57:13Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-int-dense.build-1024",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:57:16Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-int-dense.build-1024",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:57:19Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-long-dense.build-1024",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:57:22Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-long-dense.build-1024",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:57:25Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-int-sparse.build-1024",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:57:28Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-int-sparse.build-1024",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:57:31Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-long-sparse.build-1024",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:57:34Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-long-sparse.build-1024",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:57:36Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-int-dense.build-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:57:39Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-int-dense.build-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:57:43Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-long-dense.build-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:57:46Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-long-dense.build-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:57:49Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-int-sparse.build-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:57:52Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-int-sparse.build-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:57:55Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-long-sparse.build-65536",
+    "arm": "baseline",
+    "startedUtc": "2026-11-16T09:57:59Z"
+  },
+  {
+    "repetition": 2,
+    "case": "int-long-sparse.build-65536",
+    "arm": "candidate",
+    "startedUtc": "2026-11-16T09:58:02Z"
+  }
+]
