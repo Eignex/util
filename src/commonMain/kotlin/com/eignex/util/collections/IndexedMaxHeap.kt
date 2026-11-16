@@ -3,6 +3,7 @@ package com.eignex.util.collections
 /**
  * Fixed-capacity binary max-heap over integer ids, with O(log n) key updates and removal.
  * [restore] reinserts an id at its cached key, including updates made while absent.
+ * Priorities may be infinite but must not be NaN.
  */
 class IndexedMaxHeap(
     /** Maximum number of integer ids, in `0 until capacity`. */
@@ -23,9 +24,13 @@ class IndexedMaxHeap(
     /** Return the cached priority of [id], including priorities of absent ids. */
     fun keyOf(id: Int): Double = keys[id]
 
-    /** Insert [id] with [key]. No-op if [id] is already present (use [updateKey] instead). */
+    /**
+     * Insert [id] with [key]. No-op if [id] is already present (use [updateKey] instead).
+     * @throws IllegalArgumentException when inserting a NaN priority.
+     */
     fun insert(id: Int, key: Double) {
         if (pos[id] >= 0) return
+        require(!key.isNaN()) { "Heap priority must not be NaN" }
         keys[id] = key
         heap[size] = id
         pos[id] = size
@@ -42,8 +47,12 @@ class IndexedMaxHeap(
         siftUp(size - 1)
     }
 
-    /** Change [id]'s cached key, updating heap order if the id is present. */
+    /**
+     * Change [id]'s cached key, updating heap order if the id is present.
+     * @throws IllegalArgumentException when [newKey] is NaN.
+     */
     fun updateKey(id: Int, newKey: Double) {
+        require(!newKey.isNaN()) { "Heap priority must not be NaN" }
         val old = keys[id]
         keys[id] = newKey
         val p = pos[id]
@@ -88,17 +97,24 @@ class IndexedMaxHeap(
         siftUp(p)
     }
 
-    /** Scale every cached key by a positive [factor] in O(capacity). */
+    /**
+     * Scale every cached key by a finite positive [factor] in O(capacity).
+     * @throws IllegalArgumentException when [factor] is non-finite or not positive.
+     */
     fun scaleKeys(factor: Double) {
-        require(factor > 0.0) { "scale factor must be positive, got $factor" }
+        require(factor.isFinite() && factor > 0.0) { "scale factor must be finite and positive, got $factor" }
         for (i in 0 until capacity) keys[i] *= factor
     }
 
-    /** Reset every key to [value] and arrange the heap in ascending id order. Requires `size == capacity`. */
+    /**
+     * Reset every key to [value] and arrange the heap in ascending id order. Requires `size == capacity`.
+     * @throws IllegalArgumentException when [value] is NaN or the heap is not full.
+     */
     fun resetAllKeysInIdOrder(value: Double) {
         require(size == capacity) {
             "resetAllKeysInIdOrder requires full heap (size=$size, capacity=$capacity)"
         }
+        require(!value.isNaN()) { "Heap priority must not be NaN" }
         for (i in 0 until capacity) {
             keys[i] = value
             heap[i] = i
