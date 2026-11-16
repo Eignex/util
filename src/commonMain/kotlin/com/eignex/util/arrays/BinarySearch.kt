@@ -5,6 +5,19 @@ package com.eignex.util.arrays
  * `-(insertion point) - 1` when absent.
  */
 fun IntArray.binarySearchInt(element: Int, fromIndex: Int = 0, toIndex: Int = size): Int {
+    val position = lowerBoundInt(element, fromIndex, toIndex)
+    return if (position < toIndex && this[position] == element) position else -(position + 1)
+}
+
+/**
+ * Returns the first index whose value is at least [element] in ascending `[fromIndex, toIndex)`,
+ * or [toIndex] when no such value exists. Equal values resolve to the first occurrence in the range.
+ * The range must satisfy `0 <= fromIndex <= toIndex <= size` and is not validated.
+ */
+fun IntArray.lowerBoundInt(element: Int, fromIndex: Int = 0, toIndex: Int = size): Int {
+    // Prefix and suffix boundaries are common in sorted sparse storage.
+    if (fromIndex >= toIndex || this[fromIndex] >= element) return fromIndex
+    if (this[toIndex - 1] < element) return toIndex
     var lo = fromIndex
     var len = toIndex - fromIndex
     // Lower-bound invariant: elements below lo are < element; those at/above lo+len are >= element.
@@ -18,10 +31,9 @@ fun IntArray.binarySearchInt(element: Int, fromIndex: Int = 0, toIndex: Int = si
             len = half
         }
     }
-    // The insertion point may be the window boundary, so test membership after the scan.
     val end = lo + len
     while (lo < end && this[lo] < element) lo++
-    return if (lo < toIndex && this[lo] == element) lo else -(lo + 1)
+    return lo
 }
 
 /** [binarySearchInt] for a sorted [LongArray], with the same return contract. */

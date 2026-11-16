@@ -9,6 +9,8 @@ public final class com/eignex/util/arrays/BinarySearchKt {
 	public static synthetic fun binarySearchInt$default ([IIIIILjava/lang/Object;)I
 	public static final fun binarySearchLong ([JJII)I
 	public static synthetic fun binarySearchLong$default ([JJIIILjava/lang/Object;)I
+	public static final fun lowerBoundInt ([IIII)I
+	public static synthetic fun lowerBoundInt$default ([IIIIILjava/lang/Object;)I
 }
 
 public final class com/eignex/util/arrays/EmptyArraysKt {

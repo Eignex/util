@@ -1,6 +1,6 @@
 package com.eignex.util.collections
 
-import com.eignex.util.arrays.binarySearchInt
+import com.eignex.util.arrays.lowerBoundInt
 
 /**
  * Growable primitive Int list. Removal swaps in the last element and does not preserve order.
@@ -123,10 +123,7 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
     /**
      * Index of the first element `>= element` in an ascending list, or [size] when none exists.
      */
-    fun lowerBound(element: Int): Int {
-        val idx = data.binarySearchInt(element, 0, size)
-        return if (idx >= 0) idx else -(idx + 1)
-    }
+    fun lowerBound(element: Int): Int = data.lowerBoundInt(element, 0, size)
 
     /**
      * Index of the first element `<= element` in a descending list, or [size] when none exists.
