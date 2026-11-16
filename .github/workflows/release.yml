@@ -118,20 +118,20 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: ~/.konan
-          key: ${{ runner.os }}-${{ runner.arch }}-konan-full-${{ hashFiles('*.gradle.kts', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-konan-full-${{ hashFiles('**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-${{ runner.arch }}-konan-
       - name: Restore encrypted configuration state
         if: env.HAS_CONFIGURATION_CACHE == 'true'
         uses: actions/cache/restore@v6
         with:
           path: .gradle/configuration-cache
-          key: ${{ runner.os }}-${{ runner.arch }}-configuration-full-${{ hashFiles('*.gradle.kts', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-${{ runner.arch }}-configuration-full-${{ hashFiles('*.gradle.kts', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-
+          key: ${{ runner.os }}-${{ runner.arch }}-configuration-full-${{ hashFiles('**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-${{ runner.arch }}-configuration-full-${{ hashFiles('**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-
       - name: Publish RC to GitHub only
         if: env.IS_TEST_RELEASE == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: ./gradlew publishToGitHubRelease -Ptargets.full -PciVersion="$RELEASE_VERSION"
+        run: ./gradlew :util:publishToGitHubRelease -Ptargets.full -PciVersion="$RELEASE_VERSION"
       - name: Publish stable release to Maven Central
         if: env.IS_SNAPSHOT == 'false' && env.IS_TEST_RELEASE != 'true'
         env:
@@ -139,7 +139,7 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
-        run: ./gradlew publishToMavenCentral -Ptargets.full -PciVersion="$RELEASE_VERSION"
+        run: ./gradlew :util:publishToMavenCentral -Ptargets.full -PciVersion="$RELEASE_VERSION"
       - name: Publish snapshot to Sonatype
         if: env.IS_SNAPSHOT == 'true'
         env:
@@ -147,7 +147,7 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
-        run: ./gradlew publishAllPublicationsToSonatypeSnapshotsRepository -Ptargets.full -PciVersion="$RELEASE_VERSION"
+        run: ./gradlew :util:publishAllPublicationsToSonatypeSnapshotsRepository -Ptargets.full -PciVersion="$RELEASE_VERSION"
       - name: Create GitHub release
         if: github.ref_type == 'tag' && env.IS_SNAPSHOT == 'false' && env.IS_TEST_RELEASE != 'true'
         uses: softprops/action-gh-release@v3

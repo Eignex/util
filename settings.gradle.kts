@@ -26,4 +26,4 @@ plugins {
 include(":common-main-consumer")
 project(":common-main-consumer").projectDir = file("tests/common-main")
 
-include(":util-bench")
+include(":util", ":util-bench")

@@ -11,12 +11,6 @@ eignexBuild {
 }
 
 repositories {
-    ivy {
-        url = uri("https://github.com/Eignex/kbuild/releases/download")
-        patternLayout { artifact("v[revision]/[artifact]-[revision](-[classifier]).[ext]") }
-        metadataSources { gradleMetadata() }
-        content { includeModule("com.eignex", "kbuild-platform") }
-    }
     exclusiveContent {
         forRepository {
             ivy {
@@ -29,11 +23,10 @@ repositories {
         }
         filter { includeModule("com.eignex", "lab-bench") }
     }
-    mavenCentral()
 }
 
 dependencies {
-    implementation(project(":"))
+    implementation(project(":util"))
     implementation("com.eignex:lab-bench:${providers.gradleProperty("labBenchVersion").getOrElse("0.1.0")}")
     implementation("org.openjdk.jmh:jmh-core:1.37")
     annotationProcessor("org.openjdk.jmh:jmh-generator-annprocess:1.37")

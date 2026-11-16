@@ -1,0 +1,2 @@
+# ABI references must retain the Kotlin generator's exact trailing blank lines.
+util/api/*.api whitespace=-blank-at-eof
