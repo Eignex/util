@@ -895,6 +895,12 @@ public final class com/eignex/util/numbers/BigInt_jvmKt {
 	public static final fun unaryMinus (Ljava/math/BigInteger;)Ljava/math/BigInteger;
 }
 
+public final class com/eignex/util/numbers/CheckedLongArithmeticKt {
+	public static final fun addExactOrNull (JJ)Ljava/lang/Long;
+	public static final fun mulExactOrNull (JJ)Ljava/lang/Long;
+	public static final fun subExactOrNull (JJ)Ljava/lang/Long;
+}
+
 public final class com/eignex/util/numbers/CheckedLongOverflowException : java/lang/ArithmeticException {
 	public fun <init> (Ljava/lang/String;)V
 }

@@ -162,7 +162,8 @@ before decoding. A common interface does not imply identical memory use.
 
 ## Numbers
 
-Checked Long helpers throw `CheckedLongOverflowException` rather than wrap.
+Checked Long helpers throw `CheckedLongOverflowException` rather than wrap;
+the `OrNull` variants return null on overflow.
 Saturating helpers clamp overflow to the signed range. Host integer division
 helpers explicitly select floor or ceiling rounding; `BigFraction` represents
 normalized exact rational values over the existing backend integers.
