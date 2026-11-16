@@ -684,6 +684,34 @@ final class com.eignex.util.numbers/Int128 { // com.eignex.util.numbers/Int128|n
     final fun toLong(): kotlin/Long // com.eignex.util.numbers/Int128.toLong|toLong(){}[0]
 }
 
+final class com.eignex.util.random/CounterRandom : kotlin.random/Random { // com.eignex.util.random/CounterRandom|null[0]
+    constructor <init>(kotlin/Long, com.eignex.util.concurrent/CellMode = ...) // com.eignex.util.random/CounterRandom.<init>|<init>(kotlin.Long;com.eignex.util.concurrent.CellMode){}[0]
+
+    final fun childSeed(): kotlin/Long // com.eignex.util.random/CounterRandom.childSeed|childSeed(){}[0]
+    final fun nextBits(kotlin/Int): kotlin/Int // com.eignex.util.random/CounterRandom.nextBits|nextBits(kotlin.Int){}[0]
+    final fun reset() // com.eignex.util.random/CounterRandom.reset|reset(){}[0]
+}
+
+final class com.eignex.util.random/SobolSequence { // com.eignex.util.random/SobolSequence|null[0]
+    constructor <init>(kotlin/Int, kotlin/Long? = ..., kotlin/Int = ...) // com.eignex.util.random/SobolSequence.<init>|<init>(kotlin.Int;kotlin.Long?;kotlin.Int){}[0]
+
+    final val dimensionOffset // com.eignex.util.random/SobolSequence.dimensionOffset|{}dimensionOffset[0]
+        final fun <get-dimensionOffset>(): kotlin/Int // com.eignex.util.random/SobolSequence.dimensionOffset.<get-dimensionOffset>|<get-dimensionOffset>(){}[0]
+    final val dimensions // com.eignex.util.random/SobolSequence.dimensions|{}dimensions[0]
+        final fun <get-dimensions>(): kotlin/Int // com.eignex.util.random/SobolSequence.dimensions.<get-dimensions>|<get-dimensions>(){}[0]
+    final val scrambleSeed // com.eignex.util.random/SobolSequence.scrambleSeed|{}scrambleSeed[0]
+        final fun <get-scrambleSeed>(): kotlin/Long? // com.eignex.util.random/SobolSequence.scrambleSeed.<get-scrambleSeed>|<get-scrambleSeed>(){}[0]
+
+    final fun nextNormal(kotlin/DoubleArray = ...): kotlin/DoubleArray // com.eignex.util.random/SobolSequence.nextNormal|nextNormal(kotlin.DoubleArray){}[0]
+    final fun nextPoint(kotlin/DoubleArray = ...): kotlin/DoubleArray // com.eignex.util.random/SobolSequence.nextPoint|nextPoint(kotlin.DoubleArray){}[0]
+    final fun skipTo(kotlin/Long) // com.eignex.util.random/SobolSequence.skipTo|skipTo(kotlin.Long){}[0]
+
+    final object Companion { // com.eignex.util.random/SobolSequence.Companion|null[0]
+        final const val MAX_DIMENSIONS // com.eignex.util.random/SobolSequence.Companion.MAX_DIMENSIONS|{}MAX_DIMENSIONS[0]
+            final fun <get-MAX_DIMENSIONS>(): kotlin/Int // com.eignex.util.random/SobolSequence.Companion.MAX_DIMENSIONS.<get-MAX_DIMENSIONS>|<get-MAX_DIMENSIONS>(){}[0]
+    }
+}
+
 final object com.eignex.util.concurrent/AtomicCells : com.eignex.util.concurrent/CellMode { // com.eignex.util.concurrent/AtomicCells|null[0]
     final fun <#A1: kotlin/Any?> newReference(#A1): com.eignex.util.concurrent/ReferenceCell<#A1> // com.eignex.util.concurrent/AtomicCells.newReference|newReference(0:0){0§<kotlin.Any?>}[0]
     final fun newDouble(kotlin/Double): com.eignex.util.concurrent/DoubleCell // com.eignex.util.concurrent/AtomicCells.newDouble|newDouble(kotlin.Double){}[0]
@@ -717,6 +745,10 @@ final fun (com.eignex.util.concurrent/DoubleCounter).com.eignex.util.concurrent/
 final fun (com.eignex.util.concurrent/LongCounter).com.eignex.util.concurrent/getValue(kotlin/Any?, kotlin.reflect/KProperty<*>): kotlin/Long // com.eignex.util.concurrent/getValue|getValue@com.eignex.util.concurrent.LongCounter(kotlin.Any?;kotlin.reflect.KProperty<*>){}[0]
 final fun (com.eignex.util.io/CharSource).com.eignex.util.io/lineSequence(): kotlin.sequences/Sequence<kotlin/String> // com.eignex.util.io/lineSequence|lineSequence@com.eignex.util.io.CharSource(){}[0]
 final fun (com.eignex.util.io/CharSource).com.eignex.util.io/readText(): kotlin/String // com.eignex.util.io/readText|readText@com.eignex.util.io.CharSource(){}[0]
+final fun (kotlin.random/Random).com.eignex.util.random/nextBeta(kotlin/Double, kotlin/Double): kotlin/Double // com.eignex.util.random/nextBeta|nextBeta@kotlin.random.Random(kotlin.Double;kotlin.Double){}[0]
+final fun (kotlin.random/Random).com.eignex.util.random/nextGamma(kotlin/Double): kotlin/Double // com.eignex.util.random/nextGamma|nextGamma@kotlin.random.Random(kotlin.Double){}[0]
+final fun (kotlin.random/Random).com.eignex.util.random/nextNormal(kotlin/Double = ..., kotlin/Double = ...): kotlin/Double // com.eignex.util.random/nextNormal|nextNormal@kotlin.random.Random(kotlin.Double;kotlin.Double){}[0]
+final fun (kotlin.random/Random).com.eignex.util.random/nextPoissonOne(): kotlin/Int // com.eignex.util.random/nextPoissonOne|nextPoissonOne@kotlin.random.Random(){}[0]
 final fun (kotlin/IntArray).com.eignex.util.arrays/binarySearchInt(kotlin/Int, kotlin/Int = ..., kotlin/Int = ...): kotlin/Int // com.eignex.util.arrays/binarySearchInt|binarySearchInt@kotlin.IntArray(kotlin.Int;kotlin.Int;kotlin.Int){}[0]
 final fun (kotlin/IntArray).com.eignex.util.arrays/lowerBoundInt(kotlin/Int, kotlin/Int = ..., kotlin/Int = ...): kotlin/Int // com.eignex.util.arrays/lowerBoundInt|lowerBoundInt@kotlin.IntArray(kotlin.Int;kotlin.Int;kotlin.Int){}[0]
 final fun (kotlin/LongArray).com.eignex.util.arrays/binarySearchLong(kotlin/Long, kotlin/Int = ..., kotlin/Int = ...): kotlin/Int // com.eignex.util.arrays/binarySearchLong|binarySearchLong@kotlin.LongArray(kotlin.Long;kotlin.Int;kotlin.Int){}[0]
@@ -740,14 +772,19 @@ final fun com.eignex.util.hash/hash64(kotlin/ByteArray): kotlin/Long // com.eign
 final fun com.eignex.util.hash/hash64(kotlin/String): kotlin/Long // com.eignex.util.hash/hash64|hash64(kotlin.String){}[0]
 final fun com.eignex.util.hash/splitmix64(kotlin/Long): kotlin/Long // com.eignex.util.hash/splitmix64|splitmix64(kotlin.Long){}[0]
 final fun com.eignex.util.numbers/addExact(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/addExact|addExact(kotlin.Long;kotlin.Long){}[0]
+final fun com.eignex.util.numbers/addExactOrNull(kotlin/Long, kotlin/Long): kotlin/Long? // com.eignex.util.numbers/addExactOrNull|addExactOrNull(kotlin.Long;kotlin.Long){}[0]
 final fun com.eignex.util.numbers/mulExact(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/mulExact|mulExact(kotlin.Long;kotlin.Long){}[0]
+final fun com.eignex.util.numbers/mulExactOrNull(kotlin/Long, kotlin/Long): kotlin/Long? // com.eignex.util.numbers/mulExactOrNull|mulExactOrNull(kotlin.Long;kotlin.Long){}[0]
 final fun com.eignex.util.numbers/saturatedAdd(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/saturatedAdd|saturatedAdd(kotlin.Long;kotlin.Long){}[0]
 final fun com.eignex.util.numbers/saturatedDistance(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/saturatedDistance|saturatedDistance(kotlin.Long;kotlin.Long){}[0]
 final fun com.eignex.util.numbers/saturatedMul(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/saturatedMul|saturatedMul(kotlin.Long;kotlin.Long){}[0]
 final fun com.eignex.util.numbers/saturatedSub(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/saturatedSub|saturatedSub(kotlin.Long;kotlin.Long){}[0]
 final fun com.eignex.util.numbers/subExact(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.numbers/subExact|subExact(kotlin.Long;kotlin.Long){}[0]
+final fun com.eignex.util.numbers/subExactOrNull(kotlin/Long, kotlin/Long): kotlin/Long? // com.eignex.util.numbers/subExactOrNull|subExactOrNull(kotlin.Long;kotlin.Long){}[0]
+final fun com.eignex.util.random/deriveChildSeed(kotlin/Long, kotlin/Long): kotlin/Long // com.eignex.util.random/deriveChildSeed|deriveChildSeed(kotlin.Long;kotlin.Long){}[0]
 final inline fun <#A: kotlin/Any?> (com.eignex.util.concurrent/Mutex).com.eignex.util.concurrent/guarded(kotlin/Function0<#A>): #A // com.eignex.util.concurrent/guarded|guarded@com.eignex.util.concurrent.Mutex(kotlin.Function0<0:0>){0§<kotlin.Any?>}[0]
 final inline fun <#A: kotlin/Any?> (com.eignex.util.io/CharSource).com.eignex.util.io/useSource(kotlin/Function1<com.eignex.util.io/CharSource, #A>): #A // com.eignex.util.io/useSource|useSource@com.eignex.util.io.CharSource(kotlin.Function1<com.eignex.util.io.CharSource,0:0>){0§<kotlin.Any?>}[0]
+final inline fun com.eignex.util.arrays/argMaxOf(kotlin/Int, kotlin/Function1<kotlin/Int, kotlin/Double>): kotlin/Int // com.eignex.util.arrays/argMaxOf|argMaxOf(kotlin.Int;kotlin.Function1<kotlin.Int,kotlin.Double>){}[0]
 final inline fun com.eignex.util.arrays/argsortBy(kotlin/Int, kotlin/Function2<kotlin/Int, kotlin/Int, kotlin/Int>): kotlin/IntArray // com.eignex.util.arrays/argsortBy|argsortBy(kotlin.Int;kotlin.Function2<kotlin.Int,kotlin.Int,kotlin.Int>){}[0]
 final inline fun com.eignex.util.arrays/argsortBy(kotlin/Int, kotlin/IntArray, kotlin/IntArray, kotlin/Function2<kotlin/Int, kotlin/Int, kotlin/Int>): kotlin/IntArray // com.eignex.util.arrays/argsortBy|argsortBy(kotlin.Int;kotlin.IntArray;kotlin.IntArray;kotlin.Function2<kotlin.Int,kotlin.Int,kotlin.Int>){}[0]
 final inline fun com.eignex.util.arrays/argsortByIntKey(kotlin/Int, kotlin/Function1<kotlin/Int, kotlin/Int>): kotlin/IntArray // com.eignex.util.arrays/argsortByIntKey|argsortByIntKey(kotlin.Int;kotlin.Function1<kotlin.Int,kotlin.Int>){}[0]
