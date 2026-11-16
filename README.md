@@ -17,7 +17,7 @@ Shared Kotlin Multiplatform primitives for Eignex libraries and applications.
 - Primitive collections: lists, deques, sets, maps, and fixed-size or growable packed bitsets.
 - Array algorithms: stable argsort, primitive binary search and allocation-free argmax.
 - Concurrency primitives: synchronous locks, atomic cells and additive counters.
-- Numeric primitives: checked Long arithmetic, a signed 128-bit accumulator and arbitrary-precision integers.
+- Numeric primitives: checked and saturating Long arithmetic, a signed 128-bit accumulator, arbitrary-precision integers and exact rational numbers.
 - Hashing: deterministic SplitMix64 mixing and 64-bit byte/string hashes.
 - Random sampling: normal, Gamma, Beta and Poisson draws, counter-based streams and scrambled Sobol points.
 - Text input: chunked character sources, buffered character reading and compressed file input.
