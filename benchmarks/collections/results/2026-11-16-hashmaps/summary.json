@@ -1,0 +1,338 @@
+[
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "null",
+      "size": "1024"
+    },
+    "baselineNs": 12078.166543472678,
+    "candidateNs": 8674.856961068903,
+    "speedup": 1.3923188125956631
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "value",
+      "size": "1024"
+    },
+    "baselineNs": 6664.170065502491,
+    "candidateNs": 6694.921520140168,
+    "speedup": 0.9954067490492355
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "null",
+      "size": "1024"
+    },
+    "baselineNs": 10710.774556293132,
+    "candidateNs": 6444.4278273108075,
+    "speedup": 1.662021027049445
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "value",
+      "size": "1024"
+    },
+    "baselineNs": 5907.423786503196,
+    "candidateNs": 6517.84069159134,
+    "speedup": 0.9063467590001637
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 947.6305665472198,
+    "candidateNs": 11.825137290651337,
+    "speedup": 80.1369610563755
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-object",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 1049.0936951286299,
+    "candidateNs": 13.6527743578316,
+    "speedup": 76.8410630420213
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "true",
+      "size": "1024"
+    },
+    "baselineNs": 794.5678918745797,
+    "candidateNs": 777.6226768540223,
+    "speedup": 1.0217910504990821
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "null",
+      "size": "65536"
+    },
+    "baselineNs": 1435395.078845763,
+    "candidateNs": 1206183.7518072356,
+    "speedup": 1.1900301895918413
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "value",
+      "size": "65536"
+    },
+    "baselineNs": 1110576.8690944314,
+    "candidateNs": 1175133.2344234525,
+    "speedup": 0.9450646416610845
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "null",
+      "size": "65536"
+    },
+    "baselineNs": 1537969.1158245183,
+    "candidateNs": 827893.4117015181,
+    "speedup": 1.8576897630621623
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "value",
+      "size": "65536"
+    },
+    "baselineNs": 910384.4025433278,
+    "candidateNs": 907391.5530510809,
+    "speedup": 1.0032982999259619
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 64901.201842570634,
+    "candidateNs": 5.773963403210705,
+    "speedup": 11240.320956395615
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-object",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 68061.5278037876,
+    "candidateNs": 8.063504159294757,
+    "speedup": 8440.688621129246
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "true",
+      "size": "65536"
+    },
+    "baselineNs": 96555.83015175757,
+    "candidateNs": 98131.1770857637,
+    "speedup": 0.9839465195385425
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "null",
+      "size": "1024"
+    },
+    "baselineNs": 5957.536425744569,
+    "candidateNs": 5273.369053020177,
+    "speedup": 1.1297400894656813
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "value",
+      "size": "1024"
+    },
+    "baselineNs": 4877.921687226042,
+    "candidateNs": 4852.687857499179,
+    "speedup": 1.005199969680281
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "null",
+      "size": "1024"
+    },
+    "baselineNs": 3528.909569295824,
+    "candidateNs": 3522.204664314048,
+    "speedup": 1.001903610272767
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "value",
+      "size": "1024"
+    },
+    "baselineNs": 2342.8138300287274,
+    "candidateNs": 2274.226066762028,
+    "speedup": 1.0301587270804404
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 484.9905734668141,
+    "candidateNs": 5.575303447951315,
+    "speedup": 86.98909000998454
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-object",
+      "refill": "false",
+      "size": "1024"
+    },
+    "baselineNs": 475.0657269899302,
+    "candidateNs": 6.694911552094223,
+    "speedup": 70.95922377664957
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "true",
+      "size": "1024"
+    },
+    "baselineNs": 513.6270389656943,
+    "candidateNs": 568.9692162763074,
+    "speedup": 0.9027325631555128
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "null",
+      "size": "65536"
+    },
+    "baselineNs": 878568.154193827,
+    "candidateNs": 650314.3024385173,
+    "speedup": 1.3509900534240356
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "int",
+      "payload": "value",
+      "size": "65536"
+    },
+    "baselineNs": 785272.2404787982,
+    "candidateNs": 739401.6677827471,
+    "speedup": 1.0620374211943608
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "null",
+      "size": "65536"
+    },
+    "baselineNs": 1218739.1953226146,
+    "candidateNs": 900404.8415253432,
+    "speedup": 1.3535458041940254
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.requiredLookup",
+    "params": {
+      "kind": "long",
+      "payload": "value",
+      "size": "65536"
+    },
+    "baselineNs": 731674.4905676441,
+    "candidateNs": 973471.2522596925,
+    "speedup": 0.7516138651955339
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 45601.60723854283,
+    "candidateNs": 5.829387712396088,
+    "speedup": 7822.709603201007
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "long-object",
+      "refill": "false",
+      "size": "65536"
+    },
+    "baselineNs": 58469.54324320656,
+    "candidateNs": 5.402872366287018,
+    "speedup": 10821.93679200092
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.HashMapBench.clear",
+    "params": {
+      "kind": "int-object",
+      "refill": "true",
+      "size": "65536"
+    },
+    "baselineNs": 51901.15590195971,
+    "candidateNs": 52734.92637512684,
+    "speedup": 0.9841894067086365
+  }
+]

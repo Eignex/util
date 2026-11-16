@@ -1,0 +1,530 @@
+[
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "random",
+      "size": "1024"
+    },
+    "baselineNs": 4777.744211381025,
+    "candidateNs": 4567.82476812381,
+    "speedup": 1.0459561068809207
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "random",
+      "size": "1024"
+    },
+    "baselineNs": 1965.7175702871446,
+    "candidateNs": 2001.0634394188778,
+    "speedup": 0.9823364574878256
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "random",
+      "size": "1024"
+    },
+    "baselineNs": 10588.649070971449,
+    "candidateNs": 17067.38235610311,
+    "speedup": 0.6204026399622473
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "sequential",
+      "size": "1024"
+    },
+    "baselineNs": 4317.788031552163,
+    "candidateNs": 4420.4932951634455,
+    "speedup": 0.9767661080441736
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "sequential",
+      "size": "1024"
+    },
+    "baselineNs": 1843.3603578556613,
+    "candidateNs": 2495.531745638783,
+    "speedup": 0.7386643592401246
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "sequential",
+      "size": "1024"
+    },
+    "baselineNs": 9460.645291775247,
+    "candidateNs": 10043.022122594697,
+    "speedup": 0.9420117944867189
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "upper32",
+      "size": "1024"
+    },
+    "baselineNs": 3547.692696991856,
+    "candidateNs": 5373.78326031977,
+    "speedup": 0.6601852968630425
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "upper32",
+      "size": "1024"
+    },
+    "baselineNs": 2067.1023849223993,
+    "candidateNs": 2015.413993817431,
+    "speedup": 1.0256465377652084
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "upper32",
+      "size": "1024"
+    },
+    "baselineNs": 4990.974049009836,
+    "candidateNs": 10098.04675457888,
+    "speedup": 0.4942514300348944
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "upper48",
+      "size": "1024"
+    },
+    "baselineNs": 365700.07605852897,
+    "candidateNs": 4000.8110734896845,
+    "speedup": 91.40648467050687
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "upper48",
+      "size": "1024"
+    },
+    "baselineNs": 303198.19805198006,
+    "candidateNs": 1778.5522670445112,
+    "speedup": 170.4747190566495
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "upper48",
+      "size": "1024"
+    },
+    "baselineNs": 2238011.520870854,
+    "candidateNs": 4308.198065865689,
+    "speedup": 519.4773978946922
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "random",
+      "size": "8192"
+    },
+    "baselineNs": 51113.05643459062,
+    "candidateNs": 59111.30891872133,
+    "speedup": 0.8646916701653756
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "random",
+      "size": "8192"
+    },
+    "baselineNs": 41185.83413763207,
+    "candidateNs": 40498.21633544334,
+    "speedup": 1.0169789651102963
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "random",
+      "size": "8192"
+    },
+    "baselineNs": 240119.37991666616,
+    "candidateNs": 218569.90738585382,
+    "speedup": 1.0985930441594132
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "sequential",
+      "size": "8192"
+    },
+    "baselineNs": 50975.732255605355,
+    "candidateNs": 50361.27234473227,
+    "speedup": 1.0122010402490824
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "sequential",
+      "size": "8192"
+    },
+    "baselineNs": 42577.26629390028,
+    "candidateNs": 59415.05452636536,
+    "speedup": 0.7166073755769535
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "sequential",
+      "size": "8192"
+    },
+    "baselineNs": 221928.131652454,
+    "candidateNs": 231487.76093265507,
+    "speedup": 0.9587035217685561
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "upper32",
+      "size": "8192"
+    },
+    "baselineNs": 46034.077525914894,
+    "candidateNs": 39388.30267637986,
+    "speedup": 1.1687245805978923
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "upper32",
+      "size": "8192"
+    },
+    "baselineNs": 12694.137914118217,
+    "candidateNs": 30352.07383566019,
+    "speedup": 0.41822967296567615
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "upper32",
+      "size": "8192"
+    },
+    "baselineNs": 35618.54473852606,
+    "candidateNs": 226009.42285437376,
+    "speedup": 0.15759760937700554
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "upper48",
+      "size": "8192"
+    },
+    "baselineNs": 18400240.6250817,
+    "candidateNs": 61903.19996922793,
+    "speedup": 297.24215604731995
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "upper48",
+      "size": "8192"
+    },
+    "baselineNs": 16365079.911695907,
+    "candidateNs": 12861.971982713689,
+    "speedup": 1272.3616513618865
+  },
+  {
+    "repetition": 1,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "upper48",
+      "size": "8192"
+    },
+    "baselineNs": 134500681.9,
+    "candidateNs": 63163.80612196387,
+    "speedup": 2129.3948252626
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "random",
+      "size": "1024"
+    },
+    "baselineNs": 3583.412516973206,
+    "candidateNs": 6469.129495751668,
+    "speedup": 0.5539249939773911
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "random",
+      "size": "1024"
+    },
+    "baselineNs": 1695.5396549489765,
+    "candidateNs": 4645.472129531512,
+    "speedup": 0.3649875852597072
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "random",
+      "size": "1024"
+    },
+    "baselineNs": 30058.695588113915,
+    "candidateNs": 25029.31834947672,
+    "speedup": 1.2009394410352505
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "sequential",
+      "size": "1024"
+    },
+    "baselineNs": 7756.018892736666,
+    "candidateNs": 9212.222204639505,
+    "speedup": 0.8419270313334974
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "sequential",
+      "size": "1024"
+    },
+    "baselineNs": 4791.673459939241,
+    "candidateNs": 5070.832443214526,
+    "speedup": 0.9449480955244659
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "sequential",
+      "size": "1024"
+    },
+    "baselineNs": 16842.239127530233,
+    "candidateNs": 17696.97991333487,
+    "speedup": 0.951701319095662
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "upper32",
+      "size": "1024"
+    },
+    "baselineNs": 3296.4494073030387,
+    "candidateNs": 5359.836546311552,
+    "speedup": 0.6150279731145042
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "upper32",
+      "size": "1024"
+    },
+    "baselineNs": 1739.2785090298771,
+    "candidateNs": 2148.879394593313,
+    "speedup": 0.809388611294793
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "upper32",
+      "size": "1024"
+    },
+    "baselineNs": 5706.326466127981,
+    "candidateNs": 10027.363338034967,
+    "speedup": 0.5690754661779547
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "upper48",
+      "size": "1024"
+    },
+    "baselineNs": 454541.0633154224,
+    "candidateNs": 4668.04760252259,
+    "speedup": 97.37284235700395
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "upper48",
+      "size": "1024"
+    },
+    "baselineNs": 853307.5663963873,
+    "candidateNs": 2742.5949647006305,
+    "speedup": 311.1314566602548
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "upper48",
+      "size": "1024"
+    },
+    "baselineNs": 5163456.532119179,
+    "candidateNs": 10543.486378421296,
+    "speedup": 489.7295208430209
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "random",
+      "size": "8192"
+    },
+    "baselineNs": 142716.95877930324,
+    "candidateNs": 113297.7013088946,
+    "speedup": 1.2596633217667854
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "random",
+      "size": "8192"
+    },
+    "baselineNs": 52749.11111602277,
+    "candidateNs": 67045.90175202322,
+    "speedup": 0.7867611552324446
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "random",
+      "size": "8192"
+    },
+    "baselineNs": 352253.5313643619,
+    "candidateNs": 559827.7027997557,
+    "speedup": 0.6292177568253694
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "sequential",
+      "size": "8192"
+    },
+    "baselineNs": 70768.19471267081,
+    "candidateNs": 63206.55633069905,
+    "speedup": 1.1196337661936364
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "sequential",
+      "size": "8192"
+    },
+    "baselineNs": 36802.50949385772,
+    "candidateNs": 62920.089793608946,
+    "speedup": 0.5849087249331278
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "sequential",
+      "size": "8192"
+    },
+    "baselineNs": 240286.27381708776,
+    "candidateNs": 280713.53431038896,
+    "speedup": 0.8559839282683099
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "upper32",
+      "size": "8192"
+    },
+    "baselineNs": 46631.99224374011,
+    "candidateNs": 51964.10044288195,
+    "speedup": 0.8973886172627428
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "upper32",
+      "size": "8192"
+    },
+    "baselineNs": 12383.615418210276,
+    "candidateNs": 38811.30071263233,
+    "speedup": 0.31907241424092875
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "upper32",
+      "size": "8192"
+    },
+    "baselineNs": 60164.7651648528,
+    "candidateNs": 359434.9554896948,
+    "speedup": 0.16738707308776973
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.build",
+    "params": {
+      "shape": "upper48",
+      "size": "8192"
+    },
+    "baselineNs": 35317499.527539685,
+    "candidateNs": 88472.8124512702,
+    "speedup": 399.19042414292136
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.lookup",
+    "params": {
+      "shape": "upper48",
+      "size": "8192"
+    },
+    "baselineNs": 20971951.731582634,
+    "candidateNs": 24111.578576312408,
+    "speedup": 869.7875862920816
+  },
+  {
+    "repetition": 2,
+    "benchmark": "bench.LongHashBench.removeRestore",
+    "params": {
+      "shape": "upper48",
+      "size": "8192"
+    },
+    "baselineNs": 147775107.40000004,
+    "candidateNs": 73392.8787115245,
+    "speedup": 2013.4801903715988
+  }
+]
