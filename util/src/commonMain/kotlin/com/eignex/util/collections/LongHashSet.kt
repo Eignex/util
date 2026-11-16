@@ -8,7 +8,6 @@ import com.eignex.util.collections.internals.growLongKeyTable
 import com.eignex.util.collections.internals.longKeySlot
 import com.eignex.util.collections.internals.longKeysToArray
 import com.eignex.util.collections.internals.openAddressingCapacity
-import com.eignex.util.hash.fibonacciHash
 
 /**
  * Primitive open-addressing Long set with linear probing and load factor at most 0.5.
@@ -32,11 +31,7 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
         private set
 
     override operator fun contains(value: Long): Boolean {
-        var i = mix(value) and mask
-        while (used[i]) {
-            if (keys[i] == value) return true
-            i = (i + 1) and mask
-        }
+        findLongKey(keys, used, mask, value) { return true }
         return false
     }
 
@@ -122,6 +117,4 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
             mask = nextMask
         })
     }
-
-    private fun mix(x: Long): Int = fibonacciHash(x)
 }

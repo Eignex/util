@@ -1,6 +1,7 @@
 package com.eignex.util.collections.storage
 
 import com.eignex.util.collections.internals.clearPackedBit
+import com.eignex.util.collections.internals.countSetBits
 import com.eignex.util.collections.internals.fillBitRange
 import com.eignex.util.collections.internals.getPackedBit
 import com.eignex.util.collections.internals.setPackedBit
@@ -59,11 +60,7 @@ object PackedBits {
     }
 
     /** Number of set bits across all words. */
-    fun popcount(bits: LongArray): Int {
-        var c = 0
-        for (w in bits) c += w.countOneBits()
-        return c
-    }
+    fun popcount(bits: LongArray): Int = countSetBits(bits)
 
     /** Return the lowest set-bit index, or `-1` when [bits] is empty. */
     fun firstSet(bits: LongArray): Int {

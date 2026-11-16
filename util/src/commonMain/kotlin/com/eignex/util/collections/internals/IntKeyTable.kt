@@ -17,14 +17,7 @@ internal inline fun intKeySlot(keys: IntArray, used: BooleanArray, mask: Int, ke
 }
 
 internal inline fun findIntKey(keys: IntArray, used: BooleanArray, mask: Int, key: Int, found: (Int) -> Unit) {
-    var index = fibonacciHash(key) and mask
-    while (used[index]) {
-        if (keys[index] == key) {
-            found(index)
-            return
-        }
-        index = (index + 1) and mask
-    }
+    intKeySlot(keys, used, mask, key, found)
 }
 
 internal inline fun deleteIntKeySlot(

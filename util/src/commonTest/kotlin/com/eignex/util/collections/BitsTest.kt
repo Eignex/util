@@ -13,6 +13,13 @@ import kotlin.test.assertTrue
 
 class BitsTest {
     @Test
+    fun `packed popcount includes every bit across empty and signed words`() {
+        assertEquals(0, PackedBits.popcount(longArrayOf()))
+        assertEquals(0, PackedBits.popcount(LongArray(3)))
+        assertEquals(67, PackedBits.popcount(longArrayOf(-1L, Long.MIN_VALUE, 3L)))
+    }
+
+    @Test
     fun `packed word writes clear final padding`() {
         for (size in intArrayOf(1, 63, 64, 65, 130)) {
             val bits = Bits(size)

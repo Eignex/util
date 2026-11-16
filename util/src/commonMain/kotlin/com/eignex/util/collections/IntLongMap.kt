@@ -1,7 +1,9 @@
 package com.eignex.util.collections
 
+import com.eignex.util.collections.internals.findIntKey
+import com.eignex.util.collections.internals.forEachIntKey
+import com.eignex.util.collections.internals.intKeySlot
 import com.eignex.util.collections.internals.openAddressingCapacity
-import com.eignex.util.hash.fibonacciHash
 
 /**
  * Read-only primitive Int-to-Long map with the dense/sparse backing choice of [IntIntMap].
@@ -97,27 +99,15 @@ class IntLongMap private constructor(private val backing: Backing, private val a
         private val present: BooleanArray,
         override val size: Int,
     ) : Backing {
-        override fun forEachKey(action: IntConsumer) {
-            for (slot in present.indices) if (present[slot]) action.accept(keys[slot])
-        }
+        override fun forEachKey(action: IntConsumer) = forEachIntKey(keys, present, action)
 
         override fun contains(key: Int): Boolean {
-            val mask = keys.size - 1
-            var index = fibonacciHash(key) and mask
-            while (present[index]) {
-                if (keys[index] == key) return true
-                index = (index + 1) and mask
-            }
+            findIntKey(keys, present, keys.size - 1, key) { return true }
             return false
         }
 
         override fun get(key: Int, absent: Long): Long {
-            val mask = keys.size - 1
-            var i = fibonacciHash(key) and mask
-            while (present[i]) {
-                if (keys[i] == key) return values[i]
-                i = (i + 1) and mask
-            }
+            findIntKey(keys, present, keys.size - 1, key) { return values[it] }
             return absent
         }
 
@@ -130,14 +120,7 @@ class IntLongMap private constructor(private val backing: Backing, private val a
                 val mask = cap - 1
                 var size = keys.size
                 for (i in keys.indices) {
-                    var idx = fibonacciHash(keys[i]) and mask
-                    while (p[idx]) {
-                        if (k[idx] == keys[i]) {
-                            size--
-                            break
-                        }
-                        idx = (idx + 1) and mask
-                    }
+                    val idx = intKeySlot(k, p, mask, keys[i]) { size-- }
                     k[idx] = keys[i]
                     v[idx] = values[i]
                     p[idx] = true

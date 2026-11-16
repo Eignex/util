@@ -1,8 +1,12 @@
 package com.eignex.util.collections
 
 import com.eignex.util.collections.internals.bitWordCount
+import com.eignex.util.collections.internals.clearPackedBit
+import com.eignex.util.collections.internals.countSetBits
 import com.eignex.util.collections.internals.fillBitRange
 import com.eignex.util.collections.internals.forEachSetBit
+import com.eignex.util.collections.internals.getPackedBit
+import com.eignex.util.collections.internals.setPackedBit
 
 /** Multiplatform mutable bitset over `[0, size)`, packed into a [LongArray]. */
 class Bits(size: Int) : BitSet {
@@ -10,14 +14,14 @@ class Bits(size: Int) : BitSet {
 
     @PublishedApi internal val words: LongArray = LongArray(bitWordCount(size))
 
-    override operator fun get(i: Int): Boolean = (words[i ushr 6] ushr (i and 63)) and 1L == 1L
+    override operator fun get(i: Int): Boolean = getPackedBit(words, i)
 
     override fun set(i: Int) {
-        words[i ushr 6] = words[i ushr 6] or (1L shl (i and 63))
+        setPackedBit(words, i)
     }
 
     override fun clear(i: Int) {
-        words[i ushr 6] = words[i ushr 6] and (1L shl (i and 63)).inv()
+        clearPackedBit(words, i)
     }
 
     override fun clear() {
@@ -43,11 +47,7 @@ class Bits(size: Int) : BitSet {
         forEachSetBit(words, words.size, block)
     }
 
-    override fun cardinality(): Int {
-        var c = 0
-        for (w in words) c += w.countOneBits()
-        return c
-    }
+    override fun cardinality(): Int = countSetBits(words)
 
     override fun toIntArray(): IntArray {
         val out = IntArray(cardinality())

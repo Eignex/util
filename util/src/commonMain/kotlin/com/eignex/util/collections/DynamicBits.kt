@@ -2,6 +2,7 @@ package com.eignex.util.collections
 
 import com.eignex.util.collections.internals.bitWordCount
 import com.eignex.util.collections.internals.clearPackedBit
+import com.eignex.util.collections.internals.countSetBits
 import com.eignex.util.collections.internals.fillBitRange
 import com.eignex.util.collections.internals.forEachSetBit
 import com.eignex.util.collections.internals.getPackedBit
@@ -103,11 +104,7 @@ class DynamicBits(initialCapacity: Int = 0) : BitSet {
         forEachSetBit(words, (size ushr 6) + if (size and 63 == 0) 0 else 1, block)
     }
 
-    override fun cardinality(): Int {
-        var count = 0
-        for (i in 0 until bitWordCount(size)) count += words[i].countOneBits()
-        return count
-    }
+    override fun cardinality(): Int = countSetBits(words, bitWordCount(size))
 
     /** Independent copy with the same logical size and bit values. */
     fun copy(): DynamicBits = DynamicBits(size).also {
