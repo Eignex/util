@@ -150,6 +150,9 @@ internal object UtilSuite : BenchSuite {
         Files.deleteIfExists(jsonPath)
         val argv = listOf(
             Path.of(System.getProperty("java.home"), "bin", "java").toString(),
+            // A lab worker runs several cases at once, each on its own reserved CPU. JMH's
+            // machine-wide lock in the shared temp directory would fail all but one of them.
+            "-Djmh.ignoreLock=true",
             "-cp", absoluteClasspath(), "org.openjdk.jmh.Main",
             "^com\\.eignex\\.util\\.bench\\.CollectionsBenchmark\\.batch$",
             "-p", "workload=$workload", "-p", "size=$size", "-p", "seed=$seed",
