@@ -3,17 +3,16 @@ package com.eignex.util.collections
 import com.eignex.util.arrays.binarySearchLong
 
 /**
- * Primitive growable Long list backed by a doubling [LongArray]. [removeAt] and
- * [removeValue] swap-remove without preserving order. Not thread-safe.
+ * Primitive growable Long list backed by a doubling [LongArray]. [removeAtSwap] and
+ * [removeValueSwap] swap-remove without preserving order. Not thread-safe.
  */
 class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
     private var data: LongArray = LongArray(initialCapacity.coerceAtLeast(1))
 
+    internal val primitiveCapacityBytesInternal: Long get() = data.size.toLong() * Long.SIZE_BYTES
+
     override var size: Int = 0
         private set
-
-    /** Bytes in the backing primitive array, excluding its object header. */
-    val allocatedBytes: Long get() = data.size.toLong() * Long.SIZE_BYTES
 
     /** Append [value], growing the backing array when needed. */
     fun add(value: Long) {
@@ -54,13 +53,13 @@ class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
      * Swap-remove the element at [index] (O(1); does not preserve order).
      * @throws IndexOutOfBoundsException when [index] is outside the live elements.
      */
-    fun removeAt(index: Int) {
+    fun removeAtSwap(index: Int) {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
         data[index] = data[--size]
     }
 
     /** Find the first occurrence of [value] and swap-remove it; returns true if found. */
-    fun removeValue(value: Long): Boolean {
+    fun removeValueSwap(value: Long): Boolean {
         val d = data
         val n = size
         for (i in 0 until n) {
@@ -148,4 +147,6 @@ class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
     inline fun forEach(action: (Long) -> Unit) {
         for (i in 0 until size) action(this[i])
     }
+
+    internal val backingDataInternal: LongArray get() = data
 }

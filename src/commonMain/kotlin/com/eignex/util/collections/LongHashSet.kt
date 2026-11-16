@@ -7,8 +7,8 @@ import com.eignex.util.collections.internals.forEachLongKey
 import com.eignex.util.collections.internals.growLongKeyTable
 import com.eignex.util.collections.internals.longKeySlot
 import com.eignex.util.collections.internals.longKeysToArray
-import com.eignex.util.collections.internals.mixLongKey
 import com.eignex.util.collections.internals.openAddressingCapacity
+import com.eignex.util.hash.fibonacciHash
 
 /**
  * Primitive open-addressing Long set with linear probing and load factor at most 0.5.
@@ -22,9 +22,11 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
     private var mask: Int = 0
     private val initialCap = openAddressingCapacity(initialCapacity)
 
-    /** Bytes in allocated primitive arrays, excluding object headers and shared empty storage. */
-    val allocatedBytes: Long
-        get() = if (used === EmptyLongKeyTable.used) 0L else keys.size.toLong() * (Long.SIZE_BYTES + 1L)
+    internal val primitiveCapacityBytesInternal: Long
+        get() {
+            if (used === EmptyLongKeyTable.used) return 0L
+            return keys.size.toLong() * (Long.SIZE_BYTES + 1L)
+        }
 
     override var size: Int = 0
         private set
@@ -38,25 +40,6 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
         return false
     }
 
-    /**
-     * Query membership within [maxWork] slot visits, invoking [charge] for each visit.
-     * Return null on exhaustion or [cancelled]. No mutation occurs.
-     */
-    fun containsBounded(value: Long, maxWork: Long, cancelled: () -> Boolean, charge: () -> Unit): Boolean? {
-        require(maxWork >= 0L)
-        var work = 0L
-        var slot = mixLongKey(value) and mask
-        while (true) {
-            if (work >= maxWork || cancelled()) return null
-            charge()
-            work++
-            if (cancelled()) return null
-            if (!used[slot]) return false
-            if (keys[slot] == value) return true
-            slot = (slot + 1) and mask
-        }
-    }
-
     override fun add(value: Long): Boolean {
         if (used === EmptyLongKeyTable.used) {
             keys = LongArray(initialCap)
@@ -68,81 +51,6 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
         keys[slot] = value
         size++
         if (size * 2 > keys.size) grow()
-        return true
-    }
-
-    /**
-     * Add within byte, work and scratch limits, charging each work unit through [charge].
-     * Return true for insertion, false for an existing value, or null on exhaustion or cancellation.
-     * An incomplete attempt preserves membership and the published backing arrays.
-     */
-    fun tryAddBounded(
-        value: Long,
-        maxBytes: Long,
-        maxWork: Long,
-        maxScratchBytes: Long,
-        cancelled: () -> Boolean,
-        charge: () -> Unit,
-    ): Boolean? {
-        require(maxBytes >= 0L && maxWork >= 0L && maxScratchBytes >= 0L)
-        var work = 0L
-        fun step(): Boolean {
-            if (work >= maxWork || cancelled()) return false
-            charge()
-            work++
-            return !cancelled()
-        }
-        var slot = mixLongKey(value) and mask
-        while (true) {
-            if (!step()) return null
-            if (!used[slot]) break
-            if (keys[slot] == value) return false
-            slot = (slot + 1) and mask
-        }
-        val capacity = when {
-            used === EmptyLongKeyTable.used -> initialCap
-            (size + 1L) * 2L > keys.size -> if (keys.size <= Int.MAX_VALUE / 2) keys.size * 2 else return null
-            else -> keys.size
-        }
-        if (capacity.toLong() * 9L > maxBytes) return null
-        if (capacity == keys.size && used !== EmptyLongKeyTable.used) {
-            if (!step()) return null
-            used[slot] = true
-            keys[slot] = value
-            size++
-            return true
-        }
-        if (capacity.toLong() * 9L > maxScratchBytes || capacity.toLong() * 2L > maxWork - work) return null
-        repeat(capacity) { if (!step() || !step()) return null }
-        if (!step()) return null
-        val nextKeys = LongArray(capacity)
-        val nextUsed = BooleanArray(capacity)
-        val nextMask = capacity - 1
-        for (index in used.indices) {
-            if (!step()) return null
-            if (!used[index]) continue
-            var target = mixLongKey(keys[index]) and nextMask
-            while (true) {
-                if (!step()) return null
-                if (!nextUsed[target]) break
-                target = (target + 1) and nextMask
-            }
-            nextKeys[target] = keys[index]
-            nextUsed[target] = true
-        }
-        slot = mixLongKey(value) and nextMask
-        while (true) {
-            if (!step()) return null
-            if (!nextUsed[slot]) break
-            slot = (slot + 1) and nextMask
-        }
-        nextKeys[slot] = value
-        nextUsed[slot] = true
-        if (!step()) return null
-        keys = nextKeys
-        used = nextUsed
-        mask = nextMask
-        size++
         return true
     }
 
@@ -192,6 +100,21 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
 
     @PublishedApi internal val usedInternal: BooleanArray get() = used
 
+    internal val initialCapacityInternal: Int get() = initialCap
+
+    internal fun insertAtSlot(slot: Int, value: Long) {
+        used[slot] = true
+        keys[slot] = value
+        size++
+    }
+
+    internal fun publishInsertion(nextKeys: LongArray, nextUsed: BooleanArray, nextMask: Int) {
+        keys = nextKeys
+        used = nextUsed
+        mask = nextMask
+        size++
+    }
+
     private fun grow() {
         growLongKeyTable(keys, used, {}, { _, _ -> }, { nextKeys, nextUsed, nextMask ->
             keys = nextKeys
@@ -200,5 +123,5 @@ class LongHashSet(initialCapacity: Int = 8) : MutableLongSet {
         })
     }
 
-    private fun mix(x: Long): Int = mixLongKey(x)
+    private fun mix(x: Long): Int = fibonacciHash(x)
 }

@@ -19,6 +19,8 @@ class MutableLongObjectMap<V>(initialCapacity: Int = 8) : LongKeyed {
     private var used: BooleanArray
     private var mask: Int
 
+    internal val primitiveCapacityBytesInternal: Long get() = keys.size.toLong() * 9L
+
     override var size: Int = 0
         private set
 

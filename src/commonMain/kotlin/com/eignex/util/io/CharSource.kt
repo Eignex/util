@@ -3,11 +3,14 @@ package com.eignex.util.io
 /**
  * A forward-only text source whose [next] slices have arbitrary boundaries.
  * Consumers must buffer tokens or lines spanning slices. A source is consumed once.
- * File-backed sources can also implement [AutoCloseable]; [useSource] releases those resources.
+ * The caller owns the source and closes it with [close] or [useSource], including after early termination.
  */
-interface CharSource {
+interface CharSource : AutoCloseable {
     /** The next nonempty slice of characters, or `null` once the input is exhausted. */
     fun next(): String?
+
+    /** Release owned resources. Repeated calls are harmless; subsequent [next] calls return null. */
+    override fun close()
 }
 
 /** An in-memory [CharSource] over [text], consumed once. */
@@ -15,6 +18,10 @@ class StringCharSource(text: String) : CharSource {
     private var remaining: String? = text.ifEmpty { null }
 
     override fun next(): String? = remaining.also { remaining = null }
+
+    override fun close() {
+        remaining = null
+    }
 }
 
 /** Consume the remaining source into a [String]. */
@@ -27,7 +34,8 @@ fun CharSource.readText(): String {
 
 /**
  * Lazily consume lines across chunk boundaries, stripping `\n` and `\r\n` terminators.
- * A final unterminated line is yielded.
+ * A final unterminated line is yielded. This sequence consumes its source once and does not close it;
+ * iterate inside [useSource], including when stopping early.
  */
 fun CharSource.lineSequence(): Sequence<String> = sequence {
     val carry = StringBuilder()
@@ -60,4 +68,4 @@ private fun stripCr(line: String): String =
     if (line.isNotEmpty() && line[line.length - 1] == '\r') line.substring(0, line.length - 1) else line
 
 /** Consume this source and close its resources on success, exceptions and early returns. */
-inline fun <T> CharSource.useSource(read: (CharSource) -> T): T = (this as? AutoCloseable).use { read(this) }
+inline fun <T> CharSource.useSource(read: (CharSource) -> T): T = use { read(this) }

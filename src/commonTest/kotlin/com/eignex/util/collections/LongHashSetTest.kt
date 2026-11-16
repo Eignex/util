@@ -1,6 +1,9 @@
 package com.eignex.util.collections
 
-import com.eignex.util.collections.internals.mixLongKey
+import com.eignex.util.collections.cooperative.containsBounded
+import com.eignex.util.collections.cooperative.tryAddBounded
+import com.eignex.util.collections.storage.primitiveCapacityBytes
+import com.eignex.util.hash.fibonacciHash
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -13,18 +16,18 @@ class LongHashSetTest {
         for ((existing, additional) in listOf(0 to 0, 0 to 1, 1 to 1, 8 to 1)) {
             val set = LongHashSet()
             repeat(existing) { set.add(it.toLong()) }
-            val bytes = set.allocatedBytes
+            val bytes = set.primitiveCapacityBytes
 
             val fits = set.canAddWithoutGrowing(additional)
             repeat(additional) { set.add((existing + it).toLong()) }
 
-            assertEquals(fits, bytes == set.allocatedBytes)
+            assertEquals(fits, bytes == set.primitiveCapacityBytes)
         }
     }
 
     @Test
     fun `bounded lookup should stop a collision chain without changing retained keys`() {
-        val keys = (0L..64L).groupBy { mixLongKey(it) and 15 }.values.first { it.size >= 3 }.take(3)
+        val keys = (0L..64L).groupBy { fibonacciHash(it) and 15 }.values.first { it.size >= 3 }.take(3)
         val set = LongHashSet()
         for (key in keys) set.add(key)
         var charged = 0
@@ -59,7 +62,7 @@ class LongHashSetTest {
         val added = set.tryAddBounded(4L, 72L, 1000L, 1000L, { false }, {})
 
         assertEquals(null, added)
-        assertEquals(72L, set.allocatedBytes)
+        assertEquals(72L, set.primitiveCapacityBytes)
         assertEquals(4, set.size)
         repeat(4) { assertTrue(it.toLong() in set) }
         assertEquals(false, set.tryAddBounded(0L, 0L, 1000L, 0L, { false }, {}))
@@ -74,7 +77,7 @@ class LongHashSetTest {
         val added = set.tryAddBounded(4L, 1000L, 1000L, 1000L, { charged >= 10 }, { charged++ })
 
         assertEquals(null, added)
-        assertEquals(72L, set.allocatedBytes)
+        assertEquals(72L, set.primitiveCapacityBytes)
         assertEquals(4, set.size)
         repeat(4) { assertTrue(it.toLong() in set) }
         assertFalse(4L in set)
@@ -88,7 +91,7 @@ class LongHashSetTest {
             val added = set.tryAddBounded(1L, 1000L, work, scratch, { false }, {})
 
             assertEquals(null, added)
-            assertEquals(0L, set.allocatedBytes)
+            assertEquals(0L, set.primitiveCapacityBytes)
             assertEquals(0, set.size)
         }
     }
@@ -107,7 +110,7 @@ class LongHashSetTest {
 
         assertEquals(null, added)
         assertEquals(required, charged)
-        assertEquals(72L, set.allocatedBytes)
+        assertEquals(72L, set.primitiveCapacityBytes)
         assertEquals(4, set.size)
         assertFalse(4L in set)
     }

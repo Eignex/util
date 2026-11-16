@@ -9,6 +9,8 @@ import com.eignex.util.arrays.lowerBoundInt
 class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
     private var data: IntArray = IntArray(initialCapacity.coerceAtLeast(1))
 
+    internal val primitiveCapacityBytesInternal: Long get() = data.size.toLong() * Int.SIZE_BYTES
+
     override var size: Int = 0
         private set
 
@@ -59,13 +61,13 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
      * Swap-remove the element at [index] (O(1); does not preserve order).
      * @throws IndexOutOfBoundsException when [index] is outside the live elements.
      */
-    fun removeAt(index: Int) {
+    fun removeAtSwap(index: Int) {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
         data[index] = data[--size]
     }
 
     /** Swap-remove the first occurrence of [value], returning true if found. Does not preserve order. */
-    fun removeValue(value: Int): Boolean {
+    fun removeValueSwap(value: Int): Boolean {
         val d = data
         val n = size
         for (i in 0 until n) {
@@ -150,7 +152,7 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
     /** Sort by integer [key] without boxing; ties use the element's unsigned bits.
      *  [descending] reverses the result. */
     inline fun sortByIntKey(descending: Boolean = false, key: (Int) -> Int) {
-        val d = backingData
+        val d = backingDataInternal
         val n = size
         val packed = LongArray(n) { (key(d[it]).toLong() shl 32) or (d[it].toLong() and 0xFFFFFFFFL) }
         packed.sort()
@@ -161,9 +163,5 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
         }
     }
 
-    /**
-     * Borrow the backing array without copying; only `0 until size` contains live elements.
-     * Writes to live elements update this list. Growth and [trim] can replace this array.
-     */
-    val backingData: IntArray get() = data
+    @PublishedApi internal val backingDataInternal: IntArray get() = data
 }

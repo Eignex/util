@@ -20,25 +20,9 @@ internal value class DoubleAdder(val ref: JDoubleAdder) : DoubleCounter {
 
     override fun load(): Double = ref.sum()
 
-    // A relative add preserves racing contributions; non-finite deltas require resetting the stripes.
-    override fun store(value: Double) {
-        val delta = value - ref.sum()
-        if (delta.isFinite()) {
-            ref.add(delta)
-        } else {
-            ref.reset()
-            ref.add(value)
-        }
-    }
-
     override fun add(delta: Double) {
         if (delta == 0.0) return
         ref.add(delta)
-    }
-
-    override fun addAndGet(delta: Double): Double {
-        ref.add(delta)
-        return ref.sum()
     }
 }
 
@@ -48,18 +32,8 @@ internal value class LongAdder(val ref: JLongAdder) : LongCounter {
 
     override fun load(): Long = ref.sum()
 
-    // Resetting stripes can discard racing adds; a relative add preserves their contributions.
-    override fun store(value: Long) {
-        ref.add(value - ref.sum())
-    }
-
     override fun add(delta: Long) {
         if (delta == 0L) return
         ref.add(delta)
-    }
-
-    override fun addAndGet(delta: Long): Long {
-        ref.add(delta)
-        return ref.sum()
     }
 }

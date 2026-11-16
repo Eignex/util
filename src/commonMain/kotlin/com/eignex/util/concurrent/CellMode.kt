@@ -1,17 +1,9 @@
 package com.eignex.util.concurrent
 
-import kotlin.reflect.KProperty
-
-/** Creates additive counters whose read and replacement guarantees depend on the implementation. */
-interface CounterMode {
-    /** Create a floating-point counter initialized to [initial]. */
-    fun newDouble(initial: Double = 0.0): DoubleCounter
-
-    /** Create an integer counter initialized to [initial]. */
-    fun newLong(initial: Long = 0L): LongCounter
-}
-
-/** Creates scalar and array cells that support compare-and-set operations. */
+/**
+ * Creates exact scalar and array storage with compare-and-set operations. AtomicCells synchronizes
+ * each operation; SerialCells requires thread confinement or external synchronization.
+ */
 interface CellMode : CounterMode {
     override fun newDouble(initial: Double): DoubleCell
     override fun newLong(initial: Long): LongCell
@@ -27,49 +19,28 @@ interface CellMode : CounterMode {
 }
 
 /**
- * Additive floating-point storage. Atomic cells provide linearizable operations; striped
- * counters provide best-effort totals. Plain cells require external synchronization.
+ * Exact floating-point cell. Compare-and-set uses raw IEEE-754 bits, including NaN payloads and signed zero.
+ * Zero additions preserve the stored bits. Atomicity depends on the owning mode.
  */
-interface DoubleCounter {
-    /** Read the current value, or a best-effort total for a striped counter. */
-    fun load(): Double
-
-    /**
-     * Replace the value. Striped counters use a relative adjustment and concurrent stores
-     * are best-effort. Non-finite striped replacements reset storage and can lose racing adds.
-     */
+interface DoubleCell : DoubleCounter {
+    /** Replace the stored value exactly, preserving its raw bits. */
     fun store(value: Double)
 
-    /** Add [delta]. A zero delta preserves the stored value's bits in plain and atomic cells. */
-    fun add(delta: Double)
-
-    /** Add [delta] and read the result. Striped totals may include other concurrent additions. */
+    /** Add [delta] and return the value produced by that update. */
     fun addAndGet(delta: Double): Double
-}
 
-/** Additive integer storage with the owning mode's read and replacement guarantees. */
-interface LongCounter {
-    /** Read the current value, or a best-effort total for a striped counter. */
-    fun load(): Long
-
-    /** Replace the value; striped counters use a best-effort relative adjustment. */
-    fun store(value: Long)
-
-    /** Add [delta], wrapping on integer overflow. */
-    fun add(delta: Long)
-
-    /** Add [delta] and read the result. Striped totals may include other concurrent additions. */
-    fun addAndGet(delta: Long): Long
-}
-
-/** Floating-point cell whose comparisons use raw IEEE-754 bits, including NaN payloads and signed zero. */
-interface DoubleCell : DoubleCounter {
     /** Replace the value only when its raw bits match [expectedValue]. */
     fun compareAndSet(expectedValue: Double, newValue: Double): Boolean
 }
 
-/** Integer cell with compare-and-set support. */
+/** Exact integer cell with compare-and-set support; atomicity depends on the owning mode. */
 interface LongCell : LongCounter {
+    /** Replace the stored value exactly. */
+    fun store(value: Long)
+
+    /** Add [delta] and return the value produced by that update, wrapping on overflow. */
+    fun addAndGet(delta: Long): Long
+
     /** Replace the value only when it equals [expectedValue]. */
     fun compareAndSet(expectedValue: Long, newValue: Long): Boolean
 }
@@ -127,12 +98,6 @@ interface LongCellArray {
     /** Replace the cell only when it equals [expectedValue]. */
     fun compareAndSet(index: Int, expectedValue: Long, newValue: Long): Boolean
 }
-
-/** Read a floating-point counter as a delegated property. */
-operator fun DoubleCounter.getValue(thisRef: Any?, property: KProperty<*>): Double = load()
-
-/** Read an integer counter as a delegated property. */
-operator fun LongCounter.getValue(thisRef: Any?, property: KProperty<*>): Long = load()
 
 internal fun rejectBoxedPrimitive(initial: Any?) {
     require(initial !is Double && initial !is Long) {

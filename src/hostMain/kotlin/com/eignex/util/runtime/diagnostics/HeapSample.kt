@@ -1,4 +1,4 @@
-package com.eignex.util.platform
+package com.eignex.util.runtime.diagnostics
 
 /** A diagnostic heap reading; collecting a sample may trigger garbage collection. */
 class HeapSample(

@@ -10,25 +10,6 @@ class Bits(size: Int) : BitSet {
 
     @PublishedApi internal val words: LongArray = LongArray(bitWordCount(size))
 
-    /** Number of packed 64-bit words, including a partial final word. */
-    val wordCount: Int get() = words.size
-
-    /** Packed word at [index], which must lie in `0 until wordCount`. */
-    fun getWord(index: Int): Long = words[index]
-
-    /** Replace packed word [index], clearing padding beyond [size] in the final word. */
-    fun setWord(index: Int, value: Long) {
-        val tail = size and 63
-        words[index] = if (index == words.lastIndex && tail != 0) value and (-1L ushr (64 - tail)) else value
-    }
-
-    /** Copy matching word positions `[fromIndex, toIndex)` from equal-sized [other]. */
-    fun copyWordsFrom(other: Bits, fromIndex: Int, toIndex: Int) {
-        require(size == other.size)
-        require(fromIndex >= 0 && fromIndex <= toIndex && toIndex <= wordCount)
-        other.words.copyInto(words, fromIndex, fromIndex, toIndex)
-    }
-
     override operator fun get(i: Int): Boolean = (words[i ushr 6] ushr (i and 63)) and 1L == 1L
 
     override fun set(i: Int) {
@@ -133,84 +114,8 @@ class Bits(size: Int) : BitSet {
         return sb.toString()
     }
 
-    /** Operations on packed bit arrays. */
+    /** Factories for fixed-size logical bitsets. */
     companion object {
-        /** Return whether [bit] is set in [bits]. */
-        fun has(bits: LongArray, bit: Int): Boolean = ((bits[bit ushr 6] ushr (bit and 63)) and 1L) != 0L
-
-        /** Set [bit] in [bits]. */
-        fun set(bits: LongArray, bit: Int) {
-            bits[bit ushr 6] = bits[bit ushr 6] or (1L shl (bit and 63))
-        }
-
-        /** Clear [bit] in [bits]. */
-        fun clear(bits: LongArray, bit: Int) {
-            val w = bit ushr 6
-            bits[w] = bits[w] and (1L shl (bit and 63)).inv()
-        }
-
-        /** Set bits `[from, to)`. */
-        fun fillRange(bits: LongArray, from: Int, to: Int) {
-            if (from >= to) return
-            fillBitRange(bits, from, to, true)
-        }
-
-        /** Clear all bits with index `< exclusiveBit`. */
-        fun clearBelow(bits: LongArray, exclusiveBit: Int) {
-            if (exclusiveBit <= 0) return
-            val fullWords = exclusiveBit ushr 6
-            val rem = exclusiveBit and 63
-            val limit = minOf(fullWords, bits.size)
-            for (w in 0 until limit) bits[w] = 0L
-            if (fullWords < bits.size && rem > 0) {
-                bits[fullWords] = bits[fullWords] and ((1L shl rem) - 1L).inv()
-            }
-        }
-
-        /** Clear all bits with index `> inclusiveBit`. */
-        fun clearAbove(bits: LongArray, inclusiveBit: Int) {
-            if (inclusiveBit < 0) {
-                bits.fill(0L)
-                return
-            }
-            val fromWord = (inclusiveBit + 1) ushr 6
-            val rem = (inclusiveBit + 1) and 63
-            if (fromWord < bits.size && rem > 0) {
-                bits[fromWord] = bits[fromWord] and ((1L shl rem) - 1L)
-                for (w in fromWord + 1 until bits.size) bits[w] = 0L
-            } else {
-                for (w in fromWord until bits.size) bits[w] = 0L
-            }
-        }
-
-        /** XOR [src] into [dst] word-by-word: `dst ^= src`. Both arrays must be the same length. */
-        fun xorInto(dst: LongArray, src: LongArray) {
-            for (i in dst.indices) dst[i] = dst[i] xor src[i]
-        }
-
-        /** Number of set bits across all words. */
-        fun popcount(bits: LongArray): Int {
-            var c = 0
-            for (w in bits) c += w.countOneBits()
-            return c
-        }
-
-        /** Return the lowest set-bit index, or `-1` when [bits] is empty. */
-        fun firstSet(bits: LongArray): Int {
-            for (w in bits.indices) {
-                if (bits[w] != 0L) return (w shl 6) + bits[w].countTrailingZeroBits()
-            }
-            return -1
-        }
-
-        /** Return the highest set-bit index, or `-1` when [bits] is empty. */
-        fun lastSet(bits: LongArray): Int {
-            for (w in bits.indices.reversed()) {
-                if (bits[w] != 0L) return (w shl 6) + (63 - bits[w].countLeadingZeroBits())
-            }
-            return -1
-        }
-
         /** Return an empty bitset of [size] bits. */
         fun empty(size: Int): Bits = Bits(size)
 

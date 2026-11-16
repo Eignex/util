@@ -1,4 +1,4 @@
-package com.eignex.util.platform
+package com.eignex.util.runtime
 
 /**
  * Hash of [value]'s reference identity, independent of its overridden hash code.

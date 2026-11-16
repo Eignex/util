@@ -19,7 +19,7 @@ class MutableIntIntMap(initialCapacity: Int = 8) : IntIntLookup {
     private var used: BooleanArray
     private var mask: Int
 
-    internal val primitiveCapacityBytes: Long get() = keys.size.toLong() * 9L
+    internal val primitiveCapacityBytesInternal: Long get() = keys.size.toLong() * 9L
 
     override var size: Int = 0
         private set

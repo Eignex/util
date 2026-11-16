@@ -596,7 +596,7 @@ public final class Workloads {
                 for (int i : d.order) {
                     int old = list.get(i), last = list.last();
                     sum += old;
-                    list.removeAt(i);
+                    list.removeAtSwap(i);
                     if (i < list.getSize()) list.set(i, old);
                     list.add(last);
                 }
@@ -635,7 +635,7 @@ public final class Workloads {
                 for (int i : d.order) {
                     long old = list.get(i), last = list.last();
                     sum += old;
-                    list.removeAt(i);
+                    list.removeAtSwap(i);
                     if (i < list.getSize()) list.set(i, old);
                     list.add(last);
                 }

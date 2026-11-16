@@ -1,4 +1,4 @@
-package com.eignex.util.platform
+package com.eignex.util.runtime.diagnostics
 
 /**
  * Start process-lifetime peak-heap sampling on a daemon JVM thread. Repeated calls are a no-op.

@@ -23,6 +23,9 @@ Shared Kotlin Multiplatform primitives for Eignex libraries and applications.
 - Text input: chunked character sources, buffered character reading and compressed file input.
 - Host concurrency: ordered parallel execution on JVM threads and Native workers.
 - Process support: properties/environment, standard output flushing, error output and process exit.
-- Runtime diagnostics: reference identity hashing, JVM heap samples and cumulative JIT compilation time.
+- Runtime identity and diagnostics: reference identity hashing, JVM heap samples and cumulative JIT compilation time.
 
 Primitive collection benchmarks and the eignex-lab adapter are in [util-bench](util-bench/README.md).
+
+Package ownership, target availability, behavioral contracts and API migrations are documented in
+[Package contracts](docs/packages.md).

@@ -1,8 +1,5 @@
 package com.eignex.util.hash
 
-import com.eignex.util.collections.internals.mixIntKey
-import com.eignex.util.collections.internals.mixLongKey
-
 /**
  * Deterministic SplitMix64 mixer. Not a cryptographic hash.
  */
@@ -14,7 +11,7 @@ fun splitmix64(value: Long): Long {
 }
 
 /**
- * Deterministic 64-bit hash of [bytes], stable across platforms.
+ * Deterministic 64-bit hash of [bytes], stable across platforms and library versions.
  * Mixes the input length, little-endian 8-byte chunks and a final tail. Not a cryptographic hash.
  */
 fun hash64(bytes: ByteArray): Long {
@@ -43,7 +40,15 @@ fun hash64(bytes: ByteArray): Long {
 fun hash64(value: String): Long = hash64(value.encodeToByteArray())
 
 /** Fibonacci multiplication with additional mixing of an Int key for power-of-two hash tables. */
-fun fibonacciHash(value: Int): Int = mixIntKey(value)
+fun fibonacciHash(value: Int): Int {
+    // Fold high bits before multiplying so strided keys do not retain identical low bits.
+    var h = (value xor (value ushr 16)) * -0x61c88647
+    h = (h xor (h ushr 13)) * -0x3d4d51cb
+    return h xor (h ushr 16)
+}
 
 /** Folded Fibonacci multiplicative mixing of a Long key into a 32-bit table hash. */
-fun fibonacciHash(value: Long): Int = mixLongKey(value)
+fun fibonacciHash(value: Long): Int {
+    val mixed = value * -0x61c8864680b583ebL
+    return (mixed xor (mixed ushr 32)).toInt()
+}

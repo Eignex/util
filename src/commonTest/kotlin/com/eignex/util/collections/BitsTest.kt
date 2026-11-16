@@ -1,5 +1,10 @@
 package com.eignex.util.collections
 
+import com.eignex.util.collections.storage.PackedBits
+import com.eignex.util.collections.storage.copyWordsFrom
+import com.eignex.util.collections.storage.getWord
+import com.eignex.util.collections.storage.setWord
+import com.eignex.util.collections.storage.wordCount
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -78,46 +83,46 @@ class BitsTest {
     @Test
     fun `companion set has and clear should round-trip across words`() {
         val bits = LongArray(3)
-        Bits.set(bits, 0)
-        Bits.set(bits, 63)
-        Bits.set(bits, 64)
-        Bits.set(bits, 129)
-        assertTrue(Bits.has(bits, 0))
-        assertTrue(Bits.has(bits, 63))
-        assertTrue(Bits.has(bits, 64))
-        assertTrue(Bits.has(bits, 129))
-        assertFalse(Bits.has(bits, 1))
-        assertFalse(Bits.has(bits, 128))
-        Bits.clear(bits, 64)
-        assertFalse(Bits.has(bits, 64))
-        assertTrue(Bits.has(bits, 63))
+        PackedBits.set(bits, 0)
+        PackedBits.set(bits, 63)
+        PackedBits.set(bits, 64)
+        PackedBits.set(bits, 129)
+        assertTrue(PackedBits.has(bits, 0))
+        assertTrue(PackedBits.has(bits, 63))
+        assertTrue(PackedBits.has(bits, 64))
+        assertTrue(PackedBits.has(bits, 129))
+        assertFalse(PackedBits.has(bits, 1))
+        assertFalse(PackedBits.has(bits, 128))
+        PackedBits.clear(bits, 64)
+        assertFalse(PackedBits.has(bits, 64))
+        assertTrue(PackedBits.has(bits, 63))
     }
 
     @Test
     fun `fillRange should set a half open range across word boundaries`() {
         val bits = LongArray(3)
-        Bits.fillRange(bits, 61, 67)
-        for (i in 0..60) assertFalse(Bits.has(bits, i), "bit $i")
-        for (i in 61..66) assertTrue(Bits.has(bits, i), "bit $i")
-        for (i in 67..140) assertFalse(Bits.has(bits, i), "bit $i")
+        PackedBits.fillRange(bits, 61, 67)
+        for (i in 0..60) assertFalse(PackedBits.has(bits, i), "bit $i")
+        for (i in 61..66) assertTrue(PackedBits.has(bits, i), "bit $i")
+        for (i in 67..140) assertFalse(PackedBits.has(bits, i), "bit $i")
     }
 
     @Test
     fun `clearBelow should clear only bits below the exclusive boundary`() {
         val bits = LongArray(3)
-        Bits.fillRange(bits, 0, 140)
-        Bits.clearBelow(bits, 65)
-        for (i in 0..64) assertFalse(Bits.has(bits, i), "bit $i")
-        for (i in 65..139) assertTrue(Bits.has(bits, i), "bit $i")
+        PackedBits.fillRange(bits, 0, 140)
+        PackedBits.clearBelow(bits, 65)
+        for (i in 0..64) assertFalse(PackedBits.has(bits, i), "bit $i")
+        for (i in 65..139) assertTrue(PackedBits.has(bits, i), "bit $i")
     }
 
     @Test
     fun `clearAbove should clear only bits above the inclusive boundary`() {
         val bits = LongArray(3)
-        Bits.fillRange(bits, 0, 140)
-        Bits.clearAbove(bits, 65)
-        for (i in 0..65) assertTrue(Bits.has(bits, i), "bit $i")
-        for (i in 66..139) assertFalse(Bits.has(bits, i), "bit $i")
+        PackedBits.fillRange(bits, 0, 140)
+        PackedBits.clearAbove(bits, 65)
+        for (i in 0..65) assertTrue(PackedBits.has(bits, i), "bit $i")
+        for (i in 66..139) assertFalse(PackedBits.has(bits, i), "bit $i")
     }
 
     @Test
@@ -125,10 +130,10 @@ class BitsTest {
         for (boundary in intArrayOf(Int.MIN_VALUE, -65, -64, -2, -1)) {
             val bits = longArrayOf(1L, Long.MIN_VALUE, 0x55L, -1L)
 
-            Bits.clearAbove(bits, boundary)
+            PackedBits.clearAbove(bits, boundary)
 
             assertContentEquals(LongArray(bits.size), bits, "boundary $boundary")
-            Bits.clearAbove(LongArray(0), boundary)
+            PackedBits.clearAbove(LongArray(0), boundary)
         }
     }
 
@@ -137,7 +142,7 @@ class BitsTest {
         val bits = longArrayOf(1L, Long.MIN_VALUE, 0x55L, -1L)
         val expected = bits.copyOf()
 
-        Bits.clearAbove(bits, Int.MAX_VALUE)
+        PackedBits.clearAbove(bits, Int.MAX_VALUE)
 
         assertContentEquals(expected, bits)
     }
@@ -145,14 +150,14 @@ class BitsTest {
     @Test
     fun `firstSet and lastSet should return a sentinel when empty and the extremes otherwise`() {
         val empty = LongArray(2)
-        assertEquals(-1, Bits.firstSet(empty))
-        assertEquals(-1, Bits.lastSet(empty))
+        assertEquals(-1, PackedBits.firstSet(empty))
+        assertEquals(-1, PackedBits.lastSet(empty))
 
         val bits = LongArray(3)
-        Bits.set(bits, 5)
-        Bits.set(bits, 73)
-        Bits.set(bits, 130)
-        assertEquals(5, Bits.firstSet(bits))
-        assertEquals(130, Bits.lastSet(bits))
+        PackedBits.set(bits, 5)
+        PackedBits.set(bits, 73)
+        PackedBits.set(bits, 130)
+        assertEquals(5, PackedBits.firstSet(bits))
+        assertEquals(130, PackedBits.lastSet(bits))
     }
 }

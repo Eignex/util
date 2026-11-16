@@ -51,6 +51,7 @@ internal value class AtomicDouble(val ref: KAtomicLong) : DoubleCell {
     }
 
     override fun addAndGet(delta: Double): Double {
+        if (delta == 0.0) return load()
         var currentBits = ref.load()
         while (true) {
             val currentVal = Double.fromBits(currentBits)
