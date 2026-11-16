@@ -1,3 +1,5 @@
+@file:Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction", "FunctionNaming")
+
 package com.eignex.util.numbers
 
 import kotlin.test.Test
@@ -14,9 +16,10 @@ class IntegerDivisionTest {
             longArrayOf(6, -3, -2, -2), longArrayOf(-6, -3, 2, 2),
             longArrayOf(0, 3, 0, 0), longArrayOf(0, -3, 0, 0),
         )
-        for ((a, b, floor, ceil) in cases) {
-            assertEquals(bigIntOf(floor), floorDiv(bigIntOf(a), bigIntOf(b)), "$a / $b floor")
-            assertEquals(bigIntOf(ceil), ceilDiv(bigIntOf(a), bigIntOf(b)), "$a / $b ceil")
+        for (sample in cases) {
+            val (a, b) = sample
+            assertEquals(bigIntOf(sample[2]), floorDiv(bigIntOf(a), bigIntOf(b)), "$a / $b floor")
+            assertEquals(bigIntOf(sample[3]), ceilDiv(bigIntOf(a), bigIntOf(b)), "$a / $b ceil")
         }
     }
 

@@ -1,3 +1,5 @@
+@file:Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction", "FunctionNaming")
+
 package com.eignex.util.numbers
 
 import kotlin.test.Test
