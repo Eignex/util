@@ -158,7 +158,7 @@ jobs:
       - name: Verify one snapshot pin for every publication
         if: env.IS_SNAPSHOT == 'true'
         run: |
-          pin=$(python3 .github/scripts/verify_snapshot.py "$RELEASE_VERSION" util/build/publications)
+          pin=$(java .github/scripts/VerifySnapshot.java "$RELEASE_VERSION" util/build/publications)
           echo "Published util pin: \`$pin\`" >> "$GITHUB_STEP_SUMMARY"
       - name: Create GitHub release
         if: github.ref_type == 'tag' && env.IS_SNAPSHOT == 'false' && env.IS_TEST_RELEASE != 'true'

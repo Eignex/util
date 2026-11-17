@@ -81,7 +81,9 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ runner.arch }}-configuration-${{ inputs.fullTargets && 'full' || 'default' }}-${{ hashFiles('**/*.gradle.kts', '**/gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}-
       - name: Test snapshot publication verification
         if: runner.os == 'Linux'
-        run: python3 -m unittest discover -s .github/scripts -p 'test_*.py'
+        run: |
+          javac -d "$RUNNER_TEMP/snapshot-tests" .github/scripts/VerifySnapshot*.java
+          java -cp "$RUNNER_TEMP/snapshot-tests" VerifySnapshotTest
       - name: Build and test
         run: |
           case "$RUNNER_OS" in
@@ -99,7 +101,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           ./gradlew :util-bench:installDist -PciVersion="$CI_VERSION"
-          python3 util-bench/smoke.py --java "$JAVA_HOME_17_X64/bin/java" \
+          bash util-bench/smoke.sh --java "$JAVA_HOME_17_X64/bin/java" \
             --output util-bench/build/smoke
       - name: Test iOS simulator
         if: runner.os == 'macOS'

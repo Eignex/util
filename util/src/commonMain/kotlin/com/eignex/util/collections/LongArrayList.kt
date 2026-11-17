@@ -16,16 +16,25 @@ class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
 
     /** Append [value], growing the backing array when needed. */
     fun add(value: Long) {
-        if (size == data.size) data = data.copyOf(data.size * 2)
-        data[size++] = value
+        val index = size
+        if (index == data.size) grow()
+        data[index] = value
+        size = index + 1
     }
+
+    // Keep allocation and error-message construction out of the small JVM hot methods.
+    private fun grow() {
+        data = data.copyOf(data.size * 2)
+    }
+
+    private fun failIndex(index: Int): Unit = throw IndexOutOfBoundsException("Index $index, size $size")
 
     /**
      * Return the element at [index].
      * @throws IndexOutOfBoundsException when [index] is outside the live elements.
      */
     override operator fun get(index: Int): Long {
-        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
+        if (index < 0 || index >= size) failIndex(index)
         return data[index]
     }
 
@@ -34,7 +43,7 @@ class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
      * @throws IndexOutOfBoundsException when [index] is outside the live elements.
      */
     operator fun set(index: Int, value: Long) {
-        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
+        if (index < 0 || index >= size) failIndex(index)
         data[index] = value
     }
 
@@ -43,7 +52,7 @@ class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
      * @throws IndexOutOfBoundsException when [index] is outside `0..size`.
      */
     fun insertAt(index: Int, value: Long) {
-        if (index < 0 || index > size) throw IndexOutOfBoundsException("Index $index, size $size")
+        if (index < 0 || index > size) failIndex(index)
         add(0L)
         for (i in size - 1 downTo index + 1) data[i] = data[i - 1]
         data[index] = value
@@ -54,7 +63,7 @@ class LongArrayList(initialCapacity: Int = 8) : LongIndexedCollection {
      * @throws IndexOutOfBoundsException when [index] is outside the live elements.
      */
     fun removeAtSwap(index: Int) {
-        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
+        if (index < 0 || index >= size) failIndex(index)
         data[index] = data[--size]
     }
 

@@ -16,8 +16,10 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
 
     /** Append [value], growing the backing array when needed. */
     fun add(value: Int) {
-        if (size == data.size) data = data.copyOf(data.size * 2)
-        data[size++] = value
+        val index = size
+        if (index == data.size) grow()
+        data[index] = value
+        size = index + 1
     }
 
     /** Append all entries in [values] in their existing order. */
@@ -28,12 +30,19 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
         size = newSize
     }
 
+    // Keep allocation and error-message construction out of the small JVM hot methods.
+    private fun grow() {
+        data = data.copyOf(data.size * 2)
+    }
+
+    private fun failIndex(index: Int): Unit = throw IndexOutOfBoundsException("Index $index, size $size")
+
     /**
      * Return the element at [index].
      * @throws IndexOutOfBoundsException when [index] is outside the live elements.
      */
     override operator fun get(index: Int): Int {
-        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
+        if (index < 0 || index >= size) failIndex(index)
         return data[index]
     }
 
@@ -42,7 +51,7 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
      * @throws IndexOutOfBoundsException when [index] is outside the live elements.
      */
     operator fun set(index: Int, value: Int) {
-        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
+        if (index < 0 || index >= size) failIndex(index)
         data[index] = value
     }
 
@@ -51,7 +60,7 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
      * @throws IndexOutOfBoundsException when [index] is outside `0..size`.
      */
     fun insertAt(index: Int, value: Int) {
-        if (index < 0 || index > size) throw IndexOutOfBoundsException("Index $index, size $size")
+        if (index < 0 || index > size) failIndex(index)
         add(0)
         for (i in size - 1 downTo index + 1) data[i] = data[i - 1]
         data[index] = value
@@ -62,7 +71,7 @@ class IntArrayList(initialCapacity: Int = 8) : IntIndexedCollection {
      * @throws IndexOutOfBoundsException when [index] is outside the live elements.
      */
     fun removeAtSwap(index: Int) {
-        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
+        if (index < 0 || index >= size) failIndex(index)
         data[index] = data[--size]
     }
 
