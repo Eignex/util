@@ -11,13 +11,13 @@ the lab's Java 25 runtime and keeps a separate measurement series.
 
 ```sh
 ./gradlew :util-bench:check :util-bench:lintDocs :util-bench:installDist
-python3 util-bench/smoke.py --java /absolute/jdk17/bin/java --output /tmp/util-smoke
+bash util-bench/smoke.sh --java /absolute/jdk17/bin/java --output /tmp/util-smoke
 ```
 
 The smoke helper exercises `describe`, `plan` and `run` through the installed distribution,
 running the complete catalog at size 65 with one fork and one 10ms warmup/measurement.
 The output directory must be new. It retains every frozen case, raw JMH JSON, log, controls
-and SDK result. Python is only needed for this local helper; lab execution uses the JVM adapter.
+and SDK result. The local helper requires `jq`; lab execution uses the JVM adapter.
 Smoke timings establish integration and correctness, and are too short for performance conclusions.
 Use `--workloads int-int-map.lookup-hit,bits.range` for a smaller integration check.
 
@@ -83,7 +83,7 @@ BENCH=util-bench/build/install/util-bench/bin/util-bench
 JAVA_HOME=/absolute/jdk17 "$BENCH" describe
 printf '%s\n' '{"parameters":{"workloads":"int-int-map.lookup-hit","sizes":"1024","seeds":"42"}}' > /tmp/util-request.json
 JAVA_HOME=/absolute/jdk17 "$BENCH" plan /tmp/util-request.json > /tmp/util-plan.json
-python3 -c 'import json; print(json.dumps(json.load(open("/tmp/util-plan.json"))["cases"][0]))' > /tmp/util-case.json
+jq '.cases[0]' /tmp/util-plan.json > /tmp/util-case.json
 JAVA_HOME=/absolute/jdk17 "$BENCH" run /tmp/util-case.json /tmp/util-capture
 ```
 
